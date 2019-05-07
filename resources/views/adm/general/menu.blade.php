@@ -46,19 +46,7 @@
                 </a>
                 <ul class="collapse list-unstyled" id="productoSubmenu">
                     <li>
-                        <a data-link="u" href="{{-- route('familias.index') --}}">
-                            <i class="fas fa-tasks"></i>
-                            <span class="nav-label">Familia de productos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-link="u" href="{{-- route('familias.modelos.index') --}}">
-                            <i class="fab fa-modx"></i>
-                            <span class="nav-label">Modelos de camiones</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-link="u" href="{{-- route('familias.categorias.index') --}}">
+                        <a data-link="u" href="{{ route('categorias.index') }}">
                             <i class="fas fa-columns"></i>
                             <span class="nav-label">Categorías de productos</span>
                         </a>

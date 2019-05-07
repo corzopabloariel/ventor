@@ -81,10 +81,12 @@
         <script src="{{ asset('js/jquery.maskMoney.js') }}"></script>
         <script src="{{ asset('js/declaration.js') }}"></script>
         <script src="{{ asset('js/pyrus.min.js') }}"></script>
+        <script src="{{ asset('js/color.js') }}"></script>
+        <script src="{{ asset('js/solver.js') }}"></script>
+        <script src="{{ asset('js/adm.js') }}"></script>
         <script>
             window.url = "{{ url()->current() }}";console.log(window.url)
-        </script>
+            </script>
         @stack('scripts')
-        {{--<script src="{{ asset('js/adm.js') }}"></script>--}}
     </body>
 </html>

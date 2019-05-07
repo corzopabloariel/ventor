@@ -30,13 +30,12 @@ class ContenidoController extends Controller
                     $ARR_data["data"] = [];
                     $ARR_data["data"]["PAGE"] = ["slider"];
                     $ARR_data["data"]["CONTENIDO"] = [];
-                    $ARR_data["data"]["CONTENIDO"]["empresa"] = [];
-                    $ARR_data["data"]["CONTENIDO"]["empresa"]["titulo"] = null;
-                    $ARR_data["data"]["CONTENIDO"]["empresa"]["texto"] = null;
-                    $ARR_data["data"]["CONTENIDO"]["filosofia"] = [];
-                    $ARR_data["data"]["CONTENIDO"]["filosofia"]["titulo"] = null;
-                    $ARR_data["data"]["CONTENIDO"]["filosofia"]["texto"] = null;
-                    $ARR_data["data"]["CONTENIDO"]["image"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma] = [];
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["texto"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["numeros"] = [];
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["fechas"] = [];
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["vision"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["mision"] = null;
                     break;
                 case "productos":
                     $ARR_data["data"] = [];
@@ -63,13 +62,14 @@ class ContenidoController extends Controller
             $contenido = Contenido::create($ARR_data);
         }
         $contenido["data"] = json_decode($contenido["data"], true);
+        
         $title = "Contenido: " . strtoupper($seccion);
         return view('adm.distribuidor',compact('title','view','contenido','seccion'));
     }
     public function update(Request $request, $seccion) {
         $datosRequest = $request->all();
         $contenido = Contenido::where('seccion',$seccion)->first();
-
+        
         $contenido["data"] = json_decode($contenido["data"], true);
         $ARR_data = [];
         $ARR_data["data"] = [];
@@ -99,34 +99,29 @@ class ContenidoController extends Controller
                 }
                 break;
             case "empresa":
-                $ARR_data["data"]["CONTENIDO"]["empresa"] = [];
-                $ARR_data["data"]["CONTENIDO"]["empresa"]["titulo"] = [];
-                $ARR_data["data"]["CONTENIDO"]["empresa"]["titulo"][$this->idioma] = $datosRequest["titulo_empresa_{$this->idioma}"];
-                $ARR_data["data"]["CONTENIDO"]["empresa"]["texto"] = [];
-                $ARR_data["data"]["CONTENIDO"]["empresa"]["texto"][$this->idioma] = $datosRequest["texto_empresa_{$this->idioma}"];
-                $ARR_data["data"]["CONTENIDO"]["filosofia"] = [];
-                $ARR_data["data"]["CONTENIDO"]["filosofia"]["titulo"] = [];
-                $ARR_data["data"]["CONTENIDO"]["filosofia"]["titulo"][$this->idioma] = $datosRequest["titulo_filosofia_{$this->idioma}"];
-                $ARR_data["data"]["CONTENIDO"]["filosofia"]["texto"] = [];
-                $ARR_data["data"]["CONTENIDO"]["filosofia"]["texto"][$this->idioma] = $datosRequest["texto_filosofia_{$this->idioma}"];
-                $ARR_data["data"]["CONTENIDO"]["image"] = $contenido["data"]["CONTENIDO"]["image"];
                 $ARR_data["data"]["PAGE"] = $datosRequest["page"];
-
-                $file = $request->file("image");
-                if(!is_null($file)) {
-                    $path = public_path('images/contenido/')."{$seccion}";
-                    if (!file_exists($path))
-                        mkdir($path, 0777, true);
-                    $imageName = time()."_{$seccion}.".$file->getClientOriginalExtension();
-                    
-                    $file->move($path, $imageName);
-                    $ARR_data["data"]["CONTENIDO"]["image"] = "images/contenido/{$seccion}/{$imageName}";
-                    
-                    if(!is_null($contenido["data"]["CONTENIDO"]["image"])) {
-                        $filename = public_path() . "/{$contenido["data"]["CONTENIDO"]["image"]}";
-                        if (file_exists($filename))
-                            unlink($filename);
-                    }
+                $ARR_data["data"]["CONTENIDO"] = [];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma] = [];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["texto"] = $datosRequest["texto_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["numeros"] = [];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["fechas"] = [];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["vision"] = [
+                    "TIT" => $datosRequest["TIT_vision_{$this->idioma}"],
+                    "TEX" => $datosRequest["vision_{$this->idioma}"]
+                ];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["mision"] = [
+                    "TIT" => $datosRequest["TIT_mision_{$this->idioma}"],
+                    "TEX" => $datosRequest["mision_{$this->idioma}"]
+                ];
+                
+                for( $i = 0 ; $i < count($datosRequest["anios_anio"]) ; $i++ )
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["fechas"][$datosRequest["anios_anio"][$i]] = $datosRequest["texto_anios"][$i];
+                
+                for( $i = 0 ; $i < count($datosRequest["numero_numero"]) ; $i++ ) {
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["numeros"][] = [
+                        "N" => $datosRequest["numero_numero"][$i],
+                        "T" => $datosRequest["texto_numero"][$i]
+                    ];
                 }
                 break;
             case "pagos":

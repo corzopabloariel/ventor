@@ -19,8 +19,10 @@ class CreateCategoriaTable extends Migration
             $table->string('image',150)->nullable()->default(NULL);
             $table->string('color',10)->nullable()->default(NULL);
             $table->string('hsl',100)->nullable()->default(NULL);
-            $table->unsignedBigInteger('padre_id')->default(0);
-            $table->foreign('padre_id')->references('id')->on('categorias')->onDelete('cascade');
+            $table->string('orden',10)->nullable()->default(NULL);
+            $table->unsignedBigInteger('padre_id')->nullable()->default(NULL);
+
+            $table->foreign('padre_id')->references('id')->on('categorias')->onDelete('set null');
             $table->timestamps();
         });
     }

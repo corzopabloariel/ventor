@@ -9,5 +9,5 @@ class Contenido extends Model
     protected $fillable = [
         'seccion',
         'data'
-    ]
+    ];
 }

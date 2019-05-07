@@ -11,6 +11,16 @@ class Categoria extends Model
         'image',
         'color',
         'hsl',
-        'padre_id'
+        'padre_id',
+        'orden'
     ];
+    
+    public function padre()
+    {
+        return $this->belongsTo('App\Categoria');
+    }
+    public function hijos()
+    {
+        return $this->hasMany('App\Categoria','padre_id','id')->orderBy('orden');
+    }
 }
