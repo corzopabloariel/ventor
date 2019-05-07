@@ -36,8 +36,8 @@
         });
     });
     const src = "{{ asset('images/general/no-img.png') }}";
-    window.pyrus = new Pyrus("slider", null, src);
-    window.sliders = @json($sliders);
+    window.pyrus = new Pyrus("recursos", null, src);
+    window.elementos = @json($recursos);
     
     /** ------------------------------------- */
     add = function(t, id = 0, data = null) {
@@ -53,7 +53,7 @@
         if(id != 0)
             action = `{{ url('/adm/${window.pyrus.entidad}/update/${id}') }}`;
         else
-            action = `{{ url('/adm/${window.pyrus.entidad}/' . strtolower($seccion) . '/store') }}`;
+            action = `{{ url('/adm/${window.pyrus.entidad}/store') }}`;
         if(data !== null) {
             for(let x in window.pyrus.especificacion) {
                 if(window.pyrus.especificacion[x].EDITOR !== undefined) {
@@ -66,8 +66,17 @@
                     $(`#src-${x}`).attr("src",img);
                     continue;
                 }
-                $(`[name="${x}"]`).val(data[x]);
+                if($(`[name="${x}_es"]`).length)
+                    $(`[name="${x}_es"]`).val(data[x]);
+                else
+                    $(`[name="${x}"]`).val(data[x]);
             }
+            $("#src-image").attr("style",`filter:${data.hsl}`);
+        } else {
+            if($("#tabla tbody").length)
+                $("#orden").val($("#tabla tbody").find("tr:last-child() td[data-orden]").text());
+            else
+                $("#orden").val("AA");
         }
         elmnt = document.getElementById("form");
         elmnt.scrollIntoView();
@@ -138,7 +147,6 @@
         };
         promiseFunction();
     };
-    /** ------------------------------------- */
     init = function() {
         console.log("CONSTRUYENDO FORMULARIO Y TABLA");
         /** */
@@ -153,7 +161,7 @@
         });
         table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 
-        window.sliders.forEach(function(data) {
+        window.elementos.forEach(function(data) {
             let tr = "";
             if(!table.find("tbody").length) 
                 table.append("<tbody></tbody>");
@@ -162,11 +170,23 @@
                 if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_FILE") {
                     date = new Date();
                     img = `{{ asset('${td}') }}?t=${date.getTime()}`;
-                    td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
+                    td = `<img style="filter:${data.hsl}" class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
                 }
-                tr += `<td class="${c.CLASS}">${td}</td>`;
+                if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_COLOR") {
+                    td = `${td}<div class="mt-1" style="height:10px; background: ${td}"></div>`;
+                }
+                if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_ENUM") {
+                    if(window.pyrus.especificacion[c.COLUMN].ENUM !== undefined) {
+                        if(Object.keys(window.pyrus.especificacion[c.COLUMN].ENUM).length > 0)
+                            td = window.pyrus.especificacion[c.COLUMN].ENUM[td];
+                    }
+                }
+                tr += `<td data-${c.COLUMN} class="${c.CLASS}">${td}</td>`;
             });
-            tr += `<td class="text-center"><button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
+            tr += `<td class="text-center">`;
+                tr += `<button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button>`;
+                tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
+            tr += `</td>`;
             table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
         });
     }

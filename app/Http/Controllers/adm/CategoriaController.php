@@ -90,12 +90,14 @@ class CategoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,$tipo)
     {
         $data = self::edit($id);
         $data["hijos"] = $data->hijos;
         $data["padre"] = $data->padre;
 
+        foreach($data["hijos"] AS $h)
+            $h["subcategorias"] = count($h->hijos);
         return $data;
     }
 

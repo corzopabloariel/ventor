@@ -98,3 +98,18 @@ table .btn > i {
 .card-columns {
     column-count: 2;
 }
+
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+@media (max-width: 576px) {
+    .col-12 + .col-12 {
+        margin-top: .8em;
+    }
+}
+@media (min-width: 768px) {
+    .card-columns {
+        column-count: 1;
+    }
+}

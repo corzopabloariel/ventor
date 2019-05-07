@@ -37,12 +37,22 @@ class ContenidoController extends Controller
                     $ARR_data["data"]["CONTENIDO"][$this->idioma]["vision"] = null;
                     $ARR_data["data"]["CONTENIDO"][$this->idioma]["mision"] = null;
                     break;
-                case "productos":
+                case "calidad":
                     $ARR_data["data"] = [];
-                    $ARR_data["data"]["PAGE"] = ["familias","marcas"];
+                    $ARR_data["data"]["PAGE"] = [];
                     $ARR_data["data"]["CONTENIDO"] = [];
-                    $ARR_data["data"]["CONTENIDO"]["texto"] = null;
-                    $ARR_data["data"]["CONTENIDO"]["image"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma] = [];
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"] = [];
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["calidad"] = [];
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["garantia"] = [];
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"]["titulo"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"]["subtitulo"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"]["texto"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"]["slogan"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["calidad"]["titulo"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["calidad"]["texto"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["garantia"]["titulo"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["garantia"]["texto"] = null;
                     break;
                 case "pagos":
                     $ARR_data["data"] = [];
@@ -54,8 +64,9 @@ class ContenidoController extends Controller
                 case "terminos":
                     $ARR_data["data"] = [];
                     $ARR_data["data"]["CONTENIDO"] = [];
-                    $ARR_data["data"]["CONTENIDO"]["titulo"] = null;
-                    $ARR_data["data"]["CONTENIDO"]["texto"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma] = [];
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["titulo"] = null;
+                    $ARR_data["data"]["CONTENIDO"][$this->idioma]["texto"] = null;
                     break;
             }
             $ARR_data["data"] = json_encode($ARR_data["data"]);
@@ -69,7 +80,7 @@ class ContenidoController extends Controller
     public function update(Request $request, $seccion) {
         $datosRequest = $request->all();
         $contenido = Contenido::where('seccion',$seccion)->first();
-        
+        //dd($datosRequest);
         $contenido["data"] = json_decode($contenido["data"], true);
         $ARR_data = [];
         $ARR_data["data"] = [];
@@ -124,18 +135,24 @@ class ContenidoController extends Controller
                     ];
                 }
                 break;
-            case "pagos":
-                $ARR_data["data"]["CONTENIDO"]["titulo"] = [];
-                $ARR_data["data"]["CONTENIDO"]["titulo"][$this->idioma] = $datosRequest["titulo_{$this->idioma}"];
-                $ARR_data["data"]["CONTENIDO"]["texto"] = [];
-                $ARR_data["data"]["CONTENIDO"]["texto"][$this->idioma] = $datosRequest["texto_{$this->idioma}"];
-                $ARR_data["data"]["PAGE"] = $datosRequest["page"];
+            case "calidad":
+                $ARR_data["data"]["CONTENIDO"][$this->idioma] = [];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"] = [];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["calidad"] = [];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["garantia"] = [];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"]["titulo"] = $datosRequest["TIT_principal_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"]["subtitulo"] = $datosRequest["SUBTIT_principal_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"]["texto"] = $datosRequest["texto_principal_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["principal"]["slogan"] = $datosRequest["slogan_principal_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["calidad"]["titulo"] = $datosRequest["TIT_calidad_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["calidad"]["texto"] = $datosRequest["texto_calidad_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["garantia"]["titulo"] = $datosRequest["TIT_garantia_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["garantia"]["texto"] = $datosRequest["texto_garantia_{$this->idioma}"];
                 break;
             case "terminos":
-                $ARR_data["data"]["CONTENIDO"]["titulo"] = [];
-                $ARR_data["data"]["CONTENIDO"]["titulo"][$this->idioma] = $datosRequest["titulo_{$this->idioma}"];
-                $ARR_data["data"]["CONTENIDO"]["texto"] = [];
-                $ARR_data["data"]["CONTENIDO"]["texto"][$this->idioma] = $datosRequest["texto_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma] = [];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["titulo"] = $datosRequest["titulo_{$this->idioma}"];
+                $ARR_data["data"]["CONTENIDO"][$this->idioma]["texto"] = $datosRequest["texto_{$this->idioma}"];
                 break;
         }
         $contenido->fill(["data" => json_encode($ARR_data["data"])]);

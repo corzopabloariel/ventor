@@ -1,9 +1,3 @@
-<div class="alert alert-warning" role="alert">
-    <h4 class="alert-heading">Contenido {{strtoupper($seccion)}}</h4>
-    <p>Desde esta sección puede asignar qué elementos mostrar en la vista. Cada vista tiene características y elementos únicos. Seleccione estos en el selector SECCIONES.</p>
-    <hr>
-    <p class="mb-0"><strong>Elementos:</strong> slider</p>
-</div>
 <div id="wrapper-form" class="mt-2">
     <div class="card">
         <div class="card-body">
@@ -23,9 +17,7 @@
             CKEDITOR.replace( $(this).attr("name") );
         });
     });
-
-    const src = "{{ asset('images/general/no-img.png') }}";
-    window.pyrus = new Pyrus("pagos", null, src);
+    window.pyrus = new Pyrus("calidad");
     window.contenido = @json($contenido);
     /** ------------------------------------- */
     readURL = function(input, target) {
@@ -51,8 +43,14 @@
     }
     /** */
     init(function() {
-        CKEDITOR.instances[`texto_es`].setData(window.contenido.data.CONTENIDO.texto.es);
-        $(`[name="titulo_es"]`).val(window.contenido.data.CONTENIDO.titulo.es);
+        CKEDITOR.instances[`texto_principal_es`].setData(window.contenido.data.CONTENIDO.es.principal.texto);
+        CKEDITOR.instances[`texto_calidad_es`].setData(window.contenido.data.CONTENIDO.es.calidad.texto);
+        CKEDITOR.instances[`texto_garantia_es`].setData(window.contenido.data.CONTENIDO.es.garantia.texto);
+        $(`[name="TIT_principal_es"]`).val(window.contenido.data.CONTENIDO.es.principal.titulo);
+        $(`[name="SUBTIT_principal_es"]`).val(window.contenido.data.CONTENIDO.es.principal.subtitulo);
+        $(`[name="slogan_principal_es"]`).val(window.contenido.data.CONTENIDO.es.principal.slogan);
+        $(`[name="TIT_calidad_es"]`).val(window.contenido.data.CONTENIDO.es.calidad.titulo);
+        $(`[name="TIT_garantia_es"]`).val(window.contenido.data.CONTENIDO.es.garantia.titulo);
     });
 </script>
 @endpush

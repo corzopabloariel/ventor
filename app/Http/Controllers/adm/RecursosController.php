@@ -4,9 +4,8 @@ namespace App\Http\Controllers\adm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Categoria;
-
-class SubcategoriaController extends Controller
+use App\Recurso;
+class RecursosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,11 @@ class SubcategoriaController extends Controller
      */
     public function index()
     {
-        //
+        $title = "Recursos humanos";
+        $view = "adm.parts.recurso.index";
+        $recursos = Recurso::orderBy('orden')->get();
+
+        return view('adm.distribuidor',compact('title','view','recursos'));
     }
 
     /**
@@ -38,44 +41,19 @@ class SubcategoriaController extends Controller
     {
         $datosRequest = $request->all();
         
-        $ARR_data["image"] = null;
-        $ARR_data["nombre"] = $datosRequest["nombre_sub"];
-        $ARR_data["orden"] = $datosRequest["orden_sub"];
-        $ARR_data["tipo"] = $datosRequest["tipo"];
-        $ARR_data["padre_id"] = empty($datosRequest["padre_id"]) ? null : $datosRequest["padre_id"];
-
-        $file = $request->file("image_sub");
+        $ARR_data["titulo"] = $datosRequest["titulo_es"];
+        $ARR_data["orden"] = $datosRequest["orden"];
+        $ARR_data["zona"] = $datosRequest["zona_es"];
+        $ARR_data["descripcion"] = $datosRequest["descripcion_es"];
+        $ARR_data["in_zone"] = empty($datosRequest["in_zone"]) ? 0 : $datosRequest["in_zone"];
         
-        if(!is_null($data))
-            $ARR_data["image"] = $data["image"];
-        if(!is_null($file)) {
-            $path = public_path('images/subcategorias/');
-            if (!file_exists($path))
-                mkdir($path, 0777, true);
-            $imageName = time() . "-{$datosRequest["tipo"]}.".$file->getClientOriginalExtension();
-            
-            $file->move($path, $imageName);
-            $ARR_data["image"] = "images/subcategorias/{$imageName}";
-            
-            if(!is_null($data)) {
-                if(!empty($data["image"])) {
-                    $filename = public_path() . "/" . $data["image"];
-                    if (file_exists($filename))
-                        unlink($filename);
-                }
-            }
-        }
-        
-        if(is_null($data)) {
-            $data = Categoria::create($ARR_data);
-            $data["subcategorias"] = 0;
-            return $data;
-        } else {
+        if(is_null($data))
+            Recurso::create($ARR_data);
+        else {
             $data->fill($ARR_data);
             $data->save();
-
-            return self::edit($data["id"]);
         }
+        return back();
     }
 
     /**
@@ -97,7 +75,7 @@ class SubcategoriaController extends Controller
      */
     public function edit($id)
     {
-        return Categoria::find($id);
+        return Recurso::find($id);
     }
 
     /**
@@ -120,6 +98,7 @@ class SubcategoriaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Recurso::destroy($id);
+        return 1;
     }
 }

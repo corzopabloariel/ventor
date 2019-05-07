@@ -115,6 +115,9 @@ ul ul a {
 #content > .title {
     padding: 20px;
     background-color: #fafafa;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* ---------------------------------------------------

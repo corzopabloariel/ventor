@@ -11,34 +11,41 @@
                     <button onclick="remove(this)" type="button" class="close position-absolute" aria-label="Close">
                         <span aria-hidden="true"><i class="fas fa-times"></i></span>
                     </button>
-                    <form id="form" novalidate class="pt-2" action="{{ url('/adm/familia/store') }}" method="post" enctype="multipart/form-data">
+                    <form id="form" class="pt-2" action="{{ url('/adm/familia/store') }}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <div class="container-form"></div>
+                        <div></div>
                     </form>
                 </div>
             </div>
         </div>
         <div class="card mt-2" id="wrapper-tabla">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table mb-0" id="tabla"></table>
-                </div>
+                <table class="table mb-0" id="tabla"></table>
             </div>
         </div>
     </div>
 </section>
 @push('scripts_distribuidor')
-<script src="//cdn.ckeditor.com/4.7.3/full/ckeditor.js"></script>
 <script>
     $(document).on("ready",function() {
         $(".ckeditor").each(function () {
             CKEDITOR.replace( $(this).attr("name") );
         });
     });
-    const src = "{{ asset('images/general/no-img.png') }}";
-    window.pyrus = new Pyrus("slider", null, src);
-    window.sliders = @json($sliders);
-    
+    window.pyrus = new Pyrus("usuarios");
+    window.usuarios = @json($usuarios);
+    /** ------------------------------------- */
+    readURL = function(input, target) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(`#${target}`).attr(`src`,`${e.target.result}`);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
     /** ------------------------------------- */
     add = function(t, id = 0, data = null) {
         let btn = $(t);
@@ -50,10 +57,17 @@
 
         $("#wrapper-tabla").toggle("fast");
 
-        if(id != 0)
-            action = `{{ url('/adm/${window.pyrus.entidad}/update/${id}') }}`;
-        else
-            action = `{{ url('/adm/${window.pyrus.entidad}/' . strtolower($seccion) . '/store') }}`;
+        if(id != 0) {
+            $("#form .container-form + div").html('<div class="mt-3 row justify-content-center"><div class="col-12 col-md-6"><div class="alert alert-warning" role="alert">Si no desea cambiar la clave del usuario, deje el campo vacío.</div></div></div>');
+            $("#password").removeAttr("required");
+            $("#username").attr("readonly", true);
+            action = `{{ url('/adm/empresa/${window.pyrus.entidad}/update/${id}') }}`;
+        } else {
+            $("#form .container-form + div").html("");
+            $("#password").attr("required", true);
+            $("#username").removeAttr("readonly");
+            action = `{{ url('/adm/empresa/${window.pyrus.entidad}/store') }}`;
+        }
         if(data !== null) {
             for(let x in window.pyrus.especificacion) {
                 if(window.pyrus.especificacion[x].EDITOR !== undefined) {
@@ -66,7 +80,7 @@
                     $(`#src-${x}`).attr("src",img);
                     continue;
                 }
-                $(`[name="${x}"]`).val(data[x]);
+                $(`[name="${x}"]`).val(data[x]).trigger("change");
             }
         }
         elmnt = document.getElementById("form");
@@ -76,29 +90,22 @@
     /** ------------------------------------- */
     erase = function(t, id) {
         $(t).attr("disabled",true);
-        alertify.confirm("ATENCIÓN","¿Eliminar registro?",
-            function(){
-                let promise = new Promise(function (resolve, reject) {
-                    let url = `{{ url('/adm/${window.pyrus.entidad}/delete/${id}') }}`;
-                    var xmlHttp = new XMLHttpRequest();
-                    xmlHttp.open( "GET", url, true );
-                    
-                    xmlHttp.send( null );
-                    resolve(xmlHttp.responseText);
-                });
+        let promise = new Promise(function (resolve, reject) {
+            let url = `{{ url('/adm/empresa/${window.pyrus.entidad}/delete/${id}') }}`;
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", url, true );
+            
+            xmlHttp.send( null );
+            resolve(xmlHttp.responseText);
+        });
 
-                promiseFunction = () => {
-                    promise
-                        .then(function(msg) {
-                            $("#tabla").find(`tr[data-id="${id}"]`).remove();
-                        })
-                };
-                promiseFunction();
-            },
-            function() {
-                $(t).removeAttr("disabled");
-            }
-        ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
+        promiseFunction = () => {
+            promise
+                .then(function(msg) {
+                    $("#tabla").find(`tr[data-id="${id}"]`).remove();
+                })
+        };
+        promiseFunction();
     };
     /** ------------------------------------- */
     remove = function(t) {
@@ -118,7 +125,7 @@
     edit = function(t, id) {
         $(t).attr("disabled",true);
         let promise = new Promise(function (resolve, reject) {
-            let url = `{{ url('/adm/${window.pyrus.entidad}/edit/${id}') }}`;
+            let url = `{{ url('/adm/empresa/${window.pyrus.entidad}/edit/${id}') }}`;
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.responseType = 'json';
             xmlHttp.open( "GET", url, true );
@@ -143,7 +150,15 @@
         console.log("CONSTRUYENDO FORMULARIO Y TABLA");
         /** */
         $("#form .container-form").html(window.pyrus.formulario());
-
+        if($("#form .container-form .select__2").length) {
+            
+            $("#form .container-form .select__2").select2({
+                theme: "bootstrap",
+                tags: "true",
+                allowClear: true,
+                placeholder: "Nivel",
+            });
+        }
         let columnas = window.pyrus.columnas();
         let table = $("#tabla");
         columnas.forEach(function(e) {
@@ -153,7 +168,7 @@
         });
         table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 
-        window.sliders.forEach(function(data) {
+        window.usuarios.forEach(function(data) {
             let tr = "";
             if(!table.find("tbody").length) 
                 table.append("<tbody></tbody>");
@@ -164,9 +179,13 @@
                     img = `{{ asset('${td}') }}?t=${date.getTime()}`;
                     td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
                 }
+                if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_ENUM") {
+                    if(window.pyrus.especificacion[c.COLUMN].ENUM !== undefined) 
+                        td = window.pyrus.especificacion[c.COLUMN].ENUM[td];
+                }
                 tr += `<td class="${c.CLASS}">${td}</td>`;
             });
-            tr += `<td class="text-center"><button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
+            tr += `<td class="text-center"><button onclick="edit(this,${data.id})" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id})" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
             table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
         });
     }

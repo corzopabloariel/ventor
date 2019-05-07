@@ -12,7 +12,8 @@ class Categoria extends Model
         'color',
         'hsl',
         'padre_id',
-        'orden'
+        'orden',
+        'tipo'
     ];
     
     public function padre()

@@ -4,9 +4,8 @@ namespace App\Http\Controllers\adm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Categoria;
-
-class SubcategoriaController extends Controller
+use App\Marca;
+class MarcasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,14 @@ class SubcategoriaController extends Controller
      */
     public function index()
     {
-        //
+        $title = "Marcas";
+        $view = "adm.parts.marcas.index";
+        $marcas = Marca::whereNull("padre_id")->orderBy('nombre')->get();
+
+        foreach($marcas AS $c)
+            $c["mod"] = count($c->modelos);
+        
+        return view('adm.distribuidor',compact('title','view','marcas','seccion'));
     }
 
     /**
@@ -39,23 +45,21 @@ class SubcategoriaController extends Controller
         $datosRequest = $request->all();
         
         $ARR_data["image"] = null;
-        $ARR_data["nombre"] = $datosRequest["nombre_sub"];
-        $ARR_data["orden"] = $datosRequest["orden_sub"];
-        $ARR_data["tipo"] = $datosRequest["tipo"];
+        $ARR_data["nombre"] = isset($datosRequest["nombre"]) ? $datosRequest["nombre"] : $datosRequest["nombre_sub"];
         $ARR_data["padre_id"] = empty($datosRequest["padre_id"]) ? null : $datosRequest["padre_id"];
 
-        $file = $request->file("image_sub");
+        $file = $request->file("image");
         
         if(!is_null($data))
             $ARR_data["image"] = $data["image"];
         if(!is_null($file)) {
-            $path = public_path('images/subcategorias/');
+            $path = public_path('images/marcas/');
             if (!file_exists($path))
                 mkdir($path, 0777, true);
-            $imageName = time() . "-{$datosRequest["tipo"]}.".$file->getClientOriginalExtension();
+            $imageName = time().$file->getClientOriginalExtension();
             
             $file->move($path, $imageName);
-            $ARR_data["image"] = "images/subcategorias/{$imageName}";
+            $ARR_data["image"] = "images/marcas/{$imageName}";
             
             if(!is_null($data)) {
                 if(!empty($data["image"])) {
@@ -66,15 +70,24 @@ class SubcategoriaController extends Controller
             }
         }
         
-        if(is_null($data)) {
-            $data = Categoria::create($ARR_data);
-            $data["subcategorias"] = 0;
-            return $data;
+        if(isset($datosRequest["nombre"])) {
+            if(is_null($data))
+                Marca::create($ARR_data);
+            else {
+                $data->fill($ARR_data);
+                $data->save();
+            }
+            return back();
         } else {
-            $data->fill($ARR_data);
-            $data->save();
+            if(is_null($data))
+                $data = Marca::create($ARR_data);
+            else {
+                $data->fill($ARR_data);
+                $data->save();
 
-            return self::edit($data["id"]);
+                $data = self::edit($data["id"]);
+            }
+            return $data;
         }
     }
 
@@ -86,7 +99,10 @@ class SubcategoriaController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = self::edit($id);
+        $data["hijos"] = $data->modelos;
+
+        return $data;
     }
 
     /**
@@ -97,7 +113,7 @@ class SubcategoriaController extends Controller
      */
     public function edit($id)
     {
-        return Categoria::find($id);
+        return Marca::find($id);
     }
 
     /**
@@ -120,6 +136,18 @@ class SubcategoriaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = self::show($id);
+
+        if(!empty($data["hijos"])) {
+            //TIENE IMAGEN
+            if(!is_null($data["image"])) {
+                $filename = public_path() . "/{$data["image"]}";
+                if (file_exists($filename))
+                    unlink($filename);
+            }
+        }
+
+        Marca::destroy($id);
+        return 1;
     }
 }

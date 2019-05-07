@@ -73,44 +73,16 @@
                 </ul>
             </li>
             <li>
-                <a href="#ofertasSubmenu" data-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-hand-holding-usd"></i>
-                    <span class="nav-label">Ofertas</span>
+                <a data-link="a" href="{{ route('contenido.edit', ['seccion' => 'calidad']) }}">
+                    <i class="fas fa-quidditch"></i>
+                    <span class="nav-label">Calidad</span>
                 </a>
-                <ul class="collapse list-unstyled" id="ofertasSubmenu">
-                    <li>
-                        <a data-link="u" href="{{-- route('familias.categorias.ofertas.index') --}}">
-                            <i class="fas fa-stream"></i>
-                            <span class="nav-label">Todas las ofertas</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-link="u" href="{{-- route('slider.index', ['seccion' => 'oferta']) --}}">
-                            <i class="fas fa-spider"></i>
-                            <span class="nav-label">Slider</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
             <li>
-                <a href="#pagosSubmenu" data-toggle="collapse" aria-expanded="false">
-                    <i class="fas fa-building"></i>
-                    <span class="nav-label">Pagos y envios</span>
+                <a data-link="a" href="{{ route('recursos.index') }}">
+                    <i class="fas fa-walking"></i>
+                    <span class="nav-label">Recursos humanos</span>
                 </a>
-                <ul class="collapse list-unstyled" id="pagosSubmenu">
-                    <li>
-                        <a data-link="u" href="{{-- route('contenido.edit', ['seccion' => 'pagos']) --}}">
-                            <i class="fas fa-file-contract"></i>
-                            <span class="nav-label">Contenido</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-link="u" href="{{-- route('slider.index', ['seccion' => 'pagos']) --}}">
-                            <i class="fas fa-spider"></i>
-                            <span class="nav-label">Slider</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
             <li><hr/></li>
             <li>
@@ -127,26 +99,26 @@
                 </a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
-                        <a data-link="u" href="{{-- route('empresa.datos') --}}">
+                        <a data-link="u" href="{{ route('empresa.datos') }}">
                             <span>Datos</span>
                         </a>
                     </li>
                     <li>
-                        <a data-link="u" href="{{-- route('empresa.metadatos.index') --}}">
+                        <a data-link="u" href="{{ route('empresa.metadatos.index') }}">
                             <i class="fas fa-bullhorn"></i>
                             <span class="nav-label">Metadatos</span>
                         </a>
                     </li>
                     @if(Auth::user()["is_admin"])
                     <li>
-                        <a data-link="u" href="{{---- route('empresa.usuarios') ----}}">
+                        <a data-link="u" href="{{-- route('empresa.usuarios') --}}">
                             <i class="fas fa-users-cog"></i>
                             <span class="nav-label">Usuarios</span>
                         </a>
                     </li>
                     @else
                     <li>
-                        <a data-link="u" href="{{---- route('empresa.mis_datos') ----}}">
+                        <a data-link="u" href="{{ route('empresa.mis_datos') }}">
                             <i class="fab fa-bandcamp"></i>
                             <span class="nav-label">Mis datos</span>
                         </a>
@@ -155,27 +127,33 @@
                 </ul>
             </li>
             <li>
-                <a data-link="a" href="{{-- route('marca.index') --}}">
+                <a data-link="a" href="{{ route('marcas.index') }}">
                     <i class="fab fa-bandcamp"></i>
                     <span class="nav-label">Marcas</span>
                 </a>
             </li>
             <li>
-                <a data-link="a" href="{{-- route('contenido.edit', ['seccion' => 'terminos']) --}}">
+                <a data-link="a" href="{{ route('origenes.index') }}">
+                    <i class="fas fa-hand-point-right"></i>
+                    <span class="nav-label">Orígenes</span>
+                </a>
+            </li>
+            <li>
+                <a data-link="a" href="{{ route('contenido.edit', ['seccion' => 'terminos']) }}">
                     <i class="fas fa-clipboard-check"></i>
                     <span class="nav-label">Términos y condiciones</span>
                 </a>
             </li>
             @if(Auth::user()["is_admin"])
             <li>
-                <a data-link="a" href="{{-- route('empresa.usuarios.index') --}}">
+                <a data-link="a" href="{{ route('empresa.usuarios.index') }}">
                     <i class="fas fa-users"></i>
                     <span class="nav-label">Usuarios</span>
                 </a>
             </li>
             @endif
             <li>
-                <a data-link="a" href="{{-- route('empresa.usuarios.datos') --}}">
+                <a data-link="a" href="{{ route('empresa.usuarios.datos') }}">
                     <i class="fas fa-user-cog"></i>
                     <span class="nav-label">Mis datos</span>
                 </a>

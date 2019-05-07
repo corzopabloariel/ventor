@@ -44,8 +44,8 @@
     }
     /** */
     init(function() {
-        $(`[name="titulo_es"]`).val(window.contenido.data.CONTENIDO.titulo.es);
-        CKEDITOR.instances[`texto_es`].setData(window.contenido.data.CONTENIDO.texto.es);
+        $(`[name="titulo_es"]`).val(window.contenido.data.CONTENIDO.es.titulo);
+        CKEDITOR.instances[`texto_es`].setData(window.contenido.data.CONTENIDO.es.texto);
     });
 </script>
 @endpush
