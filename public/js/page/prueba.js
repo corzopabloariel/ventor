@@ -62,7 +62,23 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
     this.nav = function(data) {
         let html = "";
         for(let x in data.ELEMENT) {
-            html += `<li class="hidden-tablet"><a href="${dataPYRUS.URLBASE}/${x}">${data.ELEMENT[x]}</a></li>`;
+            html += `<li class="hidden-tablet">`;
+                
+                if(x != "" && data.SUB !== undefined) {
+                    if(data.SUB[x] !== undefined) {
+                        html += `<a href="#">${data.ELEMENT[x]}</a>`;
+                        html += `<ul class="submenu list-unstyled shadow-sm">`;
+                        for(let y in data.SUB[x]) {
+                            html += `<li>`;
+                                html += `<a href="${dataPYRUS.URLBASE}/${x}/${y}">${data.SUB[x][y]}</a>`;
+                            html += `</li>`;
+                        }
+                        html += `</ul>`;
+                    } else
+                        html += `<a href="${dataPYRUS.URLBASE}/${x}">${data.ELEMENT[x]}</a>`;
+                } else
+                    html += `<a href="${dataPYRUS.URLBASE}/${x}">${data.ELEMENT[x]}</a>`;
+            html += `</li>`;
         }
 
         return html;

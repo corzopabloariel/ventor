@@ -21,6 +21,7 @@
     });
     const src = "{{ asset('images/general/no-img.png') }}";
     window.pyrusImage = new Pyrus("empresa_images", null, src);
+    window.pyrusGeneral = new Pyrus("empresa_general");
     window.pyrusDomicilio = new Pyrus("empresa_domicilio");
     window.pyrusTelefono = new Pyrus("empresa_telefono");
     window.pyrusEmail = new Pyrus("empresa_email");
@@ -81,7 +82,8 @@
         console.log("CONSTRUYENDO FORMULARIO Y TABLA");
         form = "";
         /** */
-
+        form += window.pyrusGeneral.formulario();
+        form += `<hr/>`;
         form += `<fieldset>`;
             form += `<legend>Imágenes</legend>`;
             form += window.pyrusImage.formulario();
@@ -119,6 +121,8 @@
             if(window.datos.images.favicon !== null)
                 favicon = `{{ asset('${window.datos.images.favicon.i}') }}?t=${date.getTime()}`;
         }
+        CKEDITOR.instances[`pago`].setData(window.datos.pago);
+        CKEDITOR.instances[`banco`].setData(window.datos.banco);
         $(`#src-logo`).attr("src",logo);
         $(`#src-logoFooter`).attr("src",logoFooter);
         $(`#src-favicon`).attr("src",favicon);

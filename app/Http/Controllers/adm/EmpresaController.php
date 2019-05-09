@@ -23,7 +23,7 @@ class EmpresaController extends Controller
         $datos["telefono"] = json_decode($datos["telefono"], true);
         $datos["domicilio"] = json_decode($datos["domicilio"], true);
         $datos["images"] = json_decode($datos["images"], true);
-        $datos["pago"] = json_decode($datos["pago"], true);
+        //$datos["pago"] = json_decode($datos["pago"], true);
         
         return view('adm.distribuidor',compact('title','view','datos','seccion'));
     }
@@ -51,6 +51,8 @@ class EmpresaController extends Controller
         $ARR_data["email"] = !isset($requestData["email_email"]) ? [] : $requestData["email_email"];
         $ARR_data["telefono"] = [];
         $ARR_data["domicilio"] = [];
+        $ARR_data["pago"] = $requestData["pago"];
+        $ARR_data["banco"] = $requestData["banco"];
         $ARR_data["domicilio"]["calle"] = $requestData["calle"];
         $ARR_data["domicilio"]["altura"] = $requestData["altura"];
         $ARR_data["domicilio"]["barrio"] = $requestData["barrio"];

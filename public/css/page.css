@@ -146,12 +146,16 @@ nav .menu li {
 nav .menu .submenu {
     display: none;
     position: absolute;
-    background: #ECECEC;
-    color: #9FA3A5;
-    font-size: 16px;
-    min-width: 140px;
+    background: #F9F9F9;
+    color: #7A7A7A;
+    min-width: 180px;
     z-index: 11;
-    font-family: 'Montserrat', sans-serif;
+}
+nav .menu .submenu a {
+    font-size: 12px;
+}
+nav .menu .submenu li {
+    padding: 5px 10px;
 }
 nav .menu .submenu li a {
     padding: 5px 10px;
@@ -160,7 +164,7 @@ nav .menu .submenu li + li {
     border-top: 1px solid #CCCCCC;
 }
 nav .menu .submenu li:hover {
-    color: #2C3E72;
+    color: #0099D9;
 }
 
 nav .menu li:hover ul ul {
@@ -216,6 +220,10 @@ nav .info form input {
 }
 nav .logo {
     display: none;
+}
+
+nav .menu li:hover .submenu {
+    display: block;
 }
 nav .fixed {
     position: fixed;
@@ -472,6 +480,36 @@ footer .marca {
     top: calc(35%);
 }
 
+/* ---------------------------------------------------
+    DESCARGAS
+----------------------------------------------------- */
+.wrapper-descargas .title {
+    font-weight: lighter;
+    font-size: 35px;
+    color: #595959;
+}
+.wrapper-descargas .title + * {
+    color: #009AD6;
+    font-size: 15px;
+    font-weight: normal;
+}
+.wrapper-descargas .descarga p {
+    color: #7A7A7A;
+    font-size: 16px;
+}
+.wrapper-descargas .eye {
+    color: #2D266C;
+}
+.wrapper-descargas .download {
+    color: #0099D9;
+}
+.wrapper-descargas .informacion > div:first-child > div > *:first-child,
+.wrapper-descargas .informacion > div:last-child > div > *:first-child {
+    font-size: 22px;
+    font-weight: bold;
+    color: #0099D9;
+    margin-bottom: 2em;
+}
 /* ---------------------------------------------------
     PRODUCTO
 ----------------------------------------------------- */

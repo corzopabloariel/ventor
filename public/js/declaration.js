@@ -31,6 +31,33 @@ const ENTIDADES = {
             image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
         }
     },
+    descargas: {
+        ATRIBUTOS: {
+            orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
+            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 190x190",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"190px"},
+            documento: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Documento seleccionado",INVALID:"Seleccione documento",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"documento",WIDTH:"190px",SIMPLE:1},
+            nombre: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE"}
+        },
+        FORM: [
+            {
+                orden: '<div class="col-5 col-md-3">/orden/</div>',
+                BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
+            },
+            {
+                image: '<div class="col-12 col-md-6 col-lg-3">/image/</div>',
+            },
+            {
+                documento: '<div class="col-12 col-md-6">/documento/</div>',
+            },
+            {
+                nombre: '<div class="col-12 col-md-6">/nombre/</div>'
+            }
+        ],
+        FUNCIONES: {
+            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}},
+            documento: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
     empresa: {
         ATRIBUTOS: {
             page: {TIPO:"TP_ENUM",ENUM:{slider:"Slider"},NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"secciones",MULTIPLE: 1},
@@ -351,6 +378,18 @@ const ENTIDADES = {
             {
                 descripcion: '<div class="col-12">/descripcion/</div>',
                 metas: '<div class="col-12 mt-2">/metas/</div>'
+            }
+        ]
+    },
+    empresa_general: {
+        ATRIBUTOS: {
+            pago: {TIPO:"TP_TEXT",EDITOR:1,VISIBILIDAD:"TP_VISIBLE",FIELDSET:1,NOMBRE:"Pagos vigentes"},
+            banco: {TIPO:"TP_TEXT",EDITOR:1,VISIBILIDAD:"TP_VISIBLE",FIELDSET:1,NOMBRE:"Cuentas bancarias"}
+        },
+        FORM: [
+            {
+                pago: '<div class="col-12 col-md-6">/pago/</div>',
+                banco: '<div class="col-12 col-md-6">/banco/</div>',
             }
         ]
     },

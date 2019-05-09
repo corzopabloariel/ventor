@@ -11,7 +11,14 @@ const BODY = {
             nav:    {
                         TIPO:"TP_NAV",
                         ELEMENT: {empresa: "Empresa", productos: "Productos", descargas: "Descargas", atencion: "Atención al Cliente", calidad: "Calidad", trabaje: "Trabaje con nosotros", contacto: "Contacto"},
-                        ACTIVE: "active"
+                        ACTIVE: "active",
+                        SUB: {
+                            atencion: {
+                                transmision: "Análisis de transmisión",
+                                pagos: "Información sobre pagos",
+                                consulta: "Consulta general"
+                            }
+                        }
                     },
         },
         HTML : [

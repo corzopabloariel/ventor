@@ -10,6 +10,7 @@ use App\Slider;
 use App\Categoria;
 use App\Contenido;
 use App\Producto;
+use App\Descarga;
 
 class GeneralController extends Controller
 {
@@ -142,6 +143,25 @@ class GeneralController extends Controller
 
         $datos["contenido"] = json_decode(Contenido::where("seccion","calidad")->first()["data"], true)["CONTENIDO"][$this->idioma];
         //dd($datos["contenido"]);
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
+    public function descargas() {
+        $title = "DESCARGAS";
+        $view = "page.parts.descargas";
+        $datos = [];
+        $datos["empresa"] = self::general();
+
+        $datos["descargas"] = Descarga::orderBy("orden")->get();
+        //dd($datos["contenido"]);
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
+    public function atencion($id = null) {
+        if(empty($id))
+            return redirect()->route('index');
+        $title = "ATENCIÓN AL CLIENTE";
+        $view = "page.parts.atencion.{$id}";
+        $datos = [];
+        $datos["empresa"] = self::general();
         return view('page.distribuidor',compact('title','view','datos'));
     }
 }

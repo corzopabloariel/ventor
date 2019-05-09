@@ -14,6 +14,8 @@ class Empresa extends Model
         'email',
         'redes',
         'metadatos',
-        'images'
+        'images',
+        'pago',
+        'banco'
     ];
 }

@@ -17,8 +17,11 @@ Route::group(['prefix' => 'productos', 'as' => 'productos'], function() {
     Route::get('/', ['uses' => 'page\GeneralController@productos', 'as' => '.productos']);
     Route::get('/{id?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
 });
+Route::get('atencion/{id?}', ['uses' => 'page\GeneralController@atencion', 'as' => '.atencion']);
+
 Route::get('producto/{link?}', ['uses' => 'page\GeneralController@producto', 'as' => '.producto']);
 Route::get('calidad', 'page\GeneralController@calidad')->name('calidad');
+Route::get('descargas', 'page\GeneralController@descargas')->name('descargas');
 
 Auth::routes();
 
