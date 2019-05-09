@@ -15,6 +15,7 @@
         <!-- <Styles> -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href="{{ asset('css/css.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
         <link href="{{ asset('css/page.css') }}" rel="stylesheet">
         @stack('styles')
         <!-- </Styles> -->
@@ -53,6 +54,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="{{ asset('js/page/declaration.js') }}"></script>
         <script src="{{ asset('js/page/prueba.js') }}"></script>
+        <script src="{{ asset('js/janimate.min.js') }}"></script>
         <script>
             window.url = "{{ url()->current() }}";
             const imgDEFAULT = "{{ asset('images/general/no-img.png') }}";

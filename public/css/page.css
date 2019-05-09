@@ -244,6 +244,7 @@ footer .marca {
 .wrapper-categorias p {
     color: #666666;
     font-size: 22px;
+    line-height: 18px;
 }
 
 /* ---------------------------------------------------
@@ -349,4 +350,68 @@ footer .marca {
 }
 .wrapper-empresa .timeline .input.active::before, .wrapper-empresa .timeline .input.active::after {
     top: calc(35%);
+}
+/* ---------------------------------------------------
+    EMPRESA
+----------------------------------------------------- */
+.wrapper-link > a {
+    text-align: center;
+    display: block;
+    -webkit-transition: all 800ms ease;
+    -moz-transition: all 800ms ease;
+    -ms-transition: all 800ms ease;
+    -o-transition: all 800ms ease;
+    transition: all 800ms ease;
+}
+.wrapper-link > a > div {
+    display: inline-block;
+    position: relative;
+    border-radius: 50%;
+}
+.wrapper-link > a > div::before {
+    content: "\f067";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 20px;
+    position: absolute;
+    width: 100%;
+    border-radius: inherit;
+    top: 0;
+    left: 0;
+    z-index: 11;
+    height: 100%;
+    opacity: 0;
+    background-color: rgba(50,50,50,0.7);
+    -webkit-transition: all 800ms ease;
+    -moz-transition: all 800ms ease;
+    -ms-transition: all 800ms ease;
+    -o-transition: all 800ms ease;
+    transition: all 800ms ease;
+}
+.wrapper-link > a:hover p {
+    color: #0099D9;
+}
+.wrapper-link > a:hover > div::before {
+    opacity: 1;
+}
+
+.wrapper-calidad {
+    color: #595959;
+    font-size: 19px;
+}
+.wrapper-calidad h4.title {
+    font-size: 15px;
+    color: #0099D6;
+    font-weight: normal;
+}
+.wrapper-calidad h2.title {
+    font-size: 35px;
+}
+.wrapper-calidad .slogan {
+    font-size: 25px;
+    color: #0099D8;
 }

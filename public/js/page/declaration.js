@@ -10,14 +10,14 @@ const BODY = {
                     },
             nav:    {
                         TIPO:"TP_NAV",
-                        ELEMENT: {empresa: "Empresa", producto: "Productos", descargas: "Descargas", atencion: "Atención al Cliente", calidad: "Calidad", trabaje: "Trabaje con nosotros", contacto: "Contacto"},
+                        ELEMENT: {empresa: "Empresa", productos: "Productos", descargas: "Descargas", atencion: "Atención al Cliente", calidad: "Calidad", trabaje: "Trabaje con nosotros", contacto: "Contacto"},
                         ACTIVE: "active"
                     },
         },
         HTML : [
-            `<nav class="navbar navbar-expand-lg navbar-light p-0 shadow-sm">`,
-                `<div class="container">`,
-                    `<a class="navbar-brand position-absolute hidden-tablet" href="/BASEURL/">`,
+            `<nav class="navbar navbar-expand-lg pb-0 navbar-light">`,
+                `<div class="container border-bottom">`,
+                    `<a class="navbar-brand position-absolute hidden-tablet" href="/">`,
                         `/image/`,
                     `</a>`,
                     `<div class="row justify-content-end flex-column w-100">`,
@@ -46,7 +46,7 @@ const BODY = {
                     },
             nav:    {
                         TIPO:"TP_NAV",
-                        ELEMENT: {"/":"Inicio",empresa: "Empresa", producto: "Productos", descargas: "Descargas", calidad: "Calidad", contacto: "Contacto"},
+                        ELEMENT: {"/":"Inicio",empresa: "Empresa", productos: "Productos", descargas: "Descargas", calidad: "Calidad", contacto: "Contacto"},
                         ACTIVE: "active",
                     },
             datos:  {

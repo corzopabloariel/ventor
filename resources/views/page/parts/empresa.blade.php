@@ -58,14 +58,14 @@
                 <div>
                     <div class="d-flex justify-content-around" style="width:77vh">
                         @foreach($datos["contenido"]["fechas"] AS $f => $t)
-                        <div class="input">
+                        <div class="input" data-year="{{ $f }}">
                             <span data-year="{{ $f }}"></span>
                         </div>
                         @endforeach
                     </div>
                     <div class="d-flex justify-content-center mt-3" style="width:77vh">
                         @foreach($datos["contenido"]["fechas"] AS $f => $t)
-                        <div class="text text-center">
+                        <div class="text text-center" data-year="{{ $f }}">
                             {!! $t !!}
                         </div>
                         @endforeach

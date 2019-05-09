@@ -13,6 +13,8 @@
 
 Route::get('/', 'page\GeneralController@index')->name('index');
 Route::get('empresa', 'page\GeneralController@empresa')->name('empresa');
+Route::get('productos', 'page\GeneralController@productos')->name('productos');
+Route::get('calidad', 'page\GeneralController@calidad')->name('calidad');
 
 Auth::routes();
 

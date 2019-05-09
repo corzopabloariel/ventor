@@ -50,4 +50,23 @@ class GeneralController extends Controller
         //dd($datos["contenido"]);
         return view('page.distribuidor',compact('title','view','datos'));
     }
+    public function productos() {
+        $title = "HOME";
+        $view = "page.parts.productos.index";
+        $datos = [];
+        $datos["empresa"] = self::general();
+        $datos["categorias"] = Categoria::whereNull("padre_id")->orderBy('orden')->get();
+        
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
+    public function calidad() {
+        $title = "CALIDAD";
+        $view = "page.parts.calidad";
+        $datos = [];
+        $datos["empresa"] = self::general();
+
+        $datos["contenido"] = json_decode(Contenido::where("seccion","calidad")->first()["data"], true)["CONTENIDO"][$this->idioma];
+        //dd($datos["contenido"]);
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
 }
