@@ -297,7 +297,7 @@ const ENTIDADES = {
     },
     origenes: {
         ATRIBUTOS: {
-            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 230x230",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"108px"},
+            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"OK",INVALID:"28x14",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"108px"},
             nombre: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE"}
         },
         FORM: [
@@ -305,11 +305,9 @@ const ENTIDADES = {
                 BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
             },
             {
+                image: '<div class="col-6 col-md-4 col-lg-2">/image/</div>',
                 nombre: '<div class="col-12 col-md-6">/nombre/</div>'
-            },
-            {
-                image: '<div class="col-12 col-md-6">/image/</div>',
-            },
+            }
         ],
         FUNCIONES: {
             image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
@@ -439,18 +437,21 @@ const ENTIDADES = {
 
     productos: {
         ATRIBUTOS: {
-            orden: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
-            codigo: {TIPO:"TP_STRING",MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"200px",NOMBRE:"código"},
-            nombre: {TIPO:"TP_STRING",MAXLENGTH:100,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
+            codigo: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase text-center",NOMBRE:"código"},
+            nombre: {TIPO:"TP_TEXT",NECESARIO:1,MAXLENGTH:100,EDITOR:1,VISIBILIDAD:"TP_VISIBLE",FIELDSET:1,NOMBRE:"nombre"},
+            orden: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase text-center",WIDTH:"150px"},
+            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 362x347",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"125px"},
             link: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
-            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 1400x479",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"250px"},
-            seccion: {TIPO:"TP_ENUM",ENUM:{home:"Home",empresa:"Empresa",ofertas:"Ofertas",pagos: "Pagos y envios"},NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"sección"},
-            texto: {TIPO:"TP_TEXT",EDITOR:1,VISIBILIDAD:"TP_VISIBLE",FIELDSET:1,NOMBRE:"texto"}
-        },
-        JSON: {
-            texto: {
-                es: "español"
-            },
+            mercadolibre: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"link de mercadolibre"},
+            catalogo: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Catálogo seleccionado",INVALID:"Seleccione catálogo",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE_FORM",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"catálogo",SIMPLE:1},
+            familia_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"categoría"},
+            categoria_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"categoría",DISABLED: 1},
+            origen_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"origen"},
+            marca_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"marca"},
+            marcaTexto: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"marca"},
+            categoriaTexto: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"categoría"},
+            
+            cantidad: {TIPO:"TP_ENTERO",EDITOR:1,VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"cantidad envasada",CLASS:"text-center",SIMPLE:1}
         },
         FORM: [
             {
@@ -459,16 +460,30 @@ const ENTIDADES = {
             },
             {
                 image: '<div class="col-12 col-md-6">/image/</div>',
+                catalogo: '<div class="col-12 col-md-6">/catalogo/</div>',
             },
             {
-                link: '<div class="col-12 col-md-6">/link/</div>',
+                codigo: '<div class="col-12 col-md-3">/codigo/</div>',
+                cantidad: '<div class="col-12 col-md-3">/cantidad/</div>'
             },
             {
-                texto: '<div class="col-12">/texto/</div>'
+                nombre: '<div class="col-12">/nombre/</div>',
+            },
+            {
+                mercadolibre: '<div class="col-12">/mercadolibre/</div>'
+            },
+            {
+                familia_id: '<div class="col-12 col-md-6">/familia_id/</div>',
+                categoria_id: '<div class="col-12 col-md-6">/categoria_id/</div>',
+            },
+            {
+                origen_id: '<div class="col-12 col-md-6">/origen_id/</div>',
+                marca_id: '<div class="col-12 col-md-6">/marca_id/</div>'
             }
         ],
         FUNCIONES: {
-            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}},
+            familia_id: {onchange: "changeFamilia(this, '#categoria_id');"},
         }
     },
 }

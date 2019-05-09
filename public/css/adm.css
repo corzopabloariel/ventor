@@ -1,6 +1,7 @@
 /* ---------------------------------------------------
     TABLE
 ----------------------------------------------------- */
+table thead th,
 table tbody td {
     vertical-align: middle !important;
 }

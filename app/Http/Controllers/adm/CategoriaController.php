@@ -61,7 +61,7 @@ class CategoriaController extends Controller
             $path = public_path('images/categorias/');
             if (!file_exists($path))
                 mkdir($path, 0777, true);
-            $imageName = time().$file->getClientOriginalExtension();
+            $imageName = time() . "." .$file->getClientOriginalExtension();
             
             $file->move($path, $imageName);
             $ARR_data["image"] = "images/categorias/{$imageName}";

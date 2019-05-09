@@ -24,4 +24,15 @@ class Categoria extends Model
     {
         return $this->hasMany('App\Categoria','padre_id','id')->orderBy('orden');
     }
+    
+    public function getCategoriaEnteroAttribute() {
+        $padre = self::recursivo($this->padre);
+        return "{$padre}<br/><strong style='color:#009AD6'>{$this->nombre}</strong>";
+    }
+    public function recursivo($data) {
+        if(empty($data->padre))
+            return "<strong style='color: {$data["color"]}'>{$data["nombre"]}</strong>";
+        else
+            return self::recursivo($data->padre) . "<br/>{$data["nombre"]}";
+    }
 }

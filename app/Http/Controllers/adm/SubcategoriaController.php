@@ -8,6 +8,28 @@ use App\Categoria;
 
 class SubcategoriaController extends Controller
 {
+    public function rec_hijos($data) {
+        $data["hijos"] = $data->hijos;
+        
+        if(empty($data["hijos"]))
+            return $data;
+        else {
+            foreach($data["hijos"] AS $h)
+                $h["hijos"] = self::rec_hijos($h);
+            return $data["hijos"];
+        }
+    }
+    public function select2($data) {
+        if(count($data["hijos"]) == 0) {
+            return ["id" => $data["id"], "text" => $data["nombre"]];
+        } else {
+            $aux = [];
+            for($i = 0; $i < count($data["hijos"]); $i++) {
+                $aux[] = self::select2($data["hijos"][$i]);
+            }
+            return $aux;
+        }
+    }
     /**
      * Display a listing of the resource.
      *
@@ -84,9 +106,22 @@ class SubcategoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id = null)
     {
-        //
+        if(empty($id)) return [];
+        $data = self::edit($id);
+
+        $select2 = [];
+        $data["hijos"] = self::rec_hijos($data);
+        $select2[] = ["id" => "", "text" => ""];
+        foreach($data["hijos"] AS $h) {
+            if(count($h->hijos) == 0)
+                $select2[] = ["id" => $h["id"], "text" => $h["nombre"]];
+            else
+                $select2[] = ["text" => $h["nombre"], "children" => self::select2($h)];
+        }
+        //dd($select2);
+        return $select2;
     }
 
     /**

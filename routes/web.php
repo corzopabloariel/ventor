@@ -11,13 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'page\GeneralController@index')->name('index');
+Route::get('empresa', 'page\GeneralController@empresa')->name('empresa');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::get('/', 'adm\AdmController@index');
@@ -95,9 +92,18 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
             Route::get('index', ['uses' => 'adm\SubcategoriaController@index', 'as' => '.index']);
             Route::post('store', ['uses' => 'adm\SubcategoriaController@store', 'as' => '.store']);
             Route::get('edit/{id}', ['uses' => 'adm\SubcategoriaController@edit', 'as' => '.edit']);
+            Route::get('show/{id?}', ['uses' => 'adm\SubcategoriaController@show', 'as' => '.show']);
             Route::get('delete/{id}', ['uses' => 'adm\SubcategoriaController@destroy', 'as' => '.destroy']);
             Route::post('update/{id}', ['uses' => 'adm\SubcategoriaController@update', 'as' => 'update']);
         });
+    });
+
+    Route::group(['prefix' => 'productos', 'as' => 'productos'], function() {
+        Route::get('index', ['uses' => 'adm\ProductoController@index', 'as' => '.index']);
+        Route::post('store', ['uses' => 'adm\ProductoController@store', 'as' => '.store']);
+        Route::get('edit/{id}', ['uses' => 'adm\ProductoController@edit', 'as' => '.edit']);
+        Route::get('delete/{id}', ['uses' => 'adm\ProductoController@destroy', 'as' => '.destroy']);
+        Route::post('update/{id}', ['uses' => 'adm\ProductoController@update', 'as' => 'update']);
     });
     
     /**
