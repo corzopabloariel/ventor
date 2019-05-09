@@ -2,7 +2,127 @@ body {
     background: #FFF;
 }
 
+/* ---------------------------------------------------
+    SIDEBAR
+----------------------------------------------------- */
+.sidebar > .title {
+    font-size: 17px;
+    padding: 10px 0;
+}
+.sidebar > .title + .title {
+    border-top: 1px solid rgba(240,240,240,.54);
+}
+.sidebar > .title > i {
+    right: 0;
+    top: calc(50% - 7px);
+    position: absolute;
+    color: #A2A2A2;
+}
+.sidebar > .title > i[data-tipo="open"] {
+    display: none;
+}
+.sidebar > .title + ul > li {
+    font-size: 15px;
+}
+.sidebar > .title + ul > li > span {
+    text-transform: uppercase;
+    font-weight: 500
+}
+.sidebar ul {
+    display: none;
+}
+.sidebar > .title.active > i[data-tipo="open"] {
+    display: block;
+}
+.sidebar > .title.active > i[data-tipo="close"] {
+    display: none;
+}
+.sidebar > .title.active + ul,
+.sidebar > .title.active + ul span.active + ul {
+    display: block;
+}
+.sidebar > .title.active + ul span.active > a {
+    color: #009AD6;
+}
 
+/* ---------------------------------------------------
+    CATEGORIAS / PRODUCTOS HOVER
+----------------------------------------------------- */
+.categorias a > div,
+.productos a > div {
+    position: relative;
+    -webkit-transition: all 800ms ease;
+    -moz-transition: all 800ms ease;
+    -ms-transition: all 800ms ease;
+    -o-transition: all 800ms ease;
+    transition: all 800ms ease;
+}
+.categorias a > div img,
+.productos a > div img {
+    display: block;
+    border: 1px solid rgba(74,74,74,.44);
+}
+.categorias a > div::before,
+.productos a > div::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(74,74,74,.74);
+    z-index: 1;
+}
+.categorias a > div::after,
+.productos a > div::after {
+    content: "\f067";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    background-color: #009AD6;
+    color: #fff;
+    z-index: 2;
+    left: calc(50% - 43px / 2);
+    top: calc(50% - 43px / 2);
+    width: 43px;
+    height: 43px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.categorias a > div::before,
+.categorias a > div::after,
+.productos a > div::before,
+.productos a > div::after {
+    opacity: 0;
+    -webkit-transition: all 800ms ease;
+    -moz-transition: all 800ms ease;
+    -ms-transition: all 800ms ease;
+    -o-transition: all 800ms ease;
+    transition: all 800ms ease;
+}
+.categorias a:hover > div::before,
+.categorias a:hover > div::after,
+.productos a:hover > div::before,
+.productos a:hover > div::after {
+    opacity: 1;
+}
+.categorias a p,
+.productos a p:last-child {
+    color: #0099D6;
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 5px;
+}
+.productos a p:nth-child(2) {
+    color: #595959;
+}
+.productos a p:nth-child(3) {
+    color: #BF1939;
+    text-transform: uppercase;
+}
+.productos a p:nth-child(3)::before {
+    content: "para ";
+}
 /* ---------------------------------------------------
     NAV
 ----------------------------------------------------- */
@@ -244,7 +364,7 @@ footer .marca {
 .wrapper-categorias p {
     color: #666666;
     font-size: 22px;
-    line-height: 18px;
+    line-height: 22px;
 }
 
 /* ---------------------------------------------------
@@ -351,8 +471,60 @@ footer .marca {
 .wrapper-empresa .timeline .input.active::before, .wrapper-empresa .timeline .input.active::after {
     top: calc(35%);
 }
+
 /* ---------------------------------------------------
-    EMPRESA
+    PRODUCTO
+----------------------------------------------------- */
+.wrapper-producto .navegador {
+    color: rgba(134,134,134,.65);
+    font-size: 12px;
+    display: flex;
+}
+.wrapper-producto .navegador a {
+    padding-right: 15px;
+}
+.wrapper-producto .navegador a + a {
+    border-left: 1px solid rgba(134,134,134,.65);
+    padding-left: 15px;
+}
+.wrapper-producto .navegador a:last-child {
+    padding-right: 0;
+}
+.wrapper-producto .categorias:not(:empty) + .productos:not(:empty) {
+    padding-top: 1em;
+    margin-top: 1em;
+    border-top: 1px dotted;
+}
+.wrapper-producto .title {
+    color: #0099D6;
+}
+.wrapper-producto div.title {
+    font-size: 18px;
+    font-weight: bold;
+}
+.wrapper-producto .para {
+    color: #BF1939;
+    font-size: 14px;
+}
+.wrapper-producto table {
+    font-size: 14px;
+}
+.wrapper-producto table .title {
+    font-weight: bold;
+}
+.wrapper-producto .btn-ml {
+    background-color: #FFE600;
+}
+.wrapper-producto .btn-ml img {
+    height: 24px;
+}
+.wrapper-producto .btn:not(.btn-ml) {
+    background-color: #A8A8A8;
+    font-weight: bold;
+    color: #fff;
+}
+/* ---------------------------------------------------
+    HOVER ROUNDED
 ----------------------------------------------------- */
 .wrapper-link > a {
     text-align: center;

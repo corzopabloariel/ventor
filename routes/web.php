@@ -13,7 +13,11 @@
 
 Route::get('/', 'page\GeneralController@index')->name('index');
 Route::get('empresa', 'page\GeneralController@empresa')->name('empresa');
-Route::get('productos', 'page\GeneralController@productos')->name('productos');
+Route::group(['prefix' => 'productos', 'as' => 'productos'], function() {
+    Route::get('/', ['uses' => 'page\GeneralController@productos', 'as' => '.productos']);
+    Route::get('/{id?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
+});
+Route::get('producto/{link?}', ['uses' => 'page\GeneralController@producto', 'as' => '.producto']);
 Route::get('calidad', 'page\GeneralController@calidad')->name('calidad');
 
 Auth::routes();
@@ -68,6 +72,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('edit/{id}', ['uses' => 'adm\OrigenesController@edit', 'as' => '.edit']);
         Route::get('delete/{id}', ['uses' => 'adm\OrigenesController@destroy', 'as' => '.destroy']);
         Route::post('update/{id}', ['uses' => 'adm\OrigenesController@update', 'as' => 'update']);
+    });
+    /**
+     * ORIGENES
+     */
+    Route::group(['prefix' => 'descargas', 'as' => 'descargas'], function() {
+        Route::get('index', ['uses' => 'adm\DescargasController@index', 'as' => '.index']);
+        Route::post('store', ['uses' => 'adm\DescargasController@store', 'as' => '.store']);
+        Route::get('edit/{id}', ['uses' => 'adm\DescargasController@edit', 'as' => '.edit']);
+        Route::get('delete/{id}', ['uses' => 'adm\DescargasController@destroy', 'as' => '.destroy']);
+        Route::post('update/{id}', ['uses' => 'adm\DescargasController@update', 'as' => 'update']);
     });
     /**
      * RECURSOS

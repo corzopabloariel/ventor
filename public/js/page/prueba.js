@@ -62,7 +62,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
     this.nav = function(data) {
         let html = "";
         for(let x in data.ELEMENT) {
-            html += `<li class="hidden-tablet"><a href="${x}">${data.ELEMENT[x]}</a></li>`;
+            html += `<li class="hidden-tablet"><a href="${dataPYRUS.URLBASE}/${x}">${data.ELEMENT[x]}</a></li>`;
         }
 
         return html;

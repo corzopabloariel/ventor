@@ -58,11 +58,12 @@
         <script>
             window.url = "{{ url()->current() }}";
             const imgDEFAULT = "{{ asset('images/general/no-img.png') }}";
-            const datos = @json($datos);
+            const datos = @json($datos);console.log(datos)
+            const URLBASE = `{{ URL::to("/") }}`;
             const logo = `{{ asset('${datos.empresa.images.logo}') }}`;
             const logoFooter = `{{ asset('${datos.empresa.images.logoFooter}') }}`;
-            header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo});
-            footer = new PyrusCuerpo("footer", {imgDEFAULT: imgDEFAULT, logo: logoFooter, domicilio: datos.empresa.domicilio, telefono: datos.empresa.telefono, email: datos.empresa.email});
+            header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE});
+            footer = new PyrusCuerpo("footer", {imgDEFAULT: imgDEFAULT, logo: logoFooter, domicilio: datos.empresa.domicilio, telefono: datos.empresa.telefono, email: datos.empresa.email, URLBASE:URLBASE});
             $("#wrapper-header").html(header.html());
             $("#wrapper-footer").html(footer.html());
         </script>

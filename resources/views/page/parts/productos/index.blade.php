@@ -5,7 +5,7 @@
                 <div class="row justify-content-center">
                     @foreach($datos['categorias'] AS $c)
                     <div class="col-12 col-md-4 col-lg-3 my-3 wrapper-link">
-                        <a href="">
+                        <a href="{{ URL::to('productos/' . $c['id']) }}">
                             <div>
                                 <img style="filter:{{ $c['hsl'] }}" src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" alt="{{ $c['nombre'] }}">
                             </div>

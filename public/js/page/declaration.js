@@ -46,7 +46,7 @@ const BODY = {
                     },
             nav:    {
                         TIPO:"TP_NAV",
-                        ELEMENT: {"/":"Inicio",empresa: "Empresa", productos: "Productos", descargas: "Descargas", calidad: "Calidad", contacto: "Contacto"},
+                        ELEMENT: {"":"Inicio",empresa: "Empresa", productos: "Productos", descargas: "Descargas", calidad: "Calidad", contacto: "Contacto"},
                         ACTIVE: "active",
                     },
             datos:  {

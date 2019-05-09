@@ -73,6 +73,12 @@
                 </ul>
             </li>
             <li>
+                <a data-link="a" href="{{ route('descargas.index') }}">
+                    <i class="fas fa-download"></i>
+                    <span class="nav-label">Descargas</span>
+                </a>
+            </li>
+            <li>
                 <a data-link="a" href="{{ route('contenido.edit', ['seccion' => 'calidad']) }}">
                     <i class="fas fa-quidditch"></i>
                     <span class="nav-label">Calidad</span>

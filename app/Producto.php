@@ -25,6 +25,10 @@ class Producto extends Model
     {
         return $this->belongsTo('App\Categoria');
     }
+    public function origen()
+    {
+        return $this->belongsTo('App\Origen');
+    }
     public function marca()
     {
         return $this->belongsTo('App\Marca');

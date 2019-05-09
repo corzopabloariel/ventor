@@ -11,4 +11,9 @@ class Origen extends Model
         'nombre',
         'image'
     ];
+
+    public function nombre() {
+        $image = asset($this->image);
+        return "{$this->nombre} <img src='{$image}' style='width: 34px;'/>";
+    }
 }

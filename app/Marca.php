@@ -22,7 +22,10 @@ class Marca extends Model
         return $this->belongsTo('App\Marca');
     }
 
-    public function getNombreEnteroAttribute() {
-        return "{$this->padre["nombre"]}<br/>{$this->nombre}";
+    public function getNombreEnteroAttribute($tipo = 1) {
+        $texto = "{$this->padre["nombre"]}";
+        $texto .= $tipo ? "<br/>" : " / ";
+        $texto .= "{$this->nombre}";
+        return $texto;
     }
 }
