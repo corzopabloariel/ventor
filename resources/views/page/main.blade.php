@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('headTitle', 'VENTOR :: ' . $title)</title>
         <!-- <Fonts> -->
@@ -54,6 +55,8 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="{{ asset('js/page/declaration.js') }}"></script>
         <script src="{{ asset('js/page/prueba.js') }}"></script>
+        <script src="{{ asset('js/declaration.js') }}"></script>
+        <script src="{{ asset('js/pyrus.min.js') }}"></script>
         <script src="{{ asset('js/janimate.min.js') }}"></script>
         <script>
             window.url = "{{ url()->current() }}";
@@ -64,8 +67,32 @@
             const logoFooter = `{{ asset('${datos.empresa.images.logoFooter}') }}`;
             header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE});
             footer = new PyrusCuerpo("footer", {imgDEFAULT: imgDEFAULT, logo: logoFooter, domicilio: datos.empresa.domicilio, telefono: datos.empresa.telefono, email: datos.empresa.email, URLBASE:URLBASE});
+            form = new Pyrus("formulario_login");
             $("#wrapper-header").html(header.html());
             $("#wrapper-footer").html(footer.html());
+
+            let formHTML = "";
+            let formACTION = "{{ route('client.login') }}";
+            let token = "{{ csrf_token() }}";
+            formHTML += `<form action="${formACTION}" method="post">`;
+                formHTML += `<input type="hidden" name="_token" value="${token}"/>`;
+                formHTML += form.formulario();
+                formHTML += `<button class="btn btn-primary mx-auto mt-3 d-block text-uppercase" type="submit">ingresar</button>`;
+            formHTML += `</form>`;
+            $("#login > li:first-child > div").html(formHTML);
+
+            if($("nav .menu").find(`a[href="${window.url}"]`).length) {
+                $("nav .menu").find(`a[href="${window.url}"]`).addClass("active");
+                if(window.url.indexOf('atencion') > 0) {
+                    console.log(URLBASE + "/atencion")
+                    $("nav .menu").find(`a[href="${URLBASE}/atencion"]`).addClass("active");
+                }
+            }
+            @if(auth()->guard('client')->check())
+                let data = "{{ auth()->guard('client')->user() }}";
+                header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE});
+                $("#wrapper-header").html(header.html());
+            @endif
         </script>
         @stack('scripts')
         {{--<script src="{{ asset('js/adm.js') }}"></script>--}}

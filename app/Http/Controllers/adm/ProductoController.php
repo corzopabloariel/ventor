@@ -86,6 +86,7 @@ class ProductoController extends Controller
             $select2["familias"][] = ["id" => $e["id"],"text" => $e["nombre"],"img" => $e["image"], "style" => "width: 60px; filter: {$e["hsl"]}"];
         foreach($productos AS $p) {
             $p["nombre"] = $p->getNombreCodigoAttribute();
+            $p["precio"] = "$ " . $p->getPrecio();
             $p["marcaTexto"] = $p->marca->getNombreEnteroAttribute();
             $p["categoriaTexto"] = $p->categoria->getCategoriaEnteroAttribute();
             
@@ -125,6 +126,7 @@ class ProductoController extends Controller
         $ARR_data["codigo"] = $datosRequest["codigo"];
         $ARR_data["nombre"] = $datosRequest["nombre"];
         $ARR_data["orden"] = $datosRequest["orden"];
+        
         $ARR_data["mercadolibre"] = $datosRequest["mercadolibre"];
         $ARR_data["cantidad"] = $datosRequest["cantidad"];
         $ARR_data["link"] = self::cleanURL(strip_tags($datosRequest["nombre"]));
@@ -133,9 +135,23 @@ class ProductoController extends Controller
         $ARR_data["categoria_id"] = $datosRequest["categoria_id"];
         $ARR_data["origen_id"] = $datosRequest["origen_id"];
         $ARR_data["marca_id"] = $datosRequest["marca_id"];
+        //dd($datosRequest);
+        $precio = 0;
+        if(isset($datosRequest["precio"])) {
+            $precio = $datosRequest["precio"];
+            $precio = str_replace("$","",$precio);
+            $precio = str_replace(".","",$precio);
+            $precio = str_replace(",",".",$precio);
+            $precio = trim($precio);
+        }
+        $ARR_data["precio"] = $precio;
         
         $file = $request->file("image");
         $catalogo = $request->file("catalogo");
+        if(!is_null($data)) {
+            $ARR_data["image"] = $data["image"];
+            $ARR_data["catalogo"] = $data["catalogo"];
+        }
         if(!is_null($file)) {
             $path = public_path('images/productos/');
             if (!file_exists($path))
@@ -146,9 +162,11 @@ class ProductoController extends Controller
             $ARR_data["image"] = "images/productos/{$imageName}";
             
             if(!is_null($data)) {
-                $filename = public_path() . "/" . $data["image"];
-                if (file_exists($filename))
-                    unlink($filename);
+                if(!empty($data["image"])) {
+                    $filename = public_path() . "/" . $data["image"];
+                    if (file_exists($filename))
+                        unlink($filename);
+                }
             }
         }
         if(!is_null($catalogo)) {
@@ -161,9 +179,11 @@ class ProductoController extends Controller
             $ARR_data["catalogo"] = "images/catalogos/{$imageName}";
             
             if(!is_null($data)) {
-                $filename = public_path() . "/" . $data["image"];
-                if (file_exists($filename))
-                    unlink($filename);
+                if(!empty($data["catalogo"])) {
+                    $filename = public_path() . "/" . $data["catalogo"];
+                    if (file_exists($filename))
+                        unlink($filename);
+                }
             }
         }
         
@@ -195,7 +215,9 @@ class ProductoController extends Controller
      */
     public function edit($id)
     {
-        return Producto::find($id);
+        $data = Producto::find($id);
+        $data["precio"] = $data->getPrecio();
+        return $data;
     }
 
     /**
@@ -207,7 +229,7 @@ class ProductoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        return self::store($request, self::edit($id));
     }
 
     /**

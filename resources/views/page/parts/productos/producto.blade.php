@@ -64,18 +64,22 @@
                                     </tr>
                                     <tr>
                                         <td class="title">Cantidad Envasada</td>
-                                        <td>{{ $datos["producto"]["cantidad"] }}</td>
+                                        <td>{{ $datos["producto"]["cantidad"] == 1 ? $datos["producto"]["cantidad"] . " unidad" : $datos["producto"]["cantidad"] . " unidades"}}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="row">
+                            @if(!empty($datos["producto"]["catalogo"]))
                             <div class="col-12 col-md-6">
-                                <button class="btn btn-block text-uppercase text-center"><i class="fas fa-download mr-1"></i>catálogo</button>
+                                <a download href="{{ asset($datos['producto']['catalogo']) }}" class="btn btn-block text-uppercase text-center"><i class="fas fa-download mr-1"></i>catálogo</a>
                             </div>
+                            @endif
+                            @if(!empty($datos["producto"]["mercadolibre"]))
                             <div class="col-12 col-md-6">
-                                <button class="btn btn-block btn-ml text-uppercase text-center"><img src="{{ asset('images/general/ml.fw.png')}}" class="d-block mx-auto" alt="Mercadolibre"></button>
+                                <a href="{{ asset($datos['producto']['mercadolibre']) }}" target="blank" class="btn btn-block btn-ml text-uppercase text-center"><img src="{{ asset('images/general/ml.fw.png')}}" class="d-block mx-auto" alt="Mercadolibre"></a>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>

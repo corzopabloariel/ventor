@@ -26,6 +26,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
 
             _return = _return.replace(`/${x}/`,aux);
         }
+        _return = _return.replace(/URLBASE/g, dataPYRUS.URLBASE);
         return _return;
     };
     this.formaAdecuada = function(objeto,data) {
@@ -97,7 +98,6 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
     }
     this.datos = function(data) {
         let html = "";
-        console.log(dataPYRUS)
         for(let x in data.ELEMENT) {
             html += `<li class="d-flex">`;
                 html += data.ELEMENT[x];

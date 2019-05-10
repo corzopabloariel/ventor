@@ -18,10 +18,10 @@
             <img class="d-block w-100" src="{{asset('' . $datos['slider'][$i]['image'])}}" >
             <div class="carousel-caption position-absolute w-100 h-100" style="top: 0; left: 0;">
                 <div class="container position-relative h-100 d-flex align-items-center">
-                    <div class="texto">
+                    <div class="texto text-left">
                         {!! $datos['slider'][$i]['texto'] !!}
                         @if(!empty( $datos['slider'][$i]['link'] ))
-                        <button style="background: #C1C0BD; padding: 10px 20px;" class="btn d-block text-white text-uppercase">ver {{ $datos['slider'][$i]['link'] }}</button>
+                        <a href="{{ URL::to($datos['slider'][$i]['link']) }}" style="background: #C1C0BD; padding: 10px 20px;" class="btn mt-2 text-white text-uppercase">ver {{ $datos['slider'][$i]['link'] }}</a>
                         @endif
                     </div>
                 </div>
@@ -36,9 +36,13 @@
         <h3 class="title text-uppercase text-center">categorias</h3>
         <div class="row justify-content-center">
             @foreach($datos['categorias'] AS $c)
-            <div class="col-12 col-md-4 col-lg-3 my-3">
-                <img style="filter:{{ $c['hsl'] }}" src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" alt="{{ $c['nombre'] }}">
-                <p class="mb-0 text-center">{{ $c['nombre'] }}</p>
+            <div class="col-12 col-md-4 col-lg-3 my-3 wrapper-link">
+                <a href="{{ URL::to('productos/' . $c['id']) }}">
+                    <div>
+                        <img style="filter:{{ $c['hsl'] }}" src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" alt="{{ $c['nombre'] }}">
+                    </div>
+                    <p class="mb-0 text-center">{{ $c['nombre'] }}</p>
+                </a>
             </div>
             @endforeach
         </div>

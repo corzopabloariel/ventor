@@ -22,8 +22,34 @@ Route::get('atencion/{id?}', ['uses' => 'page\GeneralController@atencion', 'as' 
 Route::get('producto/{link?}', ['uses' => 'page\GeneralController@producto', 'as' => '.producto']);
 Route::get('calidad', 'page\GeneralController@calidad')->name('calidad');
 Route::get('descargas', 'page\GeneralController@descargas')->name('descargas');
+Route::get('trabaje', 'page\GeneralController@trabaje')->name('trabaje');
+Route::get('pedido', 'page\GeneralController@pedido')->name('pedido');
+Route::get('carrito', 'page\GeneralController@carrito')->name('carrito');
+Route::get('registro', 'page\GeneralController@registro')->name('registro');
+Route::post('registro', 'page\GeneralController@registroUSER')->name('registroUSER');
 
 Auth::routes();
+
+Route::group(['prefix' => 'cliente', 'as' => 'client.'], function() {
+    // Authentication Routes...
+    Route::get('login', 'PrivateArea\LoginController@showLoginForm')->name('login');
+    Route::post('login', 'PrivateArea\LoginController@login');
+    // Route::post('logout', 'PrivateArea\LoginController@logout')->name('logout');
+    Route::get('logout', 'PrivateArea\LoginController@logout')->name('logout');
+    Route::post('register', 'PrivateArea\RegisterController@register')->name('register');
+    // Registration Routes...
+    // Route::get('register', 'PrivateArea\RegisterController@showRegistrationForm')->name('register');
+    // Route::post('register', 'PrivateArea\RegisterController@register');
+    // Password Reset Routes...
+    Route::get('password/reset', 'PrivateArea\ForgotPasswordController@showLinkRequestForm')->name('password.forgot');
+    Route::post('password/email', 'PrivateArea\ForgotPasswordController@sendResetLinkEmail')->name('password.forgot.post');
+    Route::get('password/reset/{token}', 'PrivateArea\ResetPasswordController@showResetForm')->name('password.reset');
+    Route::post('password/reset', 'PrivateArea\ResetPasswordController@reset')->name('password.reset.post');
+});
+Route::group(['middleware' => 'client', 'prefix' => 'client'], function() {
+    
+    Route::get('/', 'page\GeneralController@index');
+});
 
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::get('/', 'adm\AdmController@index');

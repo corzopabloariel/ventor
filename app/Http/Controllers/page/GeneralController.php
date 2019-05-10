@@ -4,6 +4,7 @@ namespace App\Http\Controllers\page;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 use App\Empresa;
 use App\Slider;
@@ -11,6 +12,7 @@ use App\Categoria;
 use App\Contenido;
 use App\Producto;
 use App\Descarga;
+use App\Usuario;
 
 class GeneralController extends Controller
 {
@@ -110,6 +112,7 @@ class GeneralController extends Controller
         $datos["empresa"] = self::general();
         $datos["producto"] = Producto::where("link",$link)->first();
         $title .= $datos["producto"]["nombre"];
+        //dd($link);
         $datos["categoria"] = Categoria::find($datos["producto"]["categoria_id"]);
         $datos["menu"] = self::menu($datos["categoria"]->padres());
         $datos["nombres"] = $datos["categoria"]->padres(0);
@@ -129,7 +132,7 @@ class GeneralController extends Controller
         $datos["menu"] = self::menu($datos["categoria"]->padres());
         $datos["nombres"] = $datos["categoria"]->padres(0);
         $datos["productos"] = $datos["categoria"]->productos;
-
+//dd($datos["productos"]);//
         foreach($datos["productos"] AS $p)
             $p["modelo"] = $p->marca->getNombreEnteroAttribute(0);
 
@@ -162,6 +165,65 @@ class GeneralController extends Controller
         $view = "page.parts.atencion.{$id}";
         $datos = [];
         $datos["empresa"] = self::general();
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
+
+    public function trabaje() {
+        $title = "TRABAJE CON NOSOTROS";
+        $view = "page.parts.trabaje";
+        $datos = [];
+        $datos["empresa"] = self::general();
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
+    
+    public function registro() {
+        $title = "REGISTRO";
+        $view = "page.parts.registro";
+        $datos = [];
+        $datos["empresa"] = self::general();
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
+    public function registroUSER(Request $request) {
+        $requestData = $request->all();
+        $ARR_data = [];
+
+        $aux = Usuario::where("username",$requestData["username"])->orWhere("email",$requestData["email"])->first();
+        
+        if(!empty($aux)) {
+
+            return back()
+                        ->withErrors(['mssg' => "Datos en uso [Usuario o Email]"])
+                        ->withInput($requestData);
+        }
+
+        $ARR_data["name"] = $requestData["nombre"];
+        $ARR_data["lastname"] = $requestData["apellido"];
+        $ARR_data["username"] = $requestData["username"];
+        $ARR_data["password"] = Hash::make($requestData["password"]);
+        $ARR_data["email"] = $requestData["email"];
+
+        Usuario::create($ARR_data);
+        return back()->withSuccess(['mssg' => "Usuario creado correctamente"]);
+    }
+
+    public function pedido() {
+        
+        $title = "PEDIDO";
+        $view = "page.parts.pedido";
+        $datos = [];
+        $datos["empresa"] = self::general();
+        $datos["productos"] = Producto::orderBy("orden")->get();
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
+    
+    public function carrito() {
+        
+        $title = "CARRITO";
+        $view = "page.parts.pedido";
+        $datos = [];
+        $datos["empresa"] = self::general();
+        $datos["carrito"] = 1;
+        $datos["productos"] = Producto::orderBy("orden")->get();
         return view('page.distribuidor',compact('title','view','datos'));
     }
 }

@@ -32,6 +32,7 @@
 </section>
 @push('scripts_distribuidor')
 <script src="https://cdn.ckeditor.com/4.11.4/basic/ckeditor.js"></script>
+<script src="{{ asset('js/jquery.maskMoney.js') }}"></script>
 <script>
     $(document).on("ready",function() {
         $(".ckeditor").each(function () {
@@ -93,6 +94,7 @@
         else
             action = `{{ url('/adm/${window.pyrus.entidad}/store') }}`;
         if(data !== null) {
+            console.log(data)
             for(let x in window.pyrus.especificacion) {
                 if(window.pyrus.especificacion[x].EDITOR !== undefined) {
                     if(CKEDITOR.instances[x] !== undefined)
@@ -111,6 +113,7 @@
                 }
                 $(`[name="${x}"]`).val(data[x]).trigger("change");
             }
+            $("#cantidad").val(data.cantidad)
             $("#familia_id").val(window.set_familia_id).trigger("change");
             $("#origen_id").val(window.set_origen_id).trigger("change");
             $("#marca_id").val(window.set_marca_id).trigger("change");
@@ -215,7 +218,7 @@
         console.log("CONSTRUYENDO FORMULARIO Y TABLA");
         /** */
         $("#form .container-form").html(window.pyrus.formulario());
-        
+        $("#precio").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix: '$ '});
         if($("#form .container-form .select__2").length) {
             
             $("#form .container-form #categoria_id.select__2").select2({

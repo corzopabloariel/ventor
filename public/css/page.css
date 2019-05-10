@@ -143,6 +143,27 @@ nav .menu a {
 nav .menu li {
     position: relative;
 }
+nav .info .submenu {
+    display: none;
+    position: absolute;
+    background: #FBFBFB;
+    color: #7A7A7A;
+    min-width: 250px;
+    z-index: 11;
+}
+nav .info .submenu .form-control {
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+}
+nav .info .submenu .form-control:focus {
+    box-shadow: none;
+}
+nav .info .submenu li {
+    padding: 15px;
+}
 nav .menu .submenu {
     display: none;
     position: absolute;
@@ -171,7 +192,8 @@ nav .menu li:hover ul ul {
     display:none;
 } /* hides sub-sublists */
 
-nav .menu li:hover ul {
+nav .menu li:hover ul,
+nav .info li:hover ul {
     display:block;
 } /* shows sublist on hover */
 
@@ -193,11 +215,7 @@ nav .info {
     font-family: 'Exo 2', sans-serif;
     font-size: 16px;
 }
-nav .info i {
-    color: #2D3E75;
-    margin-right: 5px;
-}
-nav .info li + li {
+nav .info > li + li {
     border-left: 1px solid #BBBBBB;
     margin-left: 10px;
     padding-left: 10px;
@@ -215,15 +233,8 @@ nav .info li form i {
 nav .active:not(.btn) {
     color: #2CC5ED !important;
 }
-nav .info form input {
-    width: 150px;
-}
 nav .logo {
     display: none;
-}
-
-nav .menu li:hover .submenu {
-    display: block;
 }
 nav .fixed {
     position: fixed;
@@ -282,6 +293,72 @@ nav .fixed .logo img {
     top: calc(50% - 8px);
 }
 
+
+/* ---------------------------------------------------
+    FOOTER
+----------------------------------------------------- */
+
+.wrapper-presupuesto .title + h4 {
+    color: #009AD6;
+    font-size: 15px;
+    font-weight: normal;
+}
+.wrapper-presupuesto .img-1,
+.wrapper-presupuesto .img-2 {
+    display: block;
+    margin: auto;
+}
+.wrapper-presupuesto .linea {
+    border-top:1px solid #DDDDDD;
+    display: inline-block;
+    margin-bottom: 4em;
+}
+.wrapper-presupuesto .iconos p {
+    color: #009AD6;
+    font-weight: 600;
+    margin: 10px 0 0 0;
+    font-size: 17px;
+    text-align: center;
+}
+.wrapper-presupuesto fieldset * {
+    font-size: 16px;
+    color: #868686;
+}
+.wrapper-presupuesto form .title {
+    color: #646464;
+    font-size: 16px;
+    font-weight: bold;
+}
+.wrapper-presupuesto .inactivo + p {
+    color: #DDDDDD;
+}
+.wrapper-presupuesto .img-1.inactivo,
+.wrapper-presupuesto .img-2.inactivo {
+    background-position: bottom center;
+}
+.wrapper-presupuesto .img-1 {
+    background-image: url(../images/general/presupuestoA.fw.png);
+    background-position: top center;
+    background-repeat: no-repeat;
+    height: 145px;
+    width: 90px;
+}
+.wrapper-presupuesto .img-2 {
+    background-image: url(../images/general/presupuestoB.fw.png);
+    background-position: top center;
+    background-repeat: no-repeat;
+    height: 145px;
+    width: 90px;
+}
+.wrapper-presupuesto .form-control {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+.wrapper-presupuesto .form-control:focus {
+    box-shadow: none;
+}
 /* ---------------------------------------------------
     FOOTER
 ----------------------------------------------------- */
@@ -488,7 +565,7 @@ footer .marca {
     font-size: 35px;
     color: #595959;
 }
-.wrapper-descargas .title + * {
+.wrapper-descargas:not(.wrapper-presupuesto) .title + * {
     color: #009AD6;
     font-size: 15px;
     font-weight: normal;
@@ -561,6 +638,36 @@ footer .marca {
     font-weight: bold;
     color: #fff;
 }
+
+/* ---------------------------------------------------
+    FORMULARIO
+----------------------------------------------------- */
+.wrapper-formulario {
+    background: #F5F5F5;
+    border-top: 1px solid #CCCCCC;
+}
+.wrapper-formulario.py-5 {
+    padding: 4rem 0 !important;
+}
+.wrapper-formulario .form-control {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    background-color: transparent;
+}
+.wrapper-formulario .form-control:focus {
+    box-shadow: none;
+}
+.wrapper-formulario .title {
+    color: #0099D6;
+    font-size: 26px;
+    font-weight: normal;
+}
+.wrapper-formulario .title + p {
+    font-size: 17px;
+    color: #5A5A5A;
+}
 /* ---------------------------------------------------
     HOVER ROUNDED
 ----------------------------------------------------- */
@@ -608,7 +715,58 @@ footer .marca {
 .wrapper-link > a:hover > div::before {
     opacity: 1;
 }
-
+/* ---------------------------------------------------
+    TRABAJE CON NOSOTROS
+----------------------------------------------------- */
+.wrapper-trabaje {
+    color: #595959;
+}
+.wrapper-trabaje h2.title {
+    font-size: 35px;
+    font-weight: lighter;
+}
+.wrapper-trabaje h3.title {
+    font-size: 22px;
+    font-weight: normal;
+    color:#009AD6;
+}
+.wrapper-trabaje .postulacion > div {
+    width: 300px;
+}
+.wrapper-trabaje .form-control {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-radius: 0;
+}
+.wrapper-trabaje .form-control:focus {
+    box-shadow: none;
+}
+.wrapper-pedido table thead th {
+    text-transform: uppercase;
+    color: #0099D8;
+    background: #F2F2F2;
+}
+.wrapper-pedido table tbody {
+    border-bottom: 1px solid #3F3F3F;
+}
+.wrapper-pedido table td,
+.wrapper-pedido table th {
+    vertical-align: middle;
+    font-size: 12px;
+}
+.wrapper-pedido table td p {
+    margin-bottom: 0;
+}
+.wrapper-pedido table td p:nth-child(1) {
+    font-weight: bold;
+}
+.wrapper-pedido table td p:nth-child(2) {
+    color: #C01939
+}
+/* ---------------------------------------------------
+    CALIDAD
+----------------------------------------------------- */
 .wrapper-calidad {
     color: #595959;
     font-size: 19px;
@@ -624,4 +782,28 @@ footer .marca {
 .wrapper-calidad .slogan {
     font-size: 25px;
     color: #0099D8;
+}
+.wrapper-calidad .list-group-horizontal {
+    display: block;
+}
+.wrapper-calidad .list-group.list-group-horizontal a {
+    border-radius: 0;
+    border: none;
+    width: auto;
+    display: inline-block
+}
+.wrapper-calidad .list-group-item.active {
+    color: #0099D8;
+    background: transparent;
+    border-bottom: 1px solid #0099D6 !important;
+}
+.wrapper-calidad .tab-content {
+    color: #525252;
+    font-size: 17px;
+}
+.wrapper-calidad .tab-content .title {
+    color: #0099D6;
+    font-size: 15px;
+    margin-bottom: 10px;
+    margin-top: 2em;
 }

@@ -481,6 +481,7 @@ const ENTIDADES = {
             orden: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase text-center",WIDTH:"150px"},
             image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 362x347",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"125px"},
             link: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
+            precio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"precio unitorio",CLASS:"text-right"},
             mercadolibre: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"link de mercadolibre"},
             catalogo: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Catálogo seleccionado",INVALID:"Seleccione catálogo",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE_FORM",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"catálogo",SIMPLE:1},
             familia_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"categoría"},
@@ -503,7 +504,8 @@ const ENTIDADES = {
             },
             {
                 codigo: '<div class="col-12 col-md-3">/codigo/</div>',
-                cantidad: '<div class="col-12 col-md-3">/cantidad/</div>'
+                cantidad: '<div class="col-12 col-md-3">/cantidad/</div>',
+                precio: '<div class="col-12 col-md-4">/precio/</div>',
             },
             {
                 nombre: '<div class="col-12">/nombre/</div>',
@@ -525,4 +527,122 @@ const ENTIDADES = {
             familia_id: {onchange: "changeFamilia(this, '#categoria_id');"},
         }
     },
+    formulario_login: {
+        ATRIBUTOS: {
+            username: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Usuario"},
+            password: {TIPO:"TP_PASSWORD",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Contraseña"},
+        },
+        FORM: [
+            {
+                username: '<div class="col-12">/username/</div>',
+            },
+            {
+                password: '<div class="col-12">/password/</div>',
+            }
+        ]
+    },
+    formulario_registro: {
+        ATRIBUTOS: {
+            nombre: {TIPO:"TP_STRING",MAXLENGTH:70,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
+            apellido: {TIPO:"TP_STRING",MAXLENGTH:120,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
+            
+            email: {TIPO:"TP_EMAIL",NECESARIO:1,MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE"},
+            
+            username: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:20,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"usuario"},
+            password: {TIPO:"TP_PASSWORD",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"contraseña"}
+        },
+        FORM: [
+            {
+                nombre: '<div class="col-12 col-md-6">/nombre/</div>',
+                apellido: '<div class="col-12 col-md-6">/apellido/</div>',
+            },
+            {
+                username: '<div class="col-12 col-md-6">/username/</div>',
+                password: '<div class="col-12 col-md-6">/password/</div>',
+            },
+            {
+                email: '<div class="col-12">/email/</div>',
+            }
+        ]
+    },
+    formulario_atencion: {
+        ATRIBUTOS: {
+            nroCliente: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Nro. Cliente"},
+            razon: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Razón Social"},
+            fecha: {TIPO:"TP_FECHA",VISIBILIDAD:"TP_VISIBLE",SIMPLE:1},
+            importe: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",CLASS:"importe"},
+            banco: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
+            sucursal: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
+            facturas: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Facturas canceladas"},
+            descuento: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Descuento efectuado"},
+            
+            observaciones: {TIPO:"TP_TEXT",VISIBILIDAD:"TP_VISIBLE"},
+        },
+        FORM: [
+            {
+                nroCliente: '<div class="col-12 col-md-6">/nroCliente/</div>',
+                razon: '<div class="col-12 col-md-6">/razon/</div>',
+            },
+            {
+                fecha: '<div class="col-12 col-md-6">/fecha/</div>',
+                importe: '<div class="col-12 col-md-6">/importe/</div>',
+            },
+            {
+                banco: '<div class="col-12 col-md-6">/banco/</div>',
+                sucursal: '<div class="col-12 col-md-6">/sucursal/</div>',
+            },
+            {
+                facturas: '<div class="col-12 col-md-6">/facturas/</div>',
+                descuento: '<div class="col-12 col-md-6">/descuento/</div>',
+            },
+            {
+                observaciones: '<div class="col-12">/observaciones/</div>',
+            }
+        ]
+    },
+    formulario_recursos: {
+        ATRIBUTOS: {
+            nombre: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
+            apellido: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
+            fecha: {TIPO:"TP_FECHA",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",SIMPLE:1, NOMBRE:"Fecha de nacimiento"},
+            domicilio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
+            cp: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"código postal"},
+            provincia: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
+            localidad: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
+            nacionalidad: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
+            dni: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"dni (documento de identidad)"},
+            estado: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"estado civil"},
+            email: {TIPO:"TP_EMAIL",VISIBILIDAD:"TP_VISIBLE"},
+            telefono: {TIPO:"TP_PHONE",VISIBILIDAD:"TP_VISIBLE"},
+            
+            observaciones: {TIPO:"TP_TEXT",VISIBILIDAD:"TP_VISIBLE"},
+        },
+        FORM: [
+            {
+                nombre: '<div class="col-12 col-md-6">/nombre/</div>',
+                apellido: '<div class="col-12 col-md-6">/apellido/</div>',
+            },
+            {
+                domicilio: '<div class="col-12 col-md-6">/domicilio/</div>',
+                cp: '<div class="col-12 col-md-6">/cp/</div>',
+            },
+            {
+                provincia: '<div class="col-12 col-md-6">/provincia/</div>',
+                localidad: '<div class="col-12 col-md-6">/localidad/</div>',
+            },
+            {
+                nacionalidad: '<div class="col-12 col-md-6">/nacionalidad/</div>',
+                dni: '<div class="col-12 col-md-6">/dni/</div>',
+            },
+            {
+                fecha: '<div class="col-12 col-md-6">/fecha/</div>',
+                estado: '<div class="col-12 col-md-6">/estado/</div>',
+            },
+            {
+                email: '<div class="col-12 col-md-6">/email/</div>',
+                telefono: '<div class="col-12 col-md-6">/telefono/</div>',
+            }
+        ]
+    }
+    
 }

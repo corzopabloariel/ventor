@@ -18,19 +18,20 @@
         <div class="row mt-4">
             <div class="col-12">
                 <div class="list-group list-group-horizontal" role="tablist">
-                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Cras justo odio</a>
-                    <a class="list-group-item list-group-item-action" id="list-home-list2" data-toggle="list" href="#list-home2" role="tab" aria-controls="home2">Dapibus ac facilisis in</a>
-                    <a class="list-group-item list-group-item-action" id="list-home-list3" data-toggle="list" href="#list-home3" role="tab" aria-controls="home2">Morbi leo risus</a>
+                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">{{ $datos["contenido"]["calidad"]["titulo"] }}</a>
+                    <a class="list-group-item list-group-item-action" id="list-home-list2" data-toggle="list" href="#list-home2" role="tab" aria-controls="home2">{{ $datos["contenido"]["garantia"]["titulo"] }}</a>
                 </div>
             </div>
             <div class="col-12">
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                        adasdsadasdaadasdas
+                        <p class="title">{{ $datos["contenido"]["calidad"]["titulo"] }}</p>
+                        {!! $datos["contenido"]["calidad"]["texto"] !!}
                     </div>
-                    <div class="tab-pane fade" id="list-home2" role="tabpanel" aria-labelledby="list-profile-list">...</div>
-                    <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
-                    <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+                    <div class="tab-pane fade" id="list-home2" role="tabpanel" aria-labelledby="list-profile-list">
+                        <p class="title">{{ $datos["contenido"]["garantia"]["titulo"] }}</p>
+                        {!! $datos["contenido"]["garantia"]["texto"] !!}
+                    </div>
                 </div>
             </div>
         </div>
