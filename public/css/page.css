@@ -212,13 +212,26 @@ nav .menu li:hover .submenu {
     display: block;
 }
 nav .info {
-    font-family: 'Exo 2', sans-serif;
     font-size: 16px;
+}
+nav .info .buscador i {
+    color: #5395DF;
+}
+nav .info .buscador .btn {
+    padding: 0;
+    margin-right: 10px;
+}
+nav .info .buscador .form-control {
+    width: 150px;
+    padding: 0;
 }
 nav .info > li + li {
     border-left: 1px solid #BBBBBB;
     margin-left: 10px;
     padding-left: 10px;
+}
+nav .info > li:last-child {
+    border-left: none;
 }
 nav .info li form input {
     border: none;
@@ -263,6 +276,10 @@ nav .fixed .logo {
 nav .fixed .logo img {
     height: 50px;
 }
+nav .buscador .form-control:focus,
+nav .buscador .btn:focus {
+    box-shadow: none;
+}
 #menuNav .modal-dialog {
     margin: 0;
 }
@@ -295,9 +312,16 @@ nav .fixed .logo img {
 
 
 /* ---------------------------------------------------
-    FOOTER
+    NOVEDADES
 ----------------------------------------------------- */
 
+.wrapper-novedades .productos a p {
+    color: #0099D8;
+}
+
+/* ---------------------------------------------------
+    PRESUPUESTO
+----------------------------------------------------- */
 .wrapper-presupuesto .title + h4 {
     color: #009AD6;
     font-size: 15px;
@@ -450,6 +474,22 @@ footer .marca {
     color: #666666;
     font-size: 22px;
     line-height: 22px;
+}
+.wrapper-categorias .buscador .form-control {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-radius: 0;
+    background-color: transparent;
+}
+.wrapper-categorias .buscador .form-control:focus,
+.wrapper-categorias .buscador .btn:focus {
+    box-shadow: none;
+}
+.wrapper-categorias .buscador .btn {
+    color: #5697DC;
+    background-color: transparent;
+    
 }
 
 /* ---------------------------------------------------

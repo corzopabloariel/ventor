@@ -364,6 +364,19 @@ const ENTIDADES = {
             }
         ]
     },
+    redes: {
+        ATRIBUTOS: {
+            redes: {TIPO:"TP_ENUM",ENUM:{facebook:'Facebook',instagram:'Instagram',twitter:'Twitter',youtube:'YouTube',linkedin:'LinkedIn'},NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"red social",WIDTH:"150px",COMUN:1},
+            url: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"link del sitio"},
+        },
+        FORM: [
+            {
+                redes: '<div class="col-4 col-md-2">/redes/</div>',
+                url: '<div class="col-8 col-md-6">/url/</div>',
+                BTN: '<div class="d-flex col-3 col-md-2">/BTN/</div>'
+            }
+        ]
+    },
     metadatos: {
         ATRIBUTOS: {
             seccion: {TIPO:"TP_ENUM",ENUM:{home:"Home",empresa:"Empresa",productos:"Productos",descargas:"Descargas",calidad:"Calidad",contacto: "Contacto"},NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_TABLE",CLASS:"text-uppercase",NOMBRE:"sección",WIDTH:"150px"},
@@ -490,7 +503,7 @@ const ENTIDADES = {
             marca_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"marca"},
             marcaTexto: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"marca"},
             categoriaTexto: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"categoría"},
-            
+            novedad: {TIPO:"TP_CHECK",VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"Novedad?"},
             cantidad: {TIPO:"TP_ENTERO",EDITOR:1,VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"cantidad envasada",CLASS:"text-center",SIMPLE:1}
         },
         FORM: [
@@ -511,7 +524,8 @@ const ENTIDADES = {
                 nombre: '<div class="col-12">/nombre/</div>',
             },
             {
-                mercadolibre: '<div class="col-12">/mercadolibre/</div>'
+                mercadolibre: '<div class="col-12 col-md-9">/mercadolibre/</div>',
+                novedad: '<div class="col-12 col-md-3">/novedad/</div>'
             },
             {
                 familia_id: '<div class="col-12 col-md-6">/familia_id/</div>',

@@ -135,6 +135,7 @@ class ProductoController extends Controller
         $ARR_data["categoria_id"] = $datosRequest["categoria_id"];
         $ARR_data["origen_id"] = $datosRequest["origen_id"];
         $ARR_data["marca_id"] = $datosRequest["marca_id"];
+        $ARR_data["novedad"] = $datosRequest["novedad"];
         //dd($datosRequest);
         $precio = 0;
         if(isset($datosRequest["precio"])) {

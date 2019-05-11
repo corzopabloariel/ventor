@@ -30,21 +30,48 @@
         @endfor
     </div>
 </div>
-
+<div class="wrapper-novedades py-5">
+    <div class="container">
+        <h3 class="title text-uppercase text-center mb-3">¡novedades!</h3>
+        <div class="row productos">
+            @foreach($datos["productos"] AS $c)
+                <a href="{{ URL::to('producto/' . $c['link']) }}" class="col-12 col-md-4">
+                    <div>
+                        <img src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" class="w-100" />
+                    </div>
+                    {!! $c["nombre"] !!}
+                </a>
+            @endforeach
+        </div>
+    </div>
+</div>
 <div class="wrapper-categorias">
     <div class="container">
         <h3 class="title text-uppercase text-center">categorias</h3>
         <div class="row justify-content-center">
-            @foreach($datos['categorias'] AS $c)
-            <div class="col-12 col-md-4 col-lg-3 my-3 wrapper-link">
-                <a href="{{ URL::to('productos/' . $c['id']) }}">
-                    <div>
-                        <img style="filter:{{ $c['hsl'] }}" src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" alt="{{ $c['nombre'] }}">
+            <div class="col-12 col-md-10">
+                <div class="row justify-content-center buscador">
+                    <div class="col-12 col-md-6">
+                        <form class="position-relative d-flex" action="{{ url('/buscador/home') }}" method="post">
+                            @csrf
+                            <button type="submit" class="btn"><i class="fas fa-search"></i></button>
+                            <input placeholder="Buscar producto..." type="text" name="" id="" class="form-control">
+                        </form>
                     </div>
-                    <p class="mb-0 text-center">{{ $c['nombre'] }}</p>
-                </a>
+                </div>
+                <div class="row justify-content-center">
+                    @foreach($datos['categorias'] AS $c)
+                    <div class="col-12 col-md-4 col-lg-3 my-3 wrapper-link">
+                        <a href="{{ URL::to('productos/' . $c['id']) }}">
+                            <div>
+                                <img style="filter:{{ $c['hsl'] }}" src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" alt="{{ $c['nombre'] }}">
+                            </div>
+                            <p class="mb-0 text-center">{{ $c['nombre'] }}</p>
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
             </div>
-            @endforeach
         </div>
     </div>
 </div>

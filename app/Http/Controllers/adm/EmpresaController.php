@@ -32,7 +32,7 @@ class EmpresaController extends Controller
         $title = "Empresa :: Términos y condiciones";
         $view = "adm.parts.empresa.terminos";
         $seccion = "empresa";
-        return view('adm.distribuidor',compact('title','view','datos','seccion'));
+        return view('adm.distribuidor',compact('title','view','seccion'));
     }
     /**
      * Update the specified resource in storage.
@@ -114,11 +114,34 @@ class EmpresaController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Redes sociales
      */
+    public function redes() {
+        $redes = Empresa::first()["redes"];
+        $redes = json_decode($redes, true);
+
+        $title = "Empresa :: Redes sociales";
+        $view = "adm.parts.empresa.edit";
+        $seccion = "redes";
+        return view('adm.distribuidor',compact('title','view','redes','seccion'));
+    }
+    public function redesStore(Request $request) {
+        $datos = Empresa::first();
+        $redes = json_decode($datos["redes"], true);
+        $ARR_data = [];
+        $id = time();
+        $requestData = $request->all();
+        if(empty($redes)) {
+            $redes = [];
+            $redes[$id] = [];
+            $redes[$id]["redes"] = $requestData["redes"];
+            $redes[$id]["url"] = $requestData["url"];
+        }
+        $ARR_data["redes"] = json_encode($redes);
+        $datos->fill($ARR_data);
+        $datos->save();
+        return back();
+    }
     public function destroy($id)
     {
         //

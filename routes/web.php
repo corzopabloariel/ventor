@@ -13,6 +13,7 @@
 
 Route::get('/', 'page\GeneralController@index')->name('index');
 Route::get('empresa', 'page\GeneralController@empresa')->name('empresa');
+Route::post('buscador/{tipo}', ['uses' => 'page\GeneralController@buscador', 'as' => 'buscador']);
 Route::group(['prefix' => 'productos', 'as' => 'productos'], function() {
     Route::get('/', ['uses' => 'page\GeneralController@productos', 'as' => '.productos']);
     Route::get('/{id?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
@@ -165,6 +166,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
             Route::post('update/{page}', ['uses' => 'adm\MetadatosController@update', 'as' => '.update']);
             Route::post('store', ['uses' => 'adm\MetadatosController@store', 'as' => '.store']);
             Route::get('delete/{page}', ['uses' => 'adm\MetadatosController@destroy', 'as' => '.destroy']);
+        });
+        
+        Route::group(['prefix' => 'redes', 'as' => '.redes'], function() {
+            Route::get('/', ['uses' => 'adm\EmpresaController@redes', 'as' => '.index']);
+            Route::get('edit/{id}', ['uses' => 'adm\EmpresaController@redesEdit', 'as' => '.edit']);
+            Route::post('update/{id}', ['uses' => 'adm\EmpresaController@redesUpdate', 'as' => '.update']);
+            Route::post('store', ['uses' => 'adm\EmpresaController@redesStore', 'as' => '.store']);
+            Route::get('delete/{id}', ['uses' => 'adm\EmpresaController@redesDestroy', 'as' => '.destroy']);
         });
         Route::group(['prefix' => 'usuarios', 'as' => '.usuarios'], function() {
             Route::get('/', ['uses' => 'adm\UserController@index', 'as' => '.index']);

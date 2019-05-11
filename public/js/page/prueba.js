@@ -39,8 +39,25 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
                 return this.marca(data);
             case "TP_DATOS":
                 return this.datos(data);
+            case "TP_SEARCH":
+                return this.form(data);
+            case "TP_SOCIAL":
+                return this.social(data);
         }
     }
+    this.social = function(data) {
+        
+    }
+    this.form = function(data) {
+        let html = "";
+
+        data.FORMAT.forEach(function(x) {
+            html += x;
+        });
+        for(let x in dataPYRUS.BUSCADOR) 
+            html = html.replace(`/${x}/`,dataPYRUS.BUSCADOR[x]);
+        return html;
+    };
     this.image = function(data) {
         let complementos = "";
         let src = dataPYRUS.logo;
@@ -59,7 +76,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
         style += `width: ${(data.WIDTH !== undefined) ? data.WIDTH : 'auto'};`
         style += `height: ${(data.HEIGHT !== undefined) ? data.HEIGHT : 'auto'};`
         return `<img ${complementos} style="${style}" />`;
-    }
+    };
     this.nav = function(data) {
         let html = "";
         for(let x in data.ELEMENT) {
@@ -83,7 +100,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
         }
 
         return html;
-    }
+    };
     this.marca = function(data) {
         let html = "";
         html += `<p class="mb-0 d-flex justify-content-between">`;
@@ -95,7 +112,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
         html += `</p>`;
 
         return html;
-    }
+    };
     this.datos = function(data) {
         let html = "";
         for(let x in data.ELEMENT) {
@@ -122,7 +139,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
         }
 
         return html;
-    }
+    };
     /* ----------------- */
 	return this.constructor();
 };

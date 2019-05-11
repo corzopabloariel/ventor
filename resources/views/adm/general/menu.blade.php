@@ -110,6 +110,12 @@
                         </a>
                     </li>
                     <li>
+                        <a data-link="u" href="{{ route('empresa.redes.index') }}">
+                            <i class="fas fa-comment"></i>
+                            <span class="nav-label">Redes sociales</span>
+                        </a>
+                    </li>
+                    <li>
                         <a data-link="u" href="{{ route('empresa.metadatos.index') }}">
                             <i class="fas fa-bullhorn"></i>
                             <span class="nav-label">Metadatos</span>

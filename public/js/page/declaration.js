@@ -20,6 +20,18 @@ const BODY = {
                             }
                         }
                     },
+            BUSCADOR: {
+                TIPO:"TP_SEARCH",
+                FORMAT: [
+                    `<form class="position-relative d-flex" action="/ACTION/" method="post">`,
+                        `<button type="submit" class="btn"><i class="fas fa-search"></i></button>`,
+                        `<input placeholder="/PLACEHOLDER/" type="text" name="/NAME/" class="form-control form-control-sm"/>`,
+                    `</form>`
+                ]
+            },
+            REDES: {
+                TIPO:"TP_SOCIAL"
+            }
         },
         HTML : [
             `<nav class="navbar navbar-expand-lg pb-0 navbar-light">`,
@@ -36,7 +48,7 @@ const BODY = {
                                     `<li class="border-top"><a href="URLBASE/registro" class="text-center text-uppercase d-block">crear una nueva cuenta</a></li>`,
                                 `</ul>`,
                             `</li>`,
-                            `<li>/BUSCADOR/</li>`,
+                            `<li class="buscador">/BUSCADOR/</li>`,
                             `<li>/REDES/</li>`,
                         `</ul>`,
                         `<ul id="ulNavFixed" class="list-unstyled mb-0 menu d-flex pb-3 justify-content-end align-items-center">`,

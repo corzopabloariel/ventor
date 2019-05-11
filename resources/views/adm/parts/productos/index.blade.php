@@ -101,6 +101,16 @@
                         CKEDITOR.instances[x].setData(data[x]);
                     continue;
                 }
+                if(window.pyrus.especificacion[x].TIPO == "TP_CHECK") {
+                    if(window.pyrus.especificacion[x].DEFAULT === undefined) {
+                        if(parseInt(data[x]) == 1)
+                            $(`[name="${x}"]`).prop("checked", true);
+                    } else {
+                        if(window.pyrus.especificacion[x].DEFAULT.localeCompare(data[x]) == 0)
+                            $(`[name="${x}"]`).prop("checked", true);
+                    }
+                    continue;
+                }
                 if(window.pyrus.especificacion[x].TIPO == "TP_FILE") {
                     date = new Date();
                     img = `{{ asset('${data[x]}') }}?t=${date.getTime()}`;

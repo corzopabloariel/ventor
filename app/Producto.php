@@ -19,7 +19,8 @@ class Producto extends Model
         'categoria_id',
         'origen_id',
         'marca_id',
-        'precio'
+        'precio',
+        'novedad'
     ];
     
     public function categoria()
@@ -36,7 +37,8 @@ class Producto extends Model
     }
     public function getNombreCodigoAttribute() {
         $orden = strtoupper($this->orden);
-        return "{$this->nombre}<p class='mb-0'><small class='text-muted'>COD. {$this->codigo}</small></p><p class='mb-0'><small class='text-muted'>CANT. ENV. {$this->cantidad} | ORDEN: <span data-orden>{$orden}</span></small></p>";
+        $novedad = $this->novedad ? '<i class="fas fa-star text-warning mr-1" title="Producto en NOVEDADES"></i>' : "";
+        return "{$this->nombre}<p class='mb-0'>{$novedad}<small class='text-muted'>COD. {$this->codigo}</small></p><p class='mb-0'><small class='text-muted'>CANT. ENV. {$this->cantidad} | ORDEN: <span data-orden>{$orden}</span></small></p>";
     }
     public function getPrecio() {
         return number_format($this->precio,2,",",".");

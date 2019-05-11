@@ -68,6 +68,8 @@ class GeneralController extends Controller
         }
         return $ARR;
     }
+    public function buscador(Request $request, $tipo) {
+    }
     /** ---------------------------- */
     public function index() {
         $title = "HOME";
@@ -78,6 +80,7 @@ class GeneralController extends Controller
             $s["texto"] = json_decode($s["texto"],true)[$this->idioma];
         $datos["empresa"] = self::general();
         $datos["categorias"] = Categoria::whereNull("padre_id")->orderBy('orden')->get();
+        $datos["productos"] = Producto::where("novedad",1)->orderBy("orden")->get();
         
         return view('page.distribuidor',compact('title','view','datos'));
     }

@@ -65,7 +65,15 @@
             const URLBASE = `{{ URL::to("/") }}`;
             const logo = `{{ asset('${datos.empresa.images.logo}') }}`;
             const logoFooter = `{{ asset('${datos.empresa.images.logoFooter}') }}`;
-            header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE});
+            
+            @if(auth()->guard('client')->check())
+                let data = @json(auth()->guard('client')->user());
+                console.log(data)
+                header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE});
+                $("#wrapper-header").html(header.html());
+            @endif
+            
+            header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE, BUSCADOR: {PLACEHOLDER: "Estoy buscando...", NAME: "input", ACTION: "{{ url('/buscador/home') }}"}});
             footer = new PyrusCuerpo("footer", {imgDEFAULT: imgDEFAULT, logo: logoFooter, domicilio: datos.empresa.domicilio, telefono: datos.empresa.telefono, email: datos.empresa.email, URLBASE:URLBASE});
             form = new Pyrus("formulario_login");
             $("#wrapper-header").html(header.html());
@@ -88,11 +96,6 @@
                     $("nav .menu").find(`a[href="${URLBASE}/atencion"]`).addClass("active");
                 }
             }
-            @if(auth()->guard('client')->check())
-                let data = "{{ auth()->guard('client')->user() }}";
-                header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE});
-                $("#wrapper-header").html(header.html());
-            @endif
         </script>
         @stack('scripts')
         {{--<script src="{{ asset('js/adm.js') }}"></script>--}}
