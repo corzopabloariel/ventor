@@ -81,6 +81,33 @@
         }
     };
     /** ------------------------------------- */
+    erase = function(t, id) {
+        $(t).attr("disabled",true);
+        alertify.confirm("ATENCIÓN","¿Eliminar registro?",
+            function(){
+                let promise = new Promise(function (resolve, reject) {
+                    let url = `{{ url('/adm/empresa/${window.pyrus.entidad}/delete/${id}') }}`;
+                    var xmlHttp = new XMLHttpRequest();
+                    xmlHttp.open( "GET", url, true );
+                    
+                    xmlHttp.send( null );
+                    resolve(xmlHttp.responseText);
+                });
+
+                promiseFunction = () => {
+                    promise
+                        .then(function(msg) {
+                            $("#tabla").find(`tr[data-id="${id}"]`).remove();
+                        })
+                };
+                promiseFunction();
+            },
+            function() {
+                $(t).removeAttr("disabled");
+            }
+        ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
+    };
+    /** ------------------------------------- */
     edit = function(t, id) {
         $(t).attr("disabled",true);
         let promise = new Promise(function (resolve, reject) {
@@ -121,9 +148,12 @@
                 table.append("<tbody></tbody>");
             columnas.forEach(function(c) {
                 td = data[c.COLUMN] === null ? "" : data[c.COLUMN];
-                if(c.COLUMN == "redes") {
+                if(c.COLUMN == "redes")
                     td = `${ARR_redes[data[c.COLUMN]]} ${data[c.COLUMN]}`;
-                }
+                
+                if(c.COLUMN == "url")
+                    td = `<a href="${td}" class="text-primary">LINK <i class="fas fa-external-link-alt"></i></a>`;
+                
                 tr += `<td data-${c.COLUMN} class="${c.CLASS}">${td}</td>`;
             });
             tr += `<td class="text-center"><button onclick="edit(this,${x})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${x})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;

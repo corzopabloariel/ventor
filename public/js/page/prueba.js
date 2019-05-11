@@ -46,7 +46,14 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
         }
     }
     this.social = function(data) {
-        
+        let html = "";
+        let ARR_redes = {facebook:'<i class="fab fa-facebook-square"></i>',instagram:'<i class="fab fa-instagram"></i>',twitter:'<i class="fab fa-twitter-square"></i>',youtube:'<i class="fab fa-youtube"></i>',linkedin:'<i class="fab fa-linkedin-in"></i>'};
+        for(let x in dataPYRUS.REDES) {
+            icon = ARR_redes[dataPYRUS.REDES[x].redes];
+            link = dataPYRUS.REDES[x].url;
+            html += `<a href="${link}" target="blank">${icon}</a>`;
+        }
+        return html;
     }
     this.form = function(data) {
         let html = "";

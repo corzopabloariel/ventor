@@ -217,6 +217,12 @@ nav .info {
 nav .info .buscador i {
     color: #5395DF;
 }
+nav .info .redes a {
+    font-size: 22px;
+}
+nav .info .redes a + a {
+    margin-left: 10px;
+} 
 nav .info .buscador .btn {
     padding: 0;
     margin-right: 10px;

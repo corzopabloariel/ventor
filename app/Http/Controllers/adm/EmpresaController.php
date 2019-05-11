@@ -125,15 +125,21 @@ class EmpresaController extends Controller
         $seccion = "redes";
         return view('adm.distribuidor',compact('title','view','redes','seccion'));
     }
-    public function redesStore(Request $request) {
+    public function redesStore(Request $request, $id = null) {
         $datos = Empresa::first();
         $redes = json_decode($datos["redes"], true);
-        $ARR_data = [];
-        $id = time();
         $requestData = $request->all();
+        $ARR_data = [];
+        if(is_null($id))
+            $id = time();
         if(empty($redes)) {
             $redes = [];
             $redes[$id] = [];
+            $redes[$id]["redes"] = $requestData["redes"];
+            $redes[$id]["url"] = $requestData["url"];
+        } else {
+            if(!isset($redes[$id]))
+                $redes[$id] = [];
             $redes[$id]["redes"] = $requestData["redes"];
             $redes[$id]["url"] = $requestData["url"];
         }
@@ -142,8 +148,20 @@ class EmpresaController extends Controller
         $datos->save();
         return back();
     }
-    public function destroy($id)
+    public function redesDestroy($id)
     {
-        //
+        $ARR_data = [];
+        $datos = Empresa::first();
+        $redes = json_decode($datos["redes"], true);
+
+        unset($redes[$id]);
+
+        $ARR_data["redes"] = json_encode($redes);
+        $datos->fill($ARR_data);
+        $datos->save();
+        return 1;
+    }
+    public function redesUpdate(Request $request, $id) {
+        return self::redesStore($request,$id);
     }
 }

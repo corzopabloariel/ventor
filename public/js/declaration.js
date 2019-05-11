@@ -366,7 +366,7 @@ const ENTIDADES = {
     },
     redes: {
         ATRIBUTOS: {
-            redes: {TIPO:"TP_ENUM",ENUM:{facebook:'Facebook',instagram:'Instagram',twitter:'Twitter',youtube:'YouTube',linkedin:'LinkedIn'},NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"red social",WIDTH:"150px",COMUN:1},
+            redes: {TIPO:"TP_ENUM",ENUM:{facebook:'Facebook',instagram:'Instagram',twitter:'Twitter',youtube:'YouTube',linkedin:'LinkedIn'},NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"red social",COMUN:1},
             url: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"link del sitio"},
         },
         FORM: [

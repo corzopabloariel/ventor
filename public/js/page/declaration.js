@@ -49,7 +49,7 @@ const BODY = {
                                 `</ul>`,
                             `</li>`,
                             `<li class="buscador">/BUSCADOR/</li>`,
-                            `<li>/REDES/</li>`,
+                            `<li class="redes">/REDES/</li>`,
                         `</ul>`,
                         `<ul id="ulNavFixed" class="list-unstyled mb-0 menu d-flex pb-3 justify-content-end align-items-center">`,
                         `/nav/`,

@@ -25,7 +25,7 @@ class GeneralController extends Controller
         $empresa["email"] = json_decode($empresa["email"], true);
         $empresa["metadatos"] = json_decode($empresa["metadatos"], true);
         $empresa["images"] = json_decode($empresa["images"], true);
-        //$empresa["redes"] = json_decode($empresa["redes"], true);
+        $empresa["redes"] = json_decode($empresa["redes"], true);
         return $empresa;
     }
     /**

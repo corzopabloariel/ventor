@@ -32,7 +32,7 @@
 </div>
 <div class="wrapper-novedades py-5">
     <div class="container">
-        <h3 class="title text-uppercase text-center mb-3">¡novedades!</h3>
+        <h3 class="title text-uppercase text-center mb-4">¡novedades!</h3>
         <div class="row productos">
             @foreach($datos["productos"] AS $c)
                 <a href="{{ URL::to('producto/' . $c['link']) }}" class="col-12 col-md-4">

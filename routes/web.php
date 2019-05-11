@@ -170,7 +170,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         
         Route::group(['prefix' => 'redes', 'as' => '.redes'], function() {
             Route::get('/', ['uses' => 'adm\EmpresaController@redes', 'as' => '.index']);
-            Route::get('edit/{id}', ['uses' => 'adm\EmpresaController@redesEdit', 'as' => '.edit']);
             Route::post('update/{id}', ['uses' => 'adm\EmpresaController@redesUpdate', 'as' => '.update']);
             Route::post('store', ['uses' => 'adm\EmpresaController@redesStore', 'as' => '.store']);
             Route::get('delete/{id}', ['uses' => 'adm\EmpresaController@redesDestroy', 'as' => '.destroy']);
