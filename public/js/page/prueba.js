@@ -43,7 +43,12 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
                 return this.form(data);
             case "TP_SOCIAL":
                 return this.social(data);
+            case "TP_PERSONA":
+                return this.persona(data);
         }
+    }
+    this.persona = function(data) {
+        return dataPYRUS.datos.name;
     }
     this.social = function(data) {
         let html = "";

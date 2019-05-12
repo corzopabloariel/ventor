@@ -4,7 +4,7 @@
             <div class="col-12 col-md-10">
                 <div class="row justify-content-center">
                     @foreach($datos['categorias'] AS $c)
-                    <div class="col-12 col-md-4 col-lg-3 my-3 wrapper-link">
+                    <div class="col-12 col-md-4 col-lg-3 my-3 wrapper-link wow zoomIn">
                         <a href="{{ URL::to('productos/' . $c['id']) }}">
                             <div>
                                 <img style="filter:{{ $c['hsl'] }}" src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" alt="{{ $c['nombre'] }}">
@@ -21,7 +21,7 @@
 @push("scripts_distribuidor")
 <script>
     $(document).ready(function() {
-        $('.wrapper-link a:nth-child(2n + 1)').jAnimate('zoomIn', function(){
+        $('.wrapper-link a:nth-child(2n + 1)').jAnimate('', function(){
             console.log('animation was finished');
         });
     });

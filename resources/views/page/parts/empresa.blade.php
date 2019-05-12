@@ -34,13 +34,13 @@
 <div class="wrapper-empresa">
     <div class="container">
         <div class="row">
-            <div class="col-12 col-md-7 col-lg-7 principal">
+            <div class="col-12 col-md-7 col-lg-7 principal wow slideInUp">
                 {!! $datos["contenido"]["texto"] !!}
             </div>
             <div class="col-12 col-md-5 col-lg-5">
                 <table class="w-100">
                 @foreach($datos["contenido"]["numeros"] AS $n)
-                    <tr>
+                    <tr class="wow fadeIn">
                         <td class="title">
                             {{ $n["N"] }}
                         </td>
@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <div class="row timeline my-5">
+        <div class="row timeline my-5 wow">
             <div class="col-12 d-flex justify-content-center">
                 <div>
                     <div class="d-flex justify-content-center">
@@ -79,14 +79,14 @@
         </div>
         <div class="row mision-vision">
             <div class="col-12 col-md-6 d-flex align-items-stretch">
-                <div class="p-4 shadow-sm text-center">
+                <div class="p-4 shadow-sm text-center wow fadeIn">
                     <p class="mb-0 title">{!! $datos["contenido"]["vision"]["TIT"] !!}</p>
                     <hr/>
                     {!! $datos["contenido"]["vision"]["TEX"] !!}
                 </div>
             </div>
             <div class="col-12 col-md-6 d-flex align-items-stretch">
-                <div class="p-4 shadow-sm text-center">
+                <div class="p-4 shadow-sm text-center wow bouceIn">
                     <p class="mb-0 title">{!! $datos["contenido"]["mision"]["TIT"] !!}</p>
                     <hr/>
                     {!! $datos["contenido"]["mision"]["TEX"] !!}

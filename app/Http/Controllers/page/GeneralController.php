@@ -180,6 +180,14 @@ class GeneralController extends Controller
         $datos["empresa"] = self::general();
         return view('page.distribuidor',compact('title','view','datos'));
     }
+
+    public function contacto() {
+        $title = "CONTACTO";
+        $view = "page.parts.contacto";
+        $datos = [];
+        $datos["empresa"] = self::general();
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
     
     public function registro() {
         $title = "REGISTRO";

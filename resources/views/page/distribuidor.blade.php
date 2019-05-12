@@ -7,6 +7,7 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
+        new WOW().init();
         $("body").on("click",".alert button.close", function() {
             $(this).closest(".alert").remove();
         });

@@ -616,7 +616,7 @@ const ENTIDADES = {
     },
     formulario_redes: {
         ATRIBUTOS: {
-            url: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",PLACEHOLDER:"URL al perfil público"},
+            url: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",PLACEHOLDER:"URL al perfil público",AYUDA: "Por ejemplo: https://ar.linkedin.com/in/john-doe"},
         },
         FORM: [
             {
@@ -624,20 +624,120 @@ const ENTIDADES = {
             }
         ]
     },
+    formulario_educacion: {
+        ATRIBUTOS: {
+            titulo: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",PLACEHOLDER:"Título"},
+            pais: {TIPO:"TP_ENUM",ENUM:{argentina:"Argentina"},VISIBILIDAD:"TP_VISIBLE",COMUN:1,NOMBRE:"Selecciona un país"},
+            area: {TIPO:"TP_ENUM",
+                    ENUM:{
+                        sociales:"Ciencias Sociales, del Comportamiento, de la Comunicación, Administración, Trabajo y Derecho",
+                        ingenieria:"Ingeniería, Tecnología, Industria, Arquitectura y Construcción",
+                        salud:"Ciencias de la Salud y Servicios Sociales",
+                        arte:"Artes y humanidades",
+                        vida:"Ciencias de la Vida, de la Tierra, del Espacio, Químicas, Físicas y Exactas",
+                        pedagodia:"Pedagogía",
+                        servicios:"Servicios: Turismo, Hostelería, Deportes, Belleza, Transporte, Medio Ambiente y Seguridad",
+                        agronomia:"Agronomía, Agricultura, Ganadería, Pesca y Veterinaria"
+                    },VISIBILIDAD:"TP_VISIBLE",COMUN:1,NOMBRE:"Área de Estudio"},
+            nivel: {TIPO:"TP_ENUM",ENUM:{primario:"Primario",secundario:"Secundario",terciario:"Terciario",universitario:"Universitario"},VISIBILIDAD:"TP_VISIBLE",COMUN:1,NOMBRE:"Nivel de Estudio"},
+            estado: {TIPO:"TP_ENUM",ENUM:{finalizado:"Finalizado",encurso:"En Curso",abandonado:"Abandonado"},VISIBILIDAD:"TP_VISIBLE",COMUN:1,NOMBRE:"Estado de Estudio"},
+            actual: {TIPO:"TP_CHECK",VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"Actualmente asisto"},
+            desde: {TIPO:"TP_FECHA",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",SIMPLE:1, NOMBRE:"Desde"},
+            hasta: {TIPO:"TP_FECHA",VISIBILIDAD:"TP_VISIBLE",SIMPLE:1, NOMBRE:"Hasta"},
+            descripcion: {TIPO:"TP_TEXT",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Descripción"},
+        },
+        FORM: [
+            {
+                titulo: '<div class="col-12 col-md-6">/titulo/</div>',
+                pais: '<div class="col-12 col-md-6">/pais/</div>',
+            },
+            {
+                area: '<div class="col-12 col-md-4">/area/</div>',
+                nivel: '<div class="col-12 col-md-4">/nivel/</div>',
+                estado: '<div class="col-12 col-md-4">/estado/</div>',
+            },
+            {
+                actual: '<div class="col-12">/actual/</div>'
+            },
+            {
+                desde: '<div class="col-12 col-md-6">/desde/</div>',
+                hasta: '<div class="col-12 col-md-6">/hasta/</div>',
+            },
+            {
+                descripcion: '<div class="col-12">/descripcion/</div>'
+            }
+        ],
+        FUNCIONES: {
+            actual: {onchange:{F:"readONLY(this,'/hasta/')",C:"hasta"}}
+        },
+        MINUSCULA: 1
+    },
+    formulario_curriculum: {
+        ATRIBUTOS: {
+            curriculum: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Curriculum Vitae seleccionado",INVALID:"Seleccione Curriculum Vitae",BROWSER:"CARGAR ARCHIVO",VISIBILIDAD:"TP_VISIBLE_FORM",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"Curriculum Vatae",SIMPLE:1},
+        },
+        FORM: [
+            {
+                curriculum: '<div class="col-12">/curriculum/</div>',
+            }
+        ]
+    },
+    formulario_trabajo: {
+        ATRIBUTOS: {
+            puesto: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",PLACEHOLDER:"Nombre del Puesto / Título"},
+            empresa: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",PLACEHOLDER:"Nombre de Empresa / Negocio"},
+            industria: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",PLACEHOLDER:"Tipo de Industria"},
+            area: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",PLACEHOLDER:"Área de trabajo"},
+            seniority: {TIPO:"TP_ENUM",NOMBRE:"Seniority",ENUM:{senior:"Senior",semisenior:"Semi senior",junior:"Junior"},VISIBILIDAD:"TP_VISIBLE",COMUN:1},
+            pais: {TIPO:"TP_ENUM",ENUM:{argentina:"Argentina"},VISIBILIDAD:"TP_VISIBLE",COMUN:1,NOMBRE:"Selecciona un país"},
+            actual: {TIPO:"TP_CHECK",VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"Actualmente trabajo aquí"},
+            desde: {TIPO:"TP_FECHA",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",SIMPLE:1, NOMBRE:"Desde"},
+            hasta: {TIPO:"TP_FECHA",VISIBILIDAD:"TP_VISIBLE",SIMPLE:1, NOMBRE:"Hasta"},
+            descripcion: {TIPO:"TP_TEXT",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Descripción"},
+        },
+        FORM: [
+            {
+                puesto: '<div class="col-12 col-md-6">/puesto/</div>',
+                seniority: '<div class="col-12 col-md-6">/seniority/</div>',
+            },
+            {
+                empresa: '<div class="col-12 col-md-6">/empresa/</div>',
+                pais: '<div class="col-12 col-md-6">/pais/</div>',
+            },
+            {
+                industria: '<div class="col-12 col-md-6">/industria/</div>',
+                area: '<div class="col-12 col-md-6">/area/</div>',
+            },
+            {
+                actual: '<div class="col-12">/actual/</div>'
+            },
+            {
+                desde: '<div class="col-12 col-md-6">/desde/</div>',
+                hasta: '<div class="col-12 col-md-6">/hasta/</div>',
+            },
+            {
+                descripcion: '<div class="col-12">/descripcion/</div>'
+            }
+        ],
+        FUNCIONES: {
+            actual: {onchange:{F:"readONLY(this,'/hasta/')",C:"hasta"}}
+        },
+        MINUSCULA: 1
+    },
     formulario_recursos: {
         ATRIBUTOS: {
-            nombre: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
-            apellido: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
+            nombre: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Nombre"},
+            apellido: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Apellido"},
             fecha: {TIPO:"TP_FECHA",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",SIMPLE:1, NOMBRE:"Fecha de nacimiento"},
-            domicilio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
-            cp: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"código postal"},
-            provincia: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
-            localidad: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
-            nacionalidad: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
-            dni: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"dni (documento de identidad)"},
-            estado: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"estado civil"},
-            email: {TIPO:"TP_EMAIL",VISIBILIDAD:"TP_VISIBLE"},
-            telefono: {TIPO:"TP_PHONE",VISIBILIDAD:"TP_VISIBLE"},
+            domicilio: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Domicilio"},
+            cp: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NECESARIO:1,NOMBRE:"código postal"},
+            provincia: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NECESARIO:1,NOMBRE:"Provincia"},
+            localidad: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NECESARIO:1,NOMBRE:"Localidad"},
+            nacionalidad: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NECESARIO:1,NOMBRE:"Nacionalidad"},
+            dni: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NECESARIO:1,NOMBRE:"DNI (Documento de Identidad)"},
+            estado: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NECESARIO:1,NOMBRE:"Estado Civil"},
+            email: {TIPO:"TP_EMAIL",VISIBILIDAD:"TP_VISIBLE",NECESARIO:1,NOMBRE:"Email"},
+            telefono: {TIPO:"TP_PHONE",VISIBILIDAD:"TP_VISIBLE",NECESARIO:1,NOMBRE:"Teléfono"},
             
             observaciones: {TIPO:"TP_TEXT",VISIBILIDAD:"TP_VISIBLE"},
         },
@@ -666,7 +766,9 @@ const ENTIDADES = {
                 email: '<div class="col-12 col-md-6">/email/</div>',
                 telefono: '<div class="col-12 col-md-6">/telefono/</div>',
             }
-        ]
+        ],
+        MINUSCULA: 1,
+        PLACEHOLDER: 1
     }
     
 }

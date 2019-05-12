@@ -160,6 +160,10 @@ nav .info .submenu .form-control {
     border-left: none;
     border-right: none;
     border-bottom: 1px solid #ccc;
+    background-color: transparent;
+}
+nav .info .submenu .btn {
+    background-color: #0099D8;
 }
 nav .info .submenu .form-control:focus {
     box-shadow: none;
@@ -784,14 +788,85 @@ footer .marca {
     opacity: 1;
 }
 /* ---------------------------------------------------
+    CONTACTO
+----------------------------------------------------- */
+.wrapper-contacto {
+    color: #595959;
+    font-size: 17px;
+}
+.wrapper-contacto .form-control {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-radius: 0;
+}
+.wrapper-contacto .form-control:focus {
+    box-shadow: none;
+}
+.wrapper-contacto .title {
+    color: #0099D8;
+    font-size: 25px;
+}
+.wrapper-contacto .info li {
+    line-height: 16px;
+}
+.wrapper-contacto .info li i {
+    color: #0099D8;
+}
+.wrapper-contacto .info li + li {
+    margin-top: 15px;
+}
+.wrapper-contacto .btn {
+    background-color: #0099D8;
+}
+/* ---------------------------------------------------
     TRABAJE CON NOSOTROS
 ----------------------------------------------------- */
 .wrapper-trabaje {
     color: #595959;
 }
+.wrapper-trabaje input.custom-file-input,
+.wrapper-trabaje input.custom-file-input + label {
+    cursor: pointer;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top-color: transparent;
+}
+.wrapper-trabaje .input-group > .input-group-append > .btn {
+    border-radius: 0;
+}
+.wrapper-trabaje input.custom-file-input:focus ~ .custom-file-label {
+    box-shadow: none;
+    border-top-color: transparent;
+}
+.wrapper-trabaje input.custom-file-input:invalid + label:before
+/*input.custom-file-input.invalid + label:before,*/ {
+    content: attr(data-invalid);
+}
+.wrapper-trabaje input.custom-file-input:valid + label:before
+/*input.custom-file-input.valid + label:before,*/ {
+    content: attr(data-valid);
+}
+.wrapper-trabaje input.custom-file-input:valid + label
+/*input.custom-file-input.valid + label,*/ {
+    border-color: #1e7e34;
+    background-color: #218838;
+    color: #ffffff;
+}
+
 .wrapper-trabaje h2.title {
     font-size: 35px;
     font-weight: lighter;
+}
+.wrapper-trabaje h3.titleC {
+    color: #646464;
+    font-size: 16px;
+}
+.wrapper-trabaje h2.title + p {
+    margin-bottom: 0;
+    color: #A5A5A5;
+    font-size: 16px;
 }
 .wrapper-trabaje h3.title {
     font-size: 22px;
@@ -802,25 +877,26 @@ footer .marca {
     width: 300px;
 }
 .wrapper-trabaje .form-control {
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-radius: 0;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-radius: 0 !important;
+    background-color: transparent;
 }
 .wrapper-trabaje .form-control:focus {
     box-shadow: none;
 } 
 .wrapper-trabaje input[type="date"]::before {
-    content: attr(placeholder);
+    content: attr(placeholder) !important;
     color: #aaa;
     margin-right: 0.5em;
 }
-.wrapper-trabaje input[type="date"]:focus::before,
-.wrapper-trabaje input[type="date"]:valid::before {
+.wrapper-trabaje input[type="date"]:focus::before{
     content: "";
 }
-.wrapper-trabaje input[type="text"]:invalid::before {
-    content: "*" !important;
+.wrapper-trabaje .form-control:disabled[type="date"],
+.wrapper-trabaje input:disabled[type="date"]::before {
+    color: #ccc;
 }
 .wrapper-trabaje .blockquote.border-left {
     border-width: 4px !important;
@@ -834,8 +910,57 @@ footer .marca {
     color: #0099D6 !important;
     font-size: 20px !important;
 }
-.wrapper-trabaje .btn {
+.wrapper-trabaje .btn:not(.btn-danger) {
     background: #009AD6;
+}
+.wrapper-trabaje .trabajo + .trabajo,
+.wrapper-trabaje .red + .red,
+.wrapper-trabaje .educacion + .educacion {
+    margin-top: 1em;
+}
+.wrapper-trabaje #formulario .form-control + label {
+    color: #999;
+    position: absolute;
+    left: 27px;
+    top: 7px;
+    margin: 0;
+    letter-spacing: .1px;
+    font-size: 16px;
+}
+.wrapper-trabaje #formulario .form-control[required] + label:after {
+    content: ' *';
+    color: #FF0000;
+}
+/* show the placeholder when input has no content (no content = invalid) */
+.wrapper-trabaje #formulario .form-control[required]:invalid + label {
+    display: inline-block;
+}
+
+/* hide the placeholder when input has some text typed in */
+.wrapper-trabaje input[required]:not([type="file"]):valid + label{
+    display: none;
+}
+
+.wrapper-trabaje #formulario input[type="date"]::before {
+    opacity: 0 !important;
+}
+.wrapper-trabaje #formulario input[type="date"]:valid::before {
+    position: absolute;
+}
+.wrapper-trabaje #formulario ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    opacity: 0; /* Firefox */
+}
+  
+.wrapper-trabaje #formulario :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    opacity: 0;
+}
+
+.wrapper-trabaje #formulario ::-ms-input-placeholder { /* Microsoft Edge */
+    opacity: 0;
+}
+
+.wrapper-trabaje #formulario input[type="date"]:invalid::-webkit-datetime-edit {
+    color: transparent;
 }
 /* ---------------------------------------------------
     PEDIDO

@@ -24,6 +24,8 @@ Route::get('producto/{link?}', ['uses' => 'page\GeneralController@producto', 'as
 Route::get('calidad', 'page\GeneralController@calidad')->name('calidad');
 Route::get('descargas', 'page\GeneralController@descargas')->name('descargas');
 Route::get('trabaje', 'page\GeneralController@trabaje')->name('trabaje');
+Route::get('contacto', 'page\GeneralController@contacto')->name('contacto');
+
 Route::get('pedido', 'page\GeneralController@pedido')->name('pedido');
 Route::get('carrito', 'page\GeneralController@carrito')->name('carrito');
 Route::get('registro', 'page\GeneralController@registro')->name('registro');
@@ -55,6 +57,8 @@ Route::post('form/{seccion}', ['uses' => 'page\FormController@index', 'as' => 'f
 Route::group(['middleware' => 'client', 'prefix' => 'client'], function() {
     
     Route::get('/', 'page\GeneralController@index');
+
+    Route::get('logout', ['uses' => 'page\ClienteController@logout' , 'as' => 'adm.logout']);
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {

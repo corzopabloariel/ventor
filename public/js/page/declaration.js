@@ -45,10 +45,61 @@ const BODY = {
                                 `<a href="#"><i class="fas fa-user-circle mr-2"></i>Zona de clientes</a>`,
                                 `<ul class="submenu list-unstyled shadow-sm rounded" id="login">`,
                                     `<li><div></div></li>`,
-                                    `<li class="border-top"><a href="URLBASE/registro" class="text-center text-uppercase d-block">crear una nueva cuenta</a></li>`,
+                                    `<li class="border-top text-center"><a href="URLBASE/registro" class="text-center d-inline-block text-uppercase" style="color:#009AD6;"><small>crear una nueva cuenta</small></a></li>`,
                                 `</ul>`,
                             `</li>`,
                             `<li class="buscador">/BUSCADOR/</li>`,
+                            `<li class="redes">/REDES/</li>`,
+                        `</ul>`,
+                        `<ul id="ulNavFixed" class="list-unstyled mb-0 menu d-flex pb-3 justify-content-end align-items-center">`,
+                        `/nav/`,
+                        `</ul>`,
+                    `</div>`,
+                `</div>`,
+            `</nav>`
+        ]
+    },
+    headerLog: {
+        ATRIBUTOS: {
+            image:  {
+                        TIPO:"TP_IMG",
+                        WIDTH: "257px",
+                        HEIGHT: "65px",
+                        DEFAULT: 1,
+                        TIME: 1
+                    },
+            nav:    {
+                        TIPO:"TP_NAV",
+                        ELEMENT: {pedido: "Pedido", carrito: "Carrito", descargas: "Descargas"},
+                        ACTIVE: "active",
+                    },
+            BUSCADOR: {
+                TIPO:"TP_SEARCH",
+                FORMAT: [
+                    `<form class="position-relative d-flex" action="/ACTION/" method="post">`,
+                        `<button type="submit" class="btn"><i class="fas fa-search"></i></button>`,
+                        `<input placeholder="/PLACEHOLDER/" type="text" name="/NAME/" class="form-control form-control-sm"/>`,
+                    `</form>`
+                ]
+            },
+            REDES: {
+                TIPO:"TP_SOCIAL"
+            },
+            DATOS: {
+                TIPO:"TP_PERSONA"
+            }
+        },
+        HTML : [
+            `<nav class="navbar navbar-expand-lg pb-0 navbar-light">`,
+                `<div class="container">`,
+                    `<a class="navbar-brand position-absolute hidden-tablet" href="URLBASE">`,
+                        `/image/`,
+                    `</a>`,
+                    `<div class="row justify-content-end flex-column w-100">`,
+                        `<ul class="list-unstyled d-flex justify-content-end pt-2 mb-1 align-items-center info">`,
+                            `<li>`,
+                                `<span style="color:#0099D6;"><i class="fas fa-user-circle mr-2"></i>Bienvenido, /DATOS/ (<a href="#">cerrar sesión</a>)</span>`,
+                            `</li>`,
                             `<li class="redes">/REDES/</li>`,
                         `</ul>`,
                         `<ul id="ulNavFixed" class="list-unstyled mb-0 menu d-flex pb-3 justify-content-end align-items-center">`,

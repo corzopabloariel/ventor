@@ -7,10 +7,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6 wow fadeIn">
                 {!! $datos["contenido"]["principal"]["texto"] !!}
             </div>
-            <div class="col-12 col-md-6 d-flex align-items-top slogan">
+            <div class="col-12 col-md-6 d-flex align-items-top slogan wow slideInUp">
                 {!! $datos["contenido"]["principal"]["slogan"] !!}
             </div>
         </div>
