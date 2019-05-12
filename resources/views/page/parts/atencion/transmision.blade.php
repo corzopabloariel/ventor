@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <form action="{{-- url('/form/presupuesto') --}}" method="post" class="formulario" enctype="multipart/form-data">
+        <form action="{{ url('/form/transmision') }}" method="post" class="formulario wrapper-formulario border-top-0 bg-white" enctype="multipart/form-data">
             @method("post")
             {{ csrf_field() }}
             <div class="row justify-content-center">
@@ -49,7 +49,7 @@
                         
                         <div class="row mt-5">
                             <div class="col-12 d-flex justify-content-end">
-                                <button onclick="siguiente(this,1)" type="button" class="btn btn-primary text-uppercase">siguiente</button>
+                                <button onclick="siguiente(this,1)" type="button" class="btn px-5 text-white text-uppercase">siguiente</button>
                             </div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                                         </div>
                                     </div>
                                 </fieldset>
-                                <fieldset class="mt-4">
+                                <fieldset class="mt-4 perfiles">
                                     <legend>Indicar si tiene preferencia por algún perfil</legend>
                                     <div class="d-flex">
                                         <div class="form-check">
@@ -219,8 +219,8 @@
                         </div>
                         <div class="row mt-5">
                             <div class="col-12 d-flex justify-content-end">
-                                <button onclick="siguiente(this,0)" type="button" class="btn btn-outline-primary text-uppercase">anterior</button>
-                                <button type="submit" class="btn btn-primary text-uppercase ml-2">enviar</button>
+                                <button onclick="siguiente(this,0)" type="button" class="btn btn-outline-secondary px-5 text-uppercase">anterior</button>
+                                <button type="submit" class="btn text-white px-5 text-uppercase ml-2">enviar</button>
                             </div>
                         </div>
                     </div>

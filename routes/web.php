@@ -47,6 +47,11 @@ Route::group(['prefix' => 'cliente', 'as' => 'client.'], function() {
     Route::get('password/reset/{token}', 'PrivateArea\ResetPasswordController@showResetForm')->name('password.reset');
     Route::post('password/reset', 'PrivateArea\ResetPasswordController@reset')->name('password.reset.post');
 });
+
+Route::post('form/{seccion}', ['uses' => 'page\FormController@index', 'as' => 'form']);
+
+
+
 Route::group(['middleware' => 'client', 'prefix' => 'client'], function() {
     
     Route::get('/', 'page\GeneralController@index');

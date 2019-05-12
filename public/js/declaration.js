@@ -581,14 +581,14 @@ const ENTIDADES = {
     },
     formulario_atencion: {
         ATRIBUTOS: {
-            nroCliente: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Nro. Cliente"},
+            nroCliente: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Nro. Cliente"},
             razon: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Razón Social"},
-            fecha: {TIPO:"TP_FECHA",VISIBILIDAD:"TP_VISIBLE",SIMPLE:1},
-            importe: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",CLASS:"importe"},
-            banco: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
-            sucursal: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
-            facturas: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Facturas canceladas"},
-            descuento: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Descuento efectuado"},
+            fecha: {TIPO:"TP_FECHA",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",SIMPLE:1},
+            importe: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"importe"},
+            banco: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
+            sucursal: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
+            facturas: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Facturas canceladas"},
+            descuento: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Descuento efectuado"},
             
             observaciones: {TIPO:"TP_TEXT",VISIBILIDAD:"TP_VISIBLE"},
         },
@@ -611,6 +611,16 @@ const ENTIDADES = {
             },
             {
                 observaciones: '<div class="col-12">/observaciones/</div>',
+            }
+        ]
+    },
+    formulario_redes: {
+        ATRIBUTOS: {
+            url: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",PLACEHOLDER:"URL al perfil público"},
+        },
+        FORM: [
+            {
+                url: '<div class="col-12">/url/</div>',
             }
         ]
     },

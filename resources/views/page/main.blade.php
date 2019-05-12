@@ -92,12 +92,10 @@
             if($("nav .menu").find(`a[href="${window.url}"]`).length) {
                 $("nav .menu").find(`a[href="${window.url}"]`).addClass("active");
                 if(window.url.indexOf('atencion') > 0) {
-                    console.log(URLBASE + "/atencion")
-                    $("nav .menu").find(`a[href="${URLBASE}/atencion"]`).addClass("active");
+                    $("nav .menu").find(`a[data-href="atencion"]`).addClass("active");
                 }
             }
         </script>
         @stack('scripts')
-        {{--<script src="{{ asset('js/adm.js') }}"></script>--}}
     </body>
 </html>

@@ -91,7 +91,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
                 
                 if(x != "" && data.SUB !== undefined) {
                     if(data.SUB[x] !== undefined) {
-                        html += `<a href="#">${data.ELEMENT[x]}</a>`;
+                        html += `<a data-href="${x}" href="#">${data.ELEMENT[x]}</a>`;
                         html += `<ul class="submenu list-unstyled shadow-sm">`;
                         for(let y in data.SUB[x]) {
                             html += `<li>`;

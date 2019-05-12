@@ -7,7 +7,7 @@
             @foreach($datos["descargas"] AS $d)
                 <div class="col-12 col-md-3 descarga d-flex justify-content-center">
                     <div class="d-inline-block">
-                        <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block" />
+                        <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
                         <p class="w-75 mx-auto mb-1 mt-2 text-center">{{ $d["nombre"] }}</p>
                         <div class="row">
                             <div class="col-6 text-right eye">

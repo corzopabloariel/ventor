@@ -35,7 +35,7 @@ const BODY = {
         },
         HTML : [
             `<nav class="navbar navbar-expand-lg pb-0 navbar-light">`,
-                `<div class="container border-bottom">`,
+                `<div class="container">`,
                     `<a class="navbar-brand position-absolute hidden-tablet" href="URLBASE">`,
                         `/image/`,
                     `</a>`,

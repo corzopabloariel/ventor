@@ -22,23 +22,29 @@
         <h3 class="title text-center">Informar pago</h3>
         <p class="text-center">Contáctanos y te brindaremos toda la información que necesites</p>
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8" id="formulario"></div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8">
-                <div class="row">
-                    <div class="col-12 col-md-6">
-                        <div class="g-recaptcha" data-sitekey="6LeFv6IUAAAAAGE-MtiFauHZVvNN3CEjpD71ZJT1"></div>
-                    </div>
-                    <div class="col-12 col-md-6 d-flex align-items-center">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="1" name="terminos" id="defaultCheck1">
-                            <label class="form-check-label" for="defaultCheck1">
-                                Acepto los términos y condiciones de privacidad
-                            </label>
+            <div class="col-12 col-md-8 col-lg-7">
+                <form action="{{ url('/buscador/pagos') }}" method="post">
+                @csrf
+                    <div id="formulario"></div>
+                    <div class="row mt-3">
+                        <div class="col-12 col-md-6">
+                            <div class="g-recaptcha" data-sitekey="6LeFv6IUAAAAAGE-MtiFauHZVvNN3CEjpD71ZJT1"></div>
+                        </div>
+                        <div class="col-12 col-md-6 d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" name="terminos" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Acepto los términos y condiciones de privacidad
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn text-uppercase d-block mx-auto text-white px-5">enviar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

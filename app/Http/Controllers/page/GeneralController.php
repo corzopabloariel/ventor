@@ -13,6 +13,7 @@ use App\Contenido;
 use App\Producto;
 use App\Descarga;
 use App\Usuario;
+use App\Recurso;
 
 class GeneralController extends Controller
 {
@@ -175,6 +176,7 @@ class GeneralController extends Controller
         $title = "TRABAJE CON NOSOTROS";
         $view = "page.parts.trabaje";
         $datos = [];
+        $datos["trabajos"] = Recurso::orderBy("orden")->get();
         $datos["empresa"] = self::general();
         return view('page.distribuidor',compact('title','view','datos'));
     }

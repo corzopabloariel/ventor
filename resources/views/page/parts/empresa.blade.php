@@ -56,19 +56,23 @@
         <div class="row timeline my-5">
             <div class="col-12 d-flex justify-content-center">
                 <div>
-                    <div class="d-flex justify-content-around" style="width:77vh">
+                    <div class="d-flex justify-content-center">
                         @foreach($datos["contenido"]["fechas"] AS $f => $t)
-                        <div class="input" data-year="{{ $f }}">
+                        <div onclick="change(this)" class="input" data-year="{{ $f }}">
                             <span data-year="{{ $f }}"></span>
                         </div>
                         @endforeach
                     </div>
-                    <div class="d-flex justify-content-center mt-3" style="width:77vh">
-                        @foreach($datos["contenido"]["fechas"] AS $f => $t)
-                        <div class="text text-center" data-year="{{ $f }}">
-                            {!! $t !!}
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-7">
+                            <div class="d-flex justify-content-center flex-column mt-3">
+                                @foreach($datos["contenido"]["fechas"] AS $f => $t)
+                                <div class="text text-center d-none" data-year="{{ $f }}">
+                                    {!! $t !!}
+                                </div>
+                                @endforeach
+                            </div>
                         </div>
-                        @endforeach
                     </div>
                 </div>
             </div>
@@ -91,3 +95,17 @@
         </div>
     </div>
 </div>
+@push('scripts_distribuidor')
+<script>
+    $(document).ready(function() {
+        $(".input[data-year]:first-child").click();
+    });
+    change = function(t) {
+        year = $(t).data("year");
+        $(".input[data-year].active").removeClass("active");
+        $(".text[data-year]").addClass("d-none");
+        $(t).addClass("active");
+        $(`.text[data-year="${year}"]`).removeClass("d-none");
+    };
+</script>
+@endpush

@@ -130,6 +130,9 @@ nav {
     min-height: 75px;
     color: #7C7C7C;
 }
+nav > .container {
+    box-shadow: 0 5px 5px -6px rgba(0,0,0,.4);
+}
 nav a:hover {
     color:#0099D9;
 }
@@ -540,8 +543,12 @@ footer .marca {
     position: relative;
     border-radius: 50%;
     margin-top: 1px;
+    cursor: pointer;
+    margin-left: 40px;
+    margin-right: 40px;
 }
-.wrapper-empresa .timeline .input::before, .wrapper-empresa .timeline .input::after {
+.wrapper-empresa .timeline .input::before,
+.wrapper-empresa .timeline .input::after {
     content: "";
     display: block;
     position: absolute;
@@ -714,6 +721,21 @@ footer .marca {
     font-size: 17px;
     color: #5A5A5A;
 }
+.wrapper-formulario input[type="date"]:before {
+    content: attr(placeholder);
+    color: #aaa;
+    margin-right: 0.5em;
+}
+.wrapper-formulario input[type="date"]:focus:before,
+.wrapper-formulario input[type="date"]:valid:before {
+    content: "";
+}
+.wrapper-formulario .btn:not(.btn-outline-secondary) {
+    background: #009AD6;
+}
+.wrapper-formulario .perfiles .form-check {
+    width: 50px;
+}
 /* ---------------------------------------------------
     HOVER ROUNDED
 ----------------------------------------------------- */
@@ -787,7 +809,37 @@ footer .marca {
 }
 .wrapper-trabaje .form-control:focus {
     box-shadow: none;
+} 
+.wrapper-trabaje input[type="date"]::before {
+    content: attr(placeholder);
+    color: #aaa;
+    margin-right: 0.5em;
 }
+.wrapper-trabaje input[type="date"]:focus::before,
+.wrapper-trabaje input[type="date"]:valid::before {
+    content: "";
+}
+.wrapper-trabaje input[type="text"]:invalid::before {
+    content: "*" !important;
+}
+.wrapper-trabaje .blockquote.border-left {
+    border-width: 4px !important;
+    border-color: #1FA6DB !important;
+}
+.wrapper-trabaje .blockquote {
+    color: #595959;
+    font-size: 16px;
+}
+.wrapper-trabaje .blockquote .title {
+    color: #0099D6 !important;
+    font-size: 20px !important;
+}
+.wrapper-trabaje .btn {
+    background: #009AD6;
+}
+/* ---------------------------------------------------
+    PEDIDO
+----------------------------------------------------- */
 .wrapper-pedido table thead th {
     text-transform: uppercase;
     color: #0099D8;
@@ -828,9 +880,6 @@ footer .marca {
 .wrapper-calidad .slogan {
     font-size: 25px;
     color: #0099D8;
-}
-.wrapper-calidad .list-group-horizontal {
-    display: block;
 }
 .wrapper-calidad .list-group.list-group-horizontal a {
     border-radius: 0;
