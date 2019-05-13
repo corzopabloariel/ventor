@@ -13,7 +13,9 @@
 
 Route::get('/', 'page\GeneralController@index')->name('index');
 Route::get('empresa', 'page\GeneralController@empresa')->name('empresa');
-Route::post('buscador/{tipo}', ['uses' => 'page\GeneralController@buscador', 'as' => 'buscador']);
+//Route::post('buscador/{tipo}', ['uses' => 'page\GeneralController@buscador', 'as' => 'buscador']);
+Route::match(['get', 'post'], 'buscador/{tipo}',['as' => 'buscador','uses' => 'page\GeneralController@buscador' ]);
+
 Route::group(['prefix' => 'productos', 'as' => 'productos'], function() {
     Route::get('/', ['uses' => 'page\GeneralController@productos', 'as' => '.productos']);
     Route::get('/{id?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
@@ -58,7 +60,7 @@ Route::group(['middleware' => 'client', 'prefix' => 'client'], function() {
     
     Route::get('/', 'page\GeneralController@index');
 
-    Route::get('logout', ['uses' => 'page\ClienteController@logout' , 'as' => 'adm.logout']);
+    Route::get('salir', ['uses' => 'page\ClienteController@salir' , 'as' => 'client.salir']);
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
@@ -81,6 +83,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('edit/{id}', ['uses' => 'adm\SliderController@edit', 'as' => '.edit']);
         Route::get('delete/{id}', ['uses' => 'adm\SliderController@destroy', 'as' => '.destroy']);
         Route::post('update/{id}', ['uses' => 'adm\SliderController@update', 'as' => 'update']);
+    });
+    /**
+     * CLIENTES
+     */
+    Route::group(['prefix' => 'clientes', 'as' => 'clientes'], function() {
+        Route::get('index', ['uses' => 'adm\ClientesController@index', 'as' => '.index']);
+        Route::get('edit/{id}', ['uses' => 'adm\ClientesController@edit', 'as' => '.edit']);
+        Route::get('delete/{id}', ['uses' => 'adm\ClientesController@destroy', 'as' => '.destroy']);
+        Route::post('update/{id}', ['uses' => 'adm\ClientesController@update', 'as' => 'update']);
     });
 
     /**

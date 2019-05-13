@@ -136,6 +136,9 @@ nav > .container {
 nav a:hover {
     color:#0099D9;
 }
+nav .logo {
+    display: none;
+}
 nav .menu > li + li {
     margin-left: 20px;
 }
@@ -221,22 +224,22 @@ nav .menu li:hover .submenu {
 nav .info {
     font-size: 16px;
 }
-nav .info .buscador i {
+nav .buscador i {
     color: #5395DF;
+} 
+nav .buscador .btn {
+    padding: 0;
+    margin-right: 10px;
+}
+nav .buscador .form-control {
+    width: 150px;
+    padding: 0;
 }
 nav .info .redes a {
     font-size: 22px;
 }
 nav .info .redes a + a {
     margin-left: 10px;
-} 
-nav .info .buscador .btn {
-    padding: 0;
-    margin-right: 10px;
-}
-nav .info .buscador .form-control {
-    width: 150px;
-    padding: 0;
 }
 nav .info > li + li {
     border-left: 1px solid #BBBBBB;
@@ -246,7 +249,13 @@ nav .info > li + li {
 nav .info > li:last-child {
     border-left: none;
 }
-nav .info li form input {
+nav .zonaCliente {
+    color: #5395DF;
+    border-left: none !important;
+    position: relative;
+}
+nav .info li form input,
+nav .buscador form input {
     border: none;
     outline: none;
     font-size: inherit;
@@ -873,6 +882,9 @@ footer .marca {
     font-weight: normal;
     color:#009AD6;
 }
+.wrapper-trabaje .postulacion {
+    column-count: 2
+}
 .wrapper-trabaje .postulacion > div {
     width: 300px;
 }
@@ -965,6 +977,11 @@ footer .marca {
 /* ---------------------------------------------------
     PEDIDO
 ----------------------------------------------------- */
+.wrapper-pedido .title {
+    font-weight: lighter;
+    color: #595959;
+    font-weight: 35px;
+}
 .wrapper-pedido table thead th {
     text-transform: uppercase;
     color: #0099D8;
@@ -986,6 +1003,58 @@ footer .marca {
 }
 .wrapper-pedido table td p:nth-child(2) {
     color: #C01939
+}
+.wrapper-pedido .valor p {
+    font-weight: 600;
+    font-size: 17px;
+    color: #595959;
+}
+.wrapper-pedido .valor p.total span {
+    font-size: 140%;
+}
+.wrapper-pedido .obs p {
+    color: #595959;
+    font-size: 16px;
+    font-weight: 600;
+}
+.wrapper-pedido .obs .form-control {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none; 
+}
+.wrapper-pedido .obs .form-control:focus {
+    box-shadow: none;
+}
+.wrapper-pedido .buscador input {
+    font-size: 17px;
+}
+.wrapper-pedido .buscador .btn {
+    color: #AFAFAF;
+    right: 0;
+    top: 0;
+    height: 100%;
+    z-index: 1;
+}
+.wrapper-pedido .buscador input::placeholder {
+    color: #0099D8;
+}
+.wrapper-pedido .pagination {
+    margin-bottom: 0;
+}
+.wrapper-pedido .pagination .page-link {
+    border: none;
+    color: #595959;
+}
+.wrapper-pedido .pagination .page-item .page-link {
+    border-radius: 0;
+    padding: 10px 7px;
+    border-radius: 3px;
+    line-height: 12px;
+}
+.wrapper-pedido .page-item.active .page-link {
+    background-color: #A0B2BC;
+    color: #fff;
 }
 /* ---------------------------------------------------
     CALIDAD
@@ -1026,4 +1095,75 @@ footer .marca {
     font-size: 15px;
     margin-bottom: 10px;
     margin-top: 2em;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+@media (min-width: 769px) and (max-width: 1440px) {
+    .carousel .texto p:first-child {
+        font-size: 35px;
+    }
+}
+@media (max-width: 768px) {
+    .wrapper-empresa table {
+        font-size: 25px;
+    }
+    .carousel .texto {
+        display: none;
+    }
+    .navbar-brand.position-absolute {
+        position: static !important;
+    }
+    .wrapper-trabaje .postulacion {
+        column-count: 1;
+    }
+    .wrapper-producto .navegador {
+        display: block;
+    }
+    .wrapper-producto .navegador a {
+        display: block;
+    }
+    .wrapper-producto .navegador a + a {
+        border: none;
+        margin-left: 0;
+        padding-left: 0;
+    }
+
+    nav .info .submenu {
+        left: -20px;
+        top: 30px;
+    }
+
+    .logueado .info {
+        display: block !important;
+    }
+}
+@media (min-width: 768px) {
+    .collapse.dont-collapse-sm {
+        display: block;
+        height: auto !important;
+        visibility: visible;
+    }
+}
+@media (max-width: 991px) {
+    .hidden-tablet {
+        display: none !important;
+    } 
+    .col-12 + .col-12 {
+        margin-top: .8em;
+    }
+    .categorias .col-12 + .col-12 {
+        margin-top: 0 !important;
+    }
+    nav .logo {
+        display: list-item !important;
+        padding-left: 15px;
+    }
+    nav .logo img {
+        height: 50px;
+    }
+    nav > .container {
+        box-shadow: none;
+    }
 }

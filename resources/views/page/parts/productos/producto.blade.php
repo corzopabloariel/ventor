@@ -13,8 +13,11 @@
     </div>
     <div class="container pb-5">
         <div class="row">
-            <div class="col-md-4">
-                <div class="sidebar" id="collapseExample">
+            <div class="col-12 col-md-4">
+                <button class="btn text-uppercase d-block d-sm-none rounded-0 mb-2" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="background: #0099D6">
+                    categorias<i class="fas fa-sort-amount-down ml-2"></i>
+                </button>
+                <div class="sidebar collapse dont-collapse-sm" id="collapseExample">
                     <div class="sidebar">
                         @foreach($datos["menu"] AS $dato)
                             <h5 class="title mb-1 position-relative @isset($dato['active']) active @endisset" data-id="{{$dato['id']}}" style="color:{{$dato['color']}}">
@@ -34,7 +37,7 @@
                 </div>
             </div>
             
-            <div class="col-md-8">
+            <div class="col-12 col-md-8">
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <img src="{{ asset($datos['producto']['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" class="w-100 border" />

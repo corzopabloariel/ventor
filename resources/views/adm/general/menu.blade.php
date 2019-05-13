@@ -92,9 +92,9 @@
             </li>
             <li><hr/></li>
             <li>
-                <a data-link="a" href="{{-- route('compras') --}}">
-                    <i class="fas fa-cash-register"></i>
-                    <span class="nav-label">Compras</span>
+                <a data-link="a" href="{{ route('clientes.index') }}">
+                    <i class="fas fa-id-card-alt"></i>
+                    <span class="nav-label">Clientes</span>
                 </a>
             </li>
             <li><hr/></li>
@@ -178,7 +178,7 @@
                 </a>
             </li>
             <li>
-                <a class="bg-danger text-white" href="{{-- route('adm.logout') --}}">
+                <a class="bg-danger text-white" href="{{ route('adm.logout') }}">
                     <i class="fas fa-power-off text-white"></i>
                     <span class="nav-label">Salir</span>
                 </a>

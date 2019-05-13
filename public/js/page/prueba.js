@@ -23,10 +23,14 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
         });
         for(let x in this.objeto.ATRIBUTOS) {
             aux = this.formaAdecuada(x,this.objeto.ATRIBUTOS[x]);
-
-            _return = _return.replace(`/${x}/`,aux);
+            regex = new RegExp(`/${x}/`, 'g');
+            console.log(regex)
+            _return = _return.replace(regex,aux);
+            //_return = _return.replace(`/${x}/`,aux);
         }
         _return = _return.replace(/URLBASE/g, dataPYRUS.URLBASE);
+        if(dataPYRUS.URLLOGOUT !== undefined)
+            _return = _return.replace(/URLLOGOUT/g, dataPYRUS.URLLOGOUT);
         return _return;
     };
     this.formaAdecuada = function(objeto,data) {
@@ -34,7 +38,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
             case "TP_IMG":
                 return this.image(data);
             case "TP_NAV":
-                return this.nav(data);
+                return this.nav(data, objeto);
             case "TP_MARCA":
                 return this.marca(data);
             case "TP_DATOS":
@@ -48,7 +52,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
         }
     }
     this.persona = function(data) {
-        return dataPYRUS.datos.name;
+        return `${dataPYRUS.datos.name} ${dataPYRUS.datos.lastname}`;
     }
     this.social = function(data) {
         let html = "";
@@ -89,10 +93,14 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
         style += `height: ${(data.HEIGHT !== undefined) ? data.HEIGHT : 'auto'};`
         return `<img ${complementos} style="${style}" />`;
     };
-    this.nav = function(data) {
+    this.nav = function(data, tipo = null) {
         let html = "";
+        console.log(data)
         for(let x in data.ELEMENT) {
-            html += `<li class="hidden-tablet">`;
+            clase = "hidden-tablet";
+            if(data.NOHIDDEN !== undefined) clase = "";
+            console.log(clase)
+            html += `<li data-${x} class="${clase}">`;
                 
                 if(x != "" && data.SUB !== undefined) {
                     if(data.SUB[x] !== undefined) {

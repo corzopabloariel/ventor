@@ -13,6 +13,14 @@ class Usuario extends Authenticatable
         'lastname',
         'password',
         'email',
-        'username'
+        'username',
+        'descuento'
     ];
+
+    public function nombre() {
+        return "{$this->name} {$this->lastname}";
+    }
+    public function descuento() {
+        return $this->descuento * 100;
+    }
 }

@@ -122,92 +122,86 @@
                                 </fieldset>
                                 <fieldset class="mt-4 perfiles">
                                     <legend>Indicar si tiene preferencia por algún perfil</legend>
-                                    <div class="d-flex">
+                                    <div class="" style="column-count: 3">
                                         <div class="form-check">
                                             <input checked class="form-check-input" type="radio" value="AX" name="perfil" id="perfilAX">
                                             <label class="form-check-label" for="perfilAX">
                                                 AX
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="5VX" name="perfil" id="perfil5VX">
                                             <label class="form-check-label" for="perfil5VX">
                                                 5VX
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="DP" name="perfil" id="perfilDP">
                                             <label class="form-check-label" for="perfilDP">
                                                 DP
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="B" name="perfil" id="perfilB">
                                             <label class="form-check-label" for="perfilB">
                                                 B
                                             </label>
                                         </div>
-                                    </div>
-                                    <div class="d-flex mt-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" value="BX" name="perfil" id="perfilBX">
                                             <label class="form-check-label" for="perfilBX">
                                                 BX
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="8VX" name="perfil" id="perfil8VX">
                                             <label class="form-check-label" for="perfil8VX">
                                                 8VX
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="3V" name="perfil" id="perfil3V">
                                             <label class="form-check-label" for="perfil3V">
                                                 3V
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="C" name="perfil" id="perfilC">
                                             <label class="form-check-label" for="perfilC">
                                                 C
                                             </label>
                                         </div>
-                                    </div>
-                                    <div class="d-flex mt-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" value="CX" name="perfil" id="perfilCX">
                                             <label class="form-check-label" for="perfilCX">
                                                 CX
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="AP" name="perfil" id="perfilAP">
                                             <label class="form-check-label" for="perfilAP">
                                                 AP
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="5V" name="perfil" id="perfil5V">
                                             <label class="form-check-label" for="perfil5V">
                                                 5V
                                             </label>
                                         </div>
-                                    </div>
-                                    <div class="d-flex mt-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" value="3VX" name="perfil" id="perfil3VX">
                                             <label class="form-check-label" for="perfil3VX">
                                                 3VX
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="CP" name="perfil" id="perfilCP">
                                             <label class="form-check-label" for="perfilCP">
                                                 CP
                                             </label>
                                         </div>
-                                        <div class="form-check ml-5">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" value="A" name="perfil" id="perfilA">
                                             <label class="form-check-label" for="perfilA">
                                                 A
@@ -219,8 +213,14 @@
                         </div>
                         <div class="row mt-5">
                             <div class="col-12 d-flex justify-content-end">
-                                <button onclick="siguiente(this,0)" type="button" class="btn btn-outline-secondary px-5 text-uppercase">anterior</button>
-                                <button type="submit" class="btn text-white px-5 text-uppercase ml-2">enviar</button>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <button onclick="siguiente(this,0)" type="button" class="btn btn-block btn-outline-secondary px-5 text-uppercase">anterior</button>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <button type="submit" class="btn text-white px-5 text-uppercase btn-block">enviar</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

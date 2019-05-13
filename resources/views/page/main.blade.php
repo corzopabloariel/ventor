@@ -55,7 +55,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script src="https://wowjs.uk/dist/wow.min.js"></script>
+        <script src="{{ asset('js/WOW.js') }}"></script>
         <script src="{{ asset('js/alertify.min.js') }}"></script>
         <script src="{{ asset('js/adm.js') }}"></script>
         <script src="{{ asset('js/page/declaration.js') }}"></script>
@@ -72,8 +72,9 @@
             const logoFooter = `{{ asset('${datos.empresa.images.logoFooter}') }}`;
             header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE, BUSCADOR: {PLACEHOLDER: "Estoy buscando...", NAME: "input", ACTION: "{{ url('/buscador/home') }}"}, REDES: datos.empresa.redes});
             @if(auth()->guard('client')->check())
-                let data = @json(auth()->guard('client')->user());
-                header = new PyrusCuerpo("headerLog", {imgDEFAULT: imgDEFAULT, datos: data, logo: logo, URLBASE: URLBASE, REDES: datos.empresa.redes});
+                window.data = @json(auth()->guard('client')->user());
+                const URLLOGOUT = `{{ route("client.logout") }}`;
+                header = new PyrusCuerpo("headerLog", {imgDEFAULT: imgDEFAULT,URLLOGOUT: URLLOGOUT,BUSCADOR: {PLACEHOLDER: "Estoy buscando...", NAME: "buscar", ACTION: "{{ url('/buscador/pedido') }}"}, datos: window.data, logo: logo, URLBASE: URLBASE, REDES: datos.empresa.redes});
                 $("#wrapper-header").html(header.html());
             @endif
             
@@ -97,6 +98,11 @@
                 if(window.url.indexOf('atencion') > 0) {
                     $("nav .menu").find(`a[data-href="atencion"]`).addClass("active");
                 }
+            }
+
+            limpiar = function() {
+                if(localStorage.productos !== undefined)
+                    localStorage.removeItem("productos");
             }
         </script>
         @stack('scripts')

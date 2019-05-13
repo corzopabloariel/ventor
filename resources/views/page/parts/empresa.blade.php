@@ -55,7 +55,7 @@
 
         <div class="row timeline my-5 wow">
             <div class="col-12 d-flex justify-content-center">
-                <div>
+                <div class="w-100">
                     <div class="d-flex justify-content-center">
                         @foreach($datos["contenido"]["fechas"] AS $f => $t)
                         <div onclick="change(this)" class="input" data-year="{{ $f }}">

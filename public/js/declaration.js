@@ -1,4 +1,14 @@
 const ENTIDADES = {
+
+    clientes: {
+        ATRIBUTOS: {
+            username: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"usuario"},
+            nombre: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"nombre"},
+            email: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE"},
+            descuento: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"descuento (%)",CLASS:"text-center"},
+        }
+    },
+
     slider: {
         ATRIBUTOS: {
             orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},

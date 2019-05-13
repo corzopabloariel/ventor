@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
+use Cookie;
+use Illuminate\Support\Facades\DB;
+
 use App\Empresa;
 use App\Slider;
 use App\Categoria;
@@ -18,6 +21,7 @@ use App\Recurso;
 class GeneralController extends Controller
 {
     public $idioma = "es";
+    public $paginate = 6;
     /** ---------------------------- */
     public function general() {
         $empresa = Empresa::first();
@@ -70,6 +74,35 @@ class GeneralController extends Controller
         return $ARR;
     }
     public function buscador(Request $request, $tipo) {
+        switch($tipo) {
+            case "pedido":
+            try {
+                if(is_null($request->all()["buscar"]))
+                    return redirect()->route('pedido');
+                else {
+                    $buscar = $request->all()["buscar"];
+                    Cookie::queue("buscar", $buscar, 100);
+                }
+            } catch (\Throwable $th) {
+                //throw $th;
+                $buscar = Cookie::get("buscar");
+            }   
+
+            $data = Producto::where(function($query) use ($buscar) {
+                            $query->where("productos.nombre", "LIKE", "%{$buscar}%");
+                            $query->orWhere("productos.codigo", "LIKE", "%{$buscar}%");
+                        })
+                        ->leftJoin("marcas",function($join) use ($buscar) {
+                            $join->on("marcas.id","=","productos.marca_id")
+                                ->where("marcas.nombre", "LIKE", "%{$buscar}%");
+                        })
+                        ->select("productos.*")
+                        ->orderBy("productos.nombre")->paginate($this->paginate);
+            
+            //dd($data);
+            return self::pedido($data, ["buscar" => $buscar]);
+            break;
+        }
     }
     /** ---------------------------- */
     public function index() {
@@ -107,7 +140,7 @@ class GeneralController extends Controller
         
         return view('page.distribuidor',compact('title','view','datos'));
     }
-    public function producto($link = null) {
+    public function producto($link = null, $buscar = null) {
         if(empty($link))
             return redirect()->route('index');
         $title = "PRODUCTO : ";
@@ -219,13 +252,15 @@ class GeneralController extends Controller
         return back()->withSuccess(['mssg' => "Usuario creado correctamente"]);
     }
 
-    public function pedido() {
+    public function pedido($data = null, $buscar = null) {
         
         $title = "PEDIDO";
         $view = "page.parts.pedido";
         $datos = [];
         $datos["empresa"] = self::general();
-        $datos["productos"] = Producto::orderBy("orden")->get();
+        $datos["buscar"] = $buscar;
+        
+        $datos["productos"] = is_null($data) ? Producto::orderBy("nombre")->paginate($this->paginate) : $data;
         return view('page.distribuidor',compact('title','view','datos'));
     }
     
