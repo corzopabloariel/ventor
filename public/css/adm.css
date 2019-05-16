@@ -5,6 +5,11 @@ table thead th,
 table tbody td {
     vertical-align: middle !important;
 }
+
+.pagination {
+    margin-bottom: 0;
+    justify-content: center !important;
+}
 /* ---------------------------------------------------
     FIELDSET
 ----------------------------------------------------- */

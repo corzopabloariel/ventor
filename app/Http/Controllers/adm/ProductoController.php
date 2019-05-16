@@ -8,6 +8,7 @@ use App\Origen;
 use App\Categoria;
 use App\Marca;
 use App\Producto;
+use App\ProductoVentor;
 class ProductoController extends Controller
 {
     public function rec_categorias( $data ) {
@@ -68,6 +69,7 @@ class ProductoController extends Controller
         $familias = Categoria::whereNull("padre_id")->orderBy('orden')->get();
         $modelos = Marca::whereNull("padre_id")->orderBy('nombre')->get();
         $productos = Producto::orderBy("orden")->get();
+        $productos2 = ProductoVentor::orderBy("stmpdh_art")->paginate(15);
         $select2 = [];
         $select2["origenes"] = [];
         $select2["familias"] = [];
@@ -89,9 +91,8 @@ class ProductoController extends Controller
             $p["precio"] = "$ " . $p->getPrecio();
             $p["marcaTexto"] = $p->marca->getNombreEnteroAttribute();
             $p["categoriaTexto"] = $p->categoria->getCategoriaEnteroAttribute();
-            
         }
-        return view('adm.distribuidor',compact('title','view','productos','select2'));
+        return view('adm.distribuidor',compact('title','view','productos','select2','productos2'));
     }
 
     /**

@@ -26,6 +26,9 @@
                 <div class="table-responsive">
                     <table class="table mb-0 table-striped table-hover" id="tabla"></table>
                 </div>
+                <div class="mt-2">
+                    {{ $productos2->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -43,7 +46,7 @@
     });
     const src = "{{ asset('images/general/no-img.png') }}";
     window.pyrus = new Pyrus("productos", null, src);
-    window.elementos = @json($productos);
+    window.elementos = @json($productos2);
     window.select2 = @json($select2);
     submitProducto = function(t) {
         let necesario = [
@@ -227,9 +230,9 @@
     init = function() {
         console.log("CONSTRUYENDO FORMULARIO Y TABLA");
         /** */
-        $("#form .container-form").html(window.pyrus.formulario());
-        $("#precio").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix: '$ '});
-        if($("#form .container-form .select__2").length) {
+        //$("#form .container-form").html(window.pyrus.formulario());
+        //$("#precio").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix: '$ '});
+        /*if($("#form .container-form .select__2").length) {
             
             $("#form .container-form #categoria_id.select__2").select2({
                 tags: "true",
@@ -267,7 +270,7 @@
                 width: "resolve",
                 escapeMarkup: function(m) { return m; }
             });
-        }
+        }*/
 
         let columnas = window.pyrus.columnas();
         let table = $("#tabla");
@@ -278,7 +281,7 @@
         });
         table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 
-        window.elementos.forEach(function(data) {
+        window.elementos.data.forEach(function(data) {
             let tr = "";
             if(!table.find("tbody").length) 
                 table.append("<tbody></tbody>");

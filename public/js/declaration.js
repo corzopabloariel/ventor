@@ -496,25 +496,26 @@ const ENTIDADES = {
             }
         ],
     },
-
+    
     productos: {
         ATRIBUTOS: {
-            codigo: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase text-center",NOMBRE:"código"},
-            nombre: {TIPO:"TP_TEXT",NECESARIO:1,MAXLENGTH:100,EDITOR:1,VISIBILIDAD:"TP_VISIBLE",FIELDSET:1,NOMBRE:"nombre"},
-            orden: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase text-center",WIDTH:"150px"},
-            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 362x347",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"125px"},
-            link: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
-            precio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"precio unitorio",CLASS:"text-right"},
-            mercadolibre: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"link de mercadolibre"},
-            catalogo: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Catálogo seleccionado",INVALID:"Seleccione catálogo",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE_FORM",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"catálogo",SIMPLE:1},
-            familia_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"categoría"},
-            categoria_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"categoría",DISABLED: 1},
-            origen_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"origen"},
-            marca_id: {TIPO:"TP_ENUM",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"marca"},
-            marcaTexto: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"marca"},
-            categoriaTexto: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"categoría"},
-            novedad: {TIPO:"TP_CHECK",VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"Novedad?"},
-            cantidad: {TIPO:"TP_ENTERO",EDITOR:1,VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"cantidad envasada",CLASS:"text-center",SIMPLE:1}
+            stmpdh_art: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center"},
+            use: {TIPO:"TP_TEXT",NECESARIO:1,MAXLENGTH:100,EDITOR:1,VISIBILIDAD:"TP_VISIBLE",FIELDSET:1},
+            stmpdh_tex: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE"},
+            codigo_ima: {TIPO:"TP_FILE",VISIBILIDAD:"TP_VISIBLE",WIDTH:"100px"},
+            usr_stmpdh: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
+            precio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",CLASS:"text-right"},
+            mercadolibre: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE_FORM"},
+            catalogo: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Catálogo seleccionado",INVALID:"Seleccione catálogo",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE_FORM",ACCEPT:"image/jpeg,application/pdf",SIMPLE:1},
+            web_marcas: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
+            parte: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",DISABLED: 1},
+            parte_dbf_: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
+            usr_stmati: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
+            modelo_y_a: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE"},
+            grupo_web: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE"},
+            cantminvta: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
+            fecha_ingr: {TIPO:"TP_FECHA",EDITOR:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center",SIMPLE:1},
+            nro_refere: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"}
         },
         FORM: [
             {
