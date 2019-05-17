@@ -40,6 +40,12 @@
                 </ul>
             </li>
             <li>
+                <a data-link="a" href="{{ route('descargas.index') }}">
+                    <i class="fas fa-truck-loading"></i>
+                    <span class="nav-label">Transportes</span>
+                </a>
+            </li>
+            <li>
                 <a href="#productoSubmenu" data-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-industry"></i>
                     <span class="nav-label">Productos</span>
@@ -64,12 +70,6 @@
                         </a>
                     </li>
 
-                    <li>
-                        <a data-link="u" href="{{-- route('familias.sin') --}}">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span class="nav-label">Sin Familia / Categoría</span>
-                        </a>
-                    </li>
                 </ul>
             </li>
             <li>

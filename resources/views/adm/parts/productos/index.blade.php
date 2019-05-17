@@ -289,8 +289,9 @@
                 td = data[c.COLUMN] === null ? "" : data[c.COLUMN];
                 if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_FILE") {
                     date = new Date();
-                    img = `{{ asset('${td}') }}?t=${date.getTime()}`;
-                    td = `<img style="filter:${data.hsl}" class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
+                    image = `IMAGEN/${td[0]}/${td}.jpg`;
+                    img = `{{ asset('${image}') }}?t=${date.getTime()}`;
+                    td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
                 }
                 if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_COLOR") {
                     td = `${td}<div class="mt-1" style="height:10px; background: ${td}"></div>`;

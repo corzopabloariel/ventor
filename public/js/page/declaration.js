@@ -46,7 +46,7 @@ const BODY = {
                             `<li class="zonaCliente"><a href="#"><i class="fas fa-user-circle mr-2"></i>Zona de clientes</a>`,
                                 `<ul class="submenu list-unstyled shadow-sm rounded" id="login">`,
                                     `<li><div></div></li>`,
-                                    `<li class="border-top text-center"><a href="URLBASE/registro" class="text-center d-inline-block text-uppercase" style="color:#009AD6;"><small>crear una nueva cuenta</small></a></li>`,
+                                    //`<li class="border-top text-center"><a href="URLBASE/registro" class="text-center d-inline-block text-uppercase" style="color:#009AD6;"><small>crear una nueva cuenta</small></a></li>`,
                                 `</ul>`,
                             `</li>`,
                             `<li class="buscador hidden-tablet">/BUSCADOR/</li>`,

@@ -500,7 +500,7 @@ const ENTIDADES = {
     productos: {
         ATRIBUTOS: {
             stmpdh_art: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center"},
-            use: {TIPO:"TP_TEXT",NECESARIO:1,MAXLENGTH:100,EDITOR:1,VISIBILIDAD:"TP_VISIBLE",FIELDSET:1},
+            use: {TIPO:"TP_TEXT",NECESARIO:1,MAXLENGTH:100,EDITOR:1,VISIBILIDAD:"TP_INVISIBLE",FIELDSET:1},
             stmpdh_tex: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE"},
             codigo_ima: {TIPO:"TP_FILE",VISIBILIDAD:"TP_VISIBLE",WIDTH:"100px"},
             usr_stmpdh: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
@@ -512,7 +512,7 @@ const ENTIDADES = {
             parte_dbf_: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
             usr_stmati: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
             modelo_y_a: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE"},
-            grupo_web: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE"},
+            grupo_web: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
             cantminvta: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
             fecha_ingr: {TIPO:"TP_FECHA",EDITOR:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center",SIMPLE:1},
             nro_refere: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"}
