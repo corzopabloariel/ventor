@@ -277,7 +277,7 @@
         columnas.forEach(function(e) {
             if(!table.find("thead").length) 
                 table.append('<thead class="thead-dark"></thead>');
-            table.find("thead").append(`<th class="${e.CLASS}" style="width:${e.WIDTH}">${e.NAME}</th>`);
+            table.find("thead").append(`<th class="${e.CLASS}" style="width:${e.WIDTH};min-width:${e.WIDTH}">${e.NAME}</th>`);
         });
         table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 

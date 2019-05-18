@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\PrivateArea;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -50,12 +51,28 @@ class LoginController extends Controller
             }
             return $next($request);
         })
-        ->except('logout');
+        ->except('salir');
         //$this->middleware('guest')->except('logout');
     }
+
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->only('username');
+
+        if (Auth::attempt($credentials)) {
+            // Authentication passed...
+            return redirect()->intended('pedido');
+        }
+    }
+
     public function guard()
     {
         return Auth::guard('client');
     }
 
+    public function logout(Request $request) {
+        dd("DD");
+        Auth::logout();
+        return redirect()->route('index');
+    }
 }

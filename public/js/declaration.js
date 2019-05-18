@@ -499,22 +499,22 @@ const ENTIDADES = {
     
     productos: {
         ATRIBUTOS: {
-            stmpdh_art: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center"},
+            stmpdh_art: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",NOMBRE:"código"},
             use: {TIPO:"TP_TEXT",NECESARIO:1,MAXLENGTH:100,EDITOR:1,VISIBILIDAD:"TP_INVISIBLE",FIELDSET:1},
             stmpdh_tex: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE"},
-            codigo_ima: {TIPO:"TP_FILE",VISIBILIDAD:"TP_VISIBLE",WIDTH:"100px"},
+            codigo_ima: {TIPO:"TP_FILE",VISIBILIDAD:"TP_VISIBLE",WIDTH:"120px",NOMBRE:"imagen"},
             usr_stmpdh: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
             precio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",CLASS:"text-right"},
             mercadolibre: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE_FORM"},
             catalogo: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Catálogo seleccionado",INVALID:"Seleccione catálogo",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE_FORM",ACCEPT:"image/jpeg,application/pdf",SIMPLE:1},
-            web_marcas: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
+            web_marcas: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"marcas"},
             parte: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",DISABLED: 1},
             parte_dbf_: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
-            usr_stmati: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
-            modelo_y_a: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE"},
+            usr_stmati: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"nombre"},
+            modelo_y_a: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"modelo"},
             grupo_web: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
             cantminvta: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
-            fecha_ingr: {TIPO:"TP_FECHA",EDITOR:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center",SIMPLE:1},
+            fecha_ingr: {TIPO:"TP_FECHA",EDITOR:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center",SIMPLE:1,NOMBRE:"fecha ingreso"},
             nro_refere: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"}
         },
         FORM: [

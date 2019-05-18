@@ -66,14 +66,14 @@
         <script>
             window.url = "{{ url()->current() }}";
             const imgDEFAULT = "{{ asset('images/general/no-img.png') }}";
-            const datos = @json($datos);console.log(datos)
+            const datos = @json($datos);
             const URLBASE = `{{ URL::to("/") }}`;
             const logo = `{{ asset('${datos.empresa.images.logo}') }}`;
             const logoFooter = `{{ asset('${datos.empresa.images.logoFooter}') }}`;
             header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE, BUSCADOR: {PLACEHOLDER: "Estoy buscando...", NAME: "input", ACTION: "{{ url('/buscador/home') }}"}, REDES: datos.empresa.redes});
             @if(auth()->guard('client')->check())
                 window.data = @json(auth()->guard('client')->user());
-                const URLLOGOUT = `{{ route("client.logout") }}`;
+                const URLLOGOUT = `{{ route("client.salir") }}`;
                 header = new PyrusCuerpo("headerLog", {imgDEFAULT: imgDEFAULT,URLLOGOUT: URLLOGOUT,BUSCADOR: {PLACEHOLDER: "Estoy buscando...", NAME: "buscar", ACTION: "{{ url('/buscador/pedido') }}"}, datos: window.data, logo: logo, URLBASE: URLBASE, REDES: datos.empresa.redes});
                 $("#wrapper-header").html(header.html());
             @endif
@@ -84,7 +84,7 @@
             $("#wrapper-footer").html(footer.html());
 
             let formHTML = "";
-            let formACTION = "{{ route('client.login') }}";
+            let formACTION = "{{ route('client.acceso') }}";
             let token = "{{ csrf_token() }}";
             formHTML += `<form action="${formACTION}" method="post">`;
                 formHTML += `<input type="hidden" name="_token" value="${token}"/>`;

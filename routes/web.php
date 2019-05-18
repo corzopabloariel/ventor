@@ -37,10 +37,12 @@ Auth::routes();
 
 Route::group(['prefix' => 'cliente', 'as' => 'client.'], function() {
     // Authentication Routes...
-    Route::get('login', 'PrivateArea\LoginController@showLoginForm')->name('login');
-    Route::post('login', 'PrivateArea\LoginController@login');
+    //Route::get('login', 'PrivateArea\LoginController@showLoginForm')->name('login');
+    Route::post('acceso', 'PrivateArea\LoginController@login')->name("acceso");
+    
     // Route::post('logout', 'PrivateArea\LoginController@logout')->name('logout');
-    Route::get('logout', 'PrivateArea\LoginController@logout')->name('logout');
+    Route::get('salir', 'PrivateArea\LoginController@logou')->name('salir');
+    
     Route::post('register', 'PrivateArea\RegisterController@register')->name('register');
     // Registration Routes...
     // Route::get('register', 'PrivateArea\RegisterController@showRegistrationForm')->name('register');
@@ -54,15 +56,7 @@ Route::group(['prefix' => 'cliente', 'as' => 'client.'], function() {
 
 Route::post('form/{seccion}', ['uses' => 'page\FormController@index', 'as' => 'form']);
 
-
-
-Route::group(['middleware' => 'client', 'prefix' => 'client'], function() {
-    
-    Route::get('/', 'page\GeneralController@index');
-
-    Route::get('salir', ['uses' => 'page\ClienteController@salir' , 'as' => 'client.salir']);
-});
-
+Route::post('login', 'Auth\LoginController@login')->name("login");
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::get('/', 'adm\AdmController@index');
     Route::get('logout', ['uses' => 'adm\AdmController@logout' , 'as' => 'adm.logout']);
