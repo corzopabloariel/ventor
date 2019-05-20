@@ -15,9 +15,7 @@
 
 <section class="mt-3">
     <div class="container-fluid">
-        <div>
-            <button id="btnADD" onclick="add(this)" class="btn btn-primary text-uppercase" type="button">Agregar<i class="fas fa-plus ml-2"></i></button>
-        </div>
+        
         <div style="display: none;" id="wrapper-form" class="mt-2">
             <div class="card">
                 <div class="card-body">
@@ -31,10 +29,13 @@
                 </div>
             </div>
         </div>
-        <div class="card mt-2" id="wrapper-tabla">
+        <div class="card" id="wrapper-tabla">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table mb-0" id="tabla"></table>
+                </div>
+                <div class="mt-2">
+                    {{ $marcas->links() }}
                 </div>
             </div>
         </div>
@@ -398,7 +399,7 @@
         });
         table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 
-        window.elementos.forEach(function(data) {
+        window.elementos.data.forEach(function(data) {
             let tr = "";
             if(!table.find("tbody").length) 
                 table.append("<tbody></tbody>");
@@ -416,8 +417,8 @@
             });
             tr += `<td class="text-center">`;
                 tr += `<button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button>`;
-                tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
-                tr += `<button onclick="hijos(this,${data.id})" type="button" class="btn rounded-0 btn-primary"><i class="fas fa-table" title="Listar hijos"></i></button>`;
+                //tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
+                //tr += `<button onclick="hijos(this,${data.id})" type="button" class="btn rounded-0 btn-primary"><i class="fas fa-table" title="Listar hijos"></i></button>`;
             tr += `</td>`;
             table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
         });

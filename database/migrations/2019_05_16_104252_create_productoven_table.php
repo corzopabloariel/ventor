@@ -22,7 +22,7 @@ class CreateProductovenTable extends Migration
             $table->string('usr_stmpdh',254)->nullable()->default(NULL);//PRE. 5 DEC
             $table->double('precio',8,5)->nullable()->default(0);
             $table->string('web_marcas',254)->nullable()->default(NULL);
-            $table->string('parte',254)->nullable()->default(NULL);
+            //$table->string('parte',254)->nullable()->default(NULL);
             $table->string('parte_dbf_',254)->nullable()->default(NULL);
             $table->string('modelo_y_a',254)->nullable()->default(NULL);
             $table->string('usr_stmati',254)->nullable()->default(NULL);
@@ -30,6 +30,15 @@ class CreateProductovenTable extends Migration
             $table->string('cantminvta',254)->nullable()->default(NULL);//PRE. 5 DEC
             $table->dateTime('fecha_ingr')->nullable()->default(NULL);
             $table->string('nro_refere',254)->nullable()->default(NULL);
+
+            
+            $table->unsignedBigInteger('familia_id')->nullable()->default(NULL);
+            $table->unsignedBigInteger('parte_id')->nullable()->default(NULL);
+            $table->unsignedBigInteger('modelo_id')->nullable()->default(NULL);
+
+            $table->foreign('familia_id')->references('id')->on('familiasventor')->onDelete('set null');
+            $table->foreign('parte_id')->references('id')->on('partesventor')->onDelete('set null');
+            $table->foreign('modelo_id')->references('id')->on('modeloventor')->onDelete('set null');
             
             $table->timestamps();
         });

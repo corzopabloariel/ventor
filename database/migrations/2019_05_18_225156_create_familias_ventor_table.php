@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMarcasTable extends Migration
+class CreateFamiliasVentorTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateMarcasTable extends Migration
      */
     public function up()
     {
-        Schema::create('modeloventor', function (Blueprint $table) {
+        Schema::create('familiasventor', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->timestamp('autofecha')->useCurrent();
+            $table->string('usr_stmati',200)->nullable()->default(NULL);
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateMarcasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('modeloventor');
+        Schema::dropIfExists('familiasventor');
     }
 }

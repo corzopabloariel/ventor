@@ -302,20 +302,48 @@ const ENTIDADES = {
 
     marcas: {
         ATRIBUTOS: {
-            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 230x230",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"108px"},
-            nombre: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE"},
-            mod: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE_TABLE",CLASS:"text-uppercase text-center",NOMBRE:"modelos"}
+            marcaT: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE"},
+            modelo_y_a: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE"},
+            //mod: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE_TABLE",CLASS:"text-uppercase text-center",NOMBRE:"modelos"}
         },
         FORM: [
             {
                 BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
-            },
+            }
+        ],
+        FUNCIONES: {
+            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
+    transportes: {
+        ATRIBUTOS: {
+            tracod: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"código"},
+            descrp: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"},
+            tradir: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"dirección"},
+            telefn: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"teléfono"},
+            respon: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"responsable"},
+        },
+        FORM: [
             {
-                nombre: '<div class="col-12 col-md-6">/nombre/</div>'
-            },
+                BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
+            }
+        ],
+        FUNCIONES: {
+            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
+    vendedores: {
+        ATRIBUTOS: {
+            vnddor: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"código",CLASS:"text-center"},
+            descrp: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"},
+            natmer: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center"},
+            nrotel: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"teléfono"},
+            mail: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE"},
+        },
+        FORM: [
             {
-                image: '<div class="col-12 col-md-6">/image/</div>',
-            },
+                BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
+            }
         ],
         FUNCIONES: {
             image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
@@ -497,25 +525,55 @@ const ENTIDADES = {
         ],
     },
     
+    familias: {
+        ATRIBUTOS: {
+            usr_stmati: {TIPO:"TP_STRING",MAXLENGTH: 200,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre"}
+        },
+        FORM: [
+            {
+                BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
+            },
+            {
+                usr_stmati: '<div class="col-12 col-md-6">/nombre/</div>'
+            }
+        ],
+    },
+    partes: {
+        ATRIBUTOS: {
+            cod: {TIPO:"TP_STRING",MAXLENGTH: 200,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"código"},
+            descrp: {TIPO:"TP_STRING",MAXLENGTH: 200,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"}
+        },
+        FORM: [
+            {
+                BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
+            },
+            {
+                cod: '<div class="col-12 col-md-6">/cod/</div>'
+            }
+        ],
+    },
     productos: {
         ATRIBUTOS: {
-            stmpdh_art: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",NOMBRE:"código"},
+            stmpdh_art: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",NOMBRE:"código",WIDTH:"150px"},
             use: {TIPO:"TP_TEXT",NECESARIO:1,MAXLENGTH:100,EDITOR:1,VISIBILIDAD:"TP_INVISIBLE",FIELDSET:1},
-            stmpdh_tex: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE"},
+            stmpdh_tex: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE", NOMBRE:"NOMBRE",WIDTH:"250px"},
             codigo_ima: {TIPO:"TP_FILE",VISIBILIDAD:"TP_VISIBLE",WIDTH:"120px",NOMBRE:"imagen"},
-            usr_stmpdh: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
-            precio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",CLASS:"text-right"},
+            usr_stmpdh: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"cantidad"},
+            cantminvta: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Cant. mínima"},
+            precio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",CLASS:"text-right",WIDTH:"100px"},
             mercadolibre: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE_FORM"},
             catalogo: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Catálogo seleccionado",INVALID:"Seleccione catálogo",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE_FORM",ACCEPT:"image/jpeg,application/pdf",SIMPLE:1},
-            web_marcas: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"marcas"},
-            parte: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",DISABLED: 1},
-            parte_dbf_: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
-            usr_stmati: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"nombre"},
-            modelo_y_a: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"modelo"},
+            familia_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"familia"},
+            modelo_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Modelo",WIDTH: "200px"},
+            parte_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"parte",WIDTH: "100px"},
             grupo_web: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
-            cantminvta: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
-            fecha_ingr: {TIPO:"TP_FECHA",EDITOR:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center",SIMPLE:1,NOMBRE:"fecha ingreso"},
-            nro_refere: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"}
+            fecha_ingr: {TIPO:"TP_FECHA",EDITOR:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-center",SIMPLE:1,NOMBRE:"fecha ingreso",WIDTH:"120px"},
+            nro_refere: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"NRO. Referencia"},
+            //web_marcas: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_INVISIBLE",CLASS:"text-uppercase",NOMBRE:"marcas"},
+            //modelo_y_a: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE",NOMBRE:"modelo"},
+            //parte: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_INVISIBLE",CLASS:"text-uppercase",DISABLED: 1},
+            //parte_dbf_: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_INVISIBLE",CLASS:"text-uppercase"},
+            //usr_stmati: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_INVISIBLE",CLASS:"text-uppercase"},
         },
         FORM: [
             {

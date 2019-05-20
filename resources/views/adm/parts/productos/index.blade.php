@@ -5,23 +5,7 @@
 
 <section class="mt-3">
     <div class="container-fluid">
-        <div>
-            <button id="btnADD" onclick="add(this)" class="btn btn-primary text-uppercase" type="button">Agregar<i class="fas fa-plus ml-2"></i></button>
-        </div>
-        <div style="display: none;" id="wrapper-form" class="mt-2">
-            <div class="card">
-                <div class="card-body">
-                    <button onclick="remove(this)" type="button" class="close position-absolute" aria-label="Close">
-                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
-                    </button>
-                    <form id="form" novalidate class="pt-2" action="{{ url('/adm/familia/store') }}" onsubmit="event.preventDefault(); submitProducto(this);" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                        <div class="container-form"></div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-2" id="wrapper-tabla">
+        <div class="card" id="wrapper-tabla">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table mb-0 table-striped table-hover" id="tabla"></table>
@@ -302,11 +286,11 @@
                             td = window.pyrus.especificacion[c.COLUMN].ENUM[td];
                     }
                 }
-                tr += `<td data-${c.COLUMN} class="${c.CLASS}">${td}</td>`;
+                tr += `<td data-${c.COLUMN} class="${c.CLASS}" style="width:${c.WIDTH};min-width:${c.WIDTH}">${td}</td>`;
             });
             tr += `<td class="text-center">`;
                 tr += `<button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button>`;
-                tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
+                //tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
             tr += `</td>`;
             table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
         });

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\adm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Marca;
+use App\ModeloVentor;
 class MarcasController extends Controller
 {
     /**
@@ -16,10 +16,10 @@ class MarcasController extends Controller
     {
         $title = "Marcas";
         $view = "adm.parts.marcas.index";
-        $marcas = Marca::whereNull("padre_id")->orderBy('nombre')->get();
+        $marcas = ModeloVentor::orderBy('modelo_y_a')->paginate(15);
 
         foreach($marcas AS $c)
-            $c["mod"] = count($c->modelos);
+            $c["marcaT"] = $c->marca["web_marcas"];
         
         return view('adm.distribuidor',compact('title','view','marcas','seccion'));
     }

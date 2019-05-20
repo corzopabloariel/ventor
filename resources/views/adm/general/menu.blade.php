@@ -40,9 +40,15 @@
                 </ul>
             </li>
             <li>
-                <a data-link="a" href="{{ route('descargas.index') }}">
+                <a data-link="a" href="{{ route('transporte.index') }}">
                     <i class="fas fa-truck-loading"></i>
                     <span class="nav-label">Transportes</span>
+                </a>
+            </li>
+            <li>
+                <a data-link="a" href="{{ route('vendedor.index') }}">
+                    <i class="fas fa-portrait"></i>
+                    <span class="nav-label">Vendedores</span>
                 </a>
             </li>
             <li>
@@ -51,6 +57,24 @@
                     <span class="nav-label">Productos</span>
                 </a>
                 <ul class="collapse list-unstyled" id="productoSubmenu">
+                    <li>
+                        <a data-link="u" href="{{ route('familias.index') }}">
+                            <i class="fas fa-tasks"></i>
+                            <span class="nav-label">Familia de productos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-link="u" href="{{ route('partes.index') }}">
+                            <i class="fab fa-modx"></i>
+                            <span class="nav-label">Partes de productos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-link="u" href="{{ route('marcas.index') }}">
+                            <i class="fas fa-registered"></i>
+                            <span class="nav-label">Marcas y modelos</span>
+                        </a>
+                    </li>
                     <li>
                         <a data-link="u" href="{{ route('categorias.index') }}">
                             <i class="fas fa-columns"></i>
@@ -137,18 +161,6 @@
                     </li>
                     @endif
                 </ul>
-            </li>
-            <li>
-                <a data-link="a" href="{{ route('marcas.index') }}">
-                    <i class="fab fa-bandcamp"></i>
-                    <span class="nav-label">Marcas</span>
-                </a>
-            </li>
-            <li>
-                <a data-link="a" href="{{ route('origenes.index') }}">
-                    <i class="fas fa-hand-point-right"></i>
-                    <span class="nav-label">Orígenes</span>
-                </a>
             </li>
             <li>
                 <a data-link="a" href="{{ route('contenido.edit', ['seccion' => 'terminos']) }}">

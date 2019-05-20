@@ -86,11 +86,14 @@ class ProductoController extends Controller
             $select2["origenes"][] = ["id" => $e["id"],"text" => $e["nombre"],"img" => $e["image"]];
         foreach($familias AS $e)
             $select2["familias"][] = ["id" => $e["id"],"text" => $e["nombre"],"img" => $e["image"], "style" => "width: 60px; filter: {$e["hsl"]}"];
-        foreach($productos AS $p) {
-            $p["nombre"] = $p->getNombreCodigoAttribute();
+        foreach($productos2 AS $p) {
+            $p["modelo_id"] = $p->modelo_id();
+            $p["familia_id"] = $p->familia_id();
+            
+            $p["parte_id"] = $p->parte_id();
             $p["precio"] = "$ " . $p->getPrecio();
-            $p["marcaTexto"] = $p->marca->getNombreEnteroAttribute();
-            $p["categoriaTexto"] = $p->categoria->getCategoriaEnteroAttribute();
+            //$p["marcaTexto"] = $p->marca->getNombreEnteroAttribute();
+            //$p["categoriaTexto"] = $p->categoria->getCategoriaEnteroAttribute();
         }
         return view('adm.distribuidor',compact('title','view','productos','select2','productos2'));
     }

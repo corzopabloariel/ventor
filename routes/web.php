@@ -110,16 +110,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     /**
      * ORIGENES
      */
-    Route::group(['prefix' => 'origenes', 'as' => 'origenes'], function() {
-        Route::get('index', ['uses' => 'adm\OrigenesController@index', 'as' => '.index']);
-        Route::post('store', ['uses' => 'adm\OrigenesController@store', 'as' => '.store']);
-        Route::get('edit/{id}', ['uses' => 'adm\OrigenesController@edit', 'as' => '.edit']);
-        Route::get('delete/{id}', ['uses' => 'adm\OrigenesController@destroy', 'as' => '.destroy']);
-        Route::post('update/{id}', ['uses' => 'adm\OrigenesController@update', 'as' => 'update']);
-    });
-    /**
-     * ORIGENES
-     */
     Route::group(['prefix' => 'descargas', 'as' => 'descargas'], function() {
         Route::get('index', ['uses' => 'adm\DescargasController@index', 'as' => '.index']);
         Route::post('store', ['uses' => 'adm\DescargasController@store', 'as' => '.store']);
@@ -136,6 +126,50 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('edit/{id}', ['uses' => 'adm\RecursosController@edit', 'as' => '.edit']);
         Route::get('delete/{id}', ['uses' => 'adm\RecursosController@destroy', 'as' => '.destroy']);
         Route::post('update/{id}', ['uses' => 'adm\RecursosController@update', 'as' => 'update']);
+    });
+    /**
+     * FAMILIAS
+     */
+    Route::group(['prefix' => 'familias', 'as' => 'familias'], function() {
+        Route::get('index', ['uses' => 'adm\FamiliaController@index', 'as' => '.index']);
+        Route::post('store', ['uses' => 'adm\FamiliaController@store', 'as' => '.store']);
+        Route::get('edit/{id}', ['uses' => 'adm\FamiliaController@edit', 'as' => '.edit']);
+        Route::get('show/{id?}', ['uses' => 'adm\FamiliaController@show', 'as' => '.show']);
+        Route::get('delete/{id}', ['uses' => 'adm\FamiliaController@destroy', 'as' => '.destroy']);
+        Route::post('update/{id}', ['uses' => 'adm\FamiliaController@update', 'as' => 'update']);
+    });
+    /**
+     * PARTES
+     */
+    Route::group(['prefix' => 'partes', 'as' => 'partes'], function() {
+        Route::get('index', ['uses' => 'adm\ParteController@index', 'as' => '.index']);
+        Route::post('store', ['uses' => 'adm\ParteController@store', 'as' => '.store']);
+        Route::get('edit/{id}', ['uses' => 'adm\ParteController@edit', 'as' => '.edit']);
+        Route::get('show/{id?}', ['uses' => 'adm\ParteController@show', 'as' => '.show']);
+        Route::get('delete/{id}', ['uses' => 'adm\ParteController@destroy', 'as' => '.destroy']);
+        Route::post('update/{id}', ['uses' => 'adm\ParteController@update', 'as' => 'update']);
+    });
+    /**
+     * TRANSPORTE
+     */
+    Route::group(['prefix' => 'transporte', 'as' => 'transporte'], function() {
+        Route::get('index', ['uses' => 'adm\TransporteController@index', 'as' => '.index']);
+        Route::post('store', ['uses' => 'adm\TransporteController@store', 'as' => '.store']);
+        Route::get('edit/{id}', ['uses' => 'adm\TransporteController@edit', 'as' => '.edit']);
+        Route::get('show/{id?}', ['uses' => 'adm\TransporteController@show', 'as' => '.show']);
+        Route::get('delete/{id}', ['uses' => 'adm\TransporteController@destroy', 'as' => '.destroy']);
+        Route::post('update/{id}', ['uses' => 'adm\TransporteController@update', 'as' => 'update']);
+    });
+    /**
+     * VENDEDOR
+     */
+    Route::group(['prefix' => 'vendedor', 'as' => 'vendedor'], function() {
+        Route::get('index', ['uses' => 'adm\VendedorController@index', 'as' => '.index']);
+        Route::post('store', ['uses' => 'adm\VendedorController@store', 'as' => '.store']);
+        Route::get('edit/{id}', ['uses' => 'adm\VendedorController@edit', 'as' => '.edit']);
+        Route::get('show/{id?}', ['uses' => 'adm\VendedorController@show', 'as' => '.show']);
+        Route::get('delete/{id}', ['uses' => 'adm\VendedorController@destroy', 'as' => '.destroy']);
+        Route::post('update/{id}', ['uses' => 'adm\VendedorController@update', 'as' => 'update']);
     });
     /**
      * CATEGORIAS
