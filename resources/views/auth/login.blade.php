@@ -27,9 +27,9 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row d-none">
                             <div class="col-12">
-                                <input placeholder="Contraseña" id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                                <input placeholder="Contraseña" id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" value="pablopablo" name="password" required>
 
                                 @if ($errors->has('password'))
                                     <span class="invalid-feedback" role="alert">

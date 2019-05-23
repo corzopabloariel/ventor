@@ -4,6 +4,35 @@
 </div>
 <div class="position-relative" style="height: calc(100% - 73px); overflow-y:auto; overflow-x: hidden;">
     <div class="w-100 position-absolute">
+        @if(Auth::user()["is_admin"] == 2)
+        <ul class="list-unstyled components m-0 p-0">
+            <li>
+                <a data-link="a" href="{{ route('clientes.index') }}">
+                    <i class="fas fa-id-card-alt"></i>
+                    <span class="nav-label">Clientes</span>
+                </a>
+            </li>
+            <li>
+                <a data-link="a" href="{{-- route('compras') --}}">
+                    <i class="fas fa-cash-register"></i>
+                    <span class="nav-label">Pedidos</span>
+                </a>
+            </li>
+            <li>
+                <a data-link="a" href="{{ route('empresa.usuarios.datos') }}">
+                    <i class="fas fa-user-cog"></i>
+                    <span class="nav-label">Mis datos</span>
+                </a>
+            </li>
+            <li><hr/></li>
+            <li>
+                <a class="bg-danger text-white" href="{{ route('adm.logout') }}">
+                    <i class="fas fa-power-off text-white"></i>
+                    <span class="nav-label">Salir</span>
+                </a>
+            </li>
+        </ul>
+        @else
         <ul class="list-unstyled components m-0 p-0">
             <li class="">
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">
@@ -58,6 +87,12 @@
                 </a>
                 <ul class="collapse list-unstyled" id="productoSubmenu">
                     <li>
+                        <a data-link="u" href="{{ route('categorias.index') }}">
+                            <i class="fas fa-columns"></i>
+                            <span class="nav-label">Categorías de productos (zona pública)</span>
+                        </a>
+                    </li>
+                    <li>
                         <a data-link="u" href="{{ route('familias.index') }}">
                             <i class="fas fa-tasks"></i>
                             <span class="nav-label">Familia de productos</span>
@@ -73,12 +108,6 @@
                         <a data-link="u" href="{{ route('marcas.index') }}">
                             <i class="fas fa-registered"></i>
                             <span class="nav-label">Marcas y modelos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-link="u" href="{{ route('categorias.index') }}">
-                            <i class="fas fa-columns"></i>
-                            <span class="nav-label">Categorías de productos</span>
                         </a>
                     </li>
                     <li>
@@ -115,6 +144,12 @@
                 </a>
             </li>
             <li><hr/></li>
+            <li>
+                <a data-link="a" href="{{-- route('compras') --}}">
+                    <i class="fas fa-cash-register"></i>
+                    <span class="nav-label">Pedidos</span>
+                </a>
+            </li>
             <li>
                 <a data-link="a" href="{{ route('clientes.index') }}">
                     <i class="fas fa-id-card-alt"></i>
@@ -196,5 +231,6 @@
                 </a>
             </li>
         </ul>
+        @endif
     </div>
 </div>

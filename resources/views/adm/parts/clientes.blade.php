@@ -36,8 +36,9 @@
         <div class="card mt-2" id="wrapper-tabla">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table mb-0" id="tabla"></table>
+                    <table class="table mb-0 table-hover" id="tabla"></table>
                 </div>
+                <div>{{ $usuarios->links() }}</div>
             </div>
         </div>
     </div>
@@ -84,7 +85,7 @@
         });
         table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 
-        window.elementos.forEach(function(data) {
+        window.elementos.data.forEach(function(data) {
             let tr = "";
             if(!table.find("tbody").length) 
                 table.append("<tbody></tbody>");
@@ -98,9 +99,9 @@
                 tr += `<td class="${c.CLASS}">${td}</td>`;
             });
             tr += `<td class="text-center">`;
-                tr += `<button onclick="edit(this,${data.id},'password')" class="btn rounded-0 btn-warning"><i class="fas fa-key"></i></button>`;
+                //tr += `<button onclick="edit(this,${data.id},'password')" class="btn rounded-0 btn-warning"><i class="fas fa-key"></i></button>`;
                 tr += `<button onclick="edit(this,${data.id},'porcentaje')" class="btn rounded-0 btn-info"><i class="fas fa-percentage"></i></button>`;
-                tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
+                //tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
             tr += `</td>`;
             table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
         });

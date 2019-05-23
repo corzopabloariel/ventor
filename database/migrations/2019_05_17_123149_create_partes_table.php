@@ -19,6 +19,9 @@ class CreatePartesTable extends Migration
             $table->timestamp('autofecha')->useCurrent();
             $table->string('cod',15)->nullable()->default(NULL);
             $table->string('descrp',120)->nullable()->default(NULL);
+            $table->unsignedBigInteger('familia_id')->nullable()->default(NULL);
+
+            $table->foreign('familia_id')->references('id')->on('familiasventor')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -14,4 +14,8 @@ class Vendedor extends Model
         'nrotel',
         'mail'
     ];
+    public function pedidos()
+    {
+        return $this->hasMany('App\Pedido');
+    }
 }

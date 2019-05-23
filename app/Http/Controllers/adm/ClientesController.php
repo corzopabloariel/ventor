@@ -4,7 +4,11 @@ namespace App\Http\Controllers\adm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Usuario;
+use App\User;
+use App\Vendedor;
+use App\Pedido;
 
 class ClientesController extends Controller
 {
@@ -17,11 +21,18 @@ class ClientesController extends Controller
     {
         $title = "Clientes";
         $view = "adm.parts.clientes";
-        $usuarios = Usuario::orderBy('username')->get();
+        if(Auth::user()["is_admin"] == 2) {
+            $natmer = Auth::user()["username"];
+            $natmer = str_replace("VND_","",$natmer);
+            $vendedor = Vendedor::where("natmer",$natmer)->first();
+            $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->paginate(15);
+        } else
+            $usuarios = Usuario::orderBy('username')->paginate(15);
 
         foreach($usuarios AS $u) {
             $u["nombre"] = $u->nombre();
             $u["descuento"] = $u->descuento();
+            
         }
         
         return view('adm.distribuidor',compact('title','view','usuarios'));

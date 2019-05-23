@@ -2,9 +2,9 @@
 
 <section class="mt-3">
     <div class="container-fluid">
-        <div>
+        {{--<div>
             <button id="btnADD" onclick="add(this)" class="btn btn-primary text-uppercase" type="button">Agregar<i class="fas fa-plus ml-2"></i></button>
-        </div>
+        </div>--}}
         <div style="display: none;" id="wrapper-form" class="mt-2">
             <div class="card">
                 <div class="card-body">
@@ -22,6 +22,7 @@
         <div class="card mt-2" id="wrapper-tabla">
             <div class="card-body">
                 <table class="table mb-0" id="tabla"></table>
+                {{ $usuarios->links() }}
             </div>
         </div>
     </div>
@@ -166,9 +167,9 @@
                 table.append('<thead class="thead-dark"></thead>');
             table.find("thead").append(`<th class="${e.CLASS}" style="width:${e.WIDTH}">${e.NAME}</th>`);
         });
-        table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
+        //table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 
-        window.usuarios.forEach(function(data) {
+        window.usuarios.data.forEach(function(data) {
             let tr = "";
             if(!table.find("tbody").length) 
                 table.append("<tbody></tbody>");
@@ -185,7 +186,7 @@
                 }
                 tr += `<td class="${c.CLASS}">${td}</td>`;
             });
-            tr += `<td class="text-center"><button onclick="edit(this,${data.id})" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id})" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
+            //tr += `<td class="text-center"><button onclick="edit(this,${data.id})" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id})" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
             table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
         });
     }

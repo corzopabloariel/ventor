@@ -3,9 +3,9 @@ const ENTIDADES = {
     clientes: {
         ATRIBUTOS: {
             username: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"usuario"},
-            nombre: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"nombre"},
+            nombre: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"nombre",CLASS:"text-uppercase"},
             email: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE"},
-            descuento: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"descuento (%)",CLASS:"text-center"},
+            descuento: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"desc. (%)",CLASS:"text-center"},
         }
     },
 
@@ -248,7 +248,8 @@ const ENTIDADES = {
             nombre: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE"},
             color: {TIPO:"TP_COLOR",VISIBILIDAD:"TP_VISIBLE"},
             hsl: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
-            subcategorias: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"Subcategorías",CLASS:"text-uppercase text-center"}
+            subcategorias: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"Subcategorías",CLASS:"text-uppercase text-center"},
+            asociado: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Relacionado"}
         },
         FORM: [
             {
@@ -506,7 +507,7 @@ const ENTIDADES = {
             username: {TIPO:"TP_STRING",MAXLENGTH:30,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"usuario"},
             name: {TIPO:"TP_STRING",MAXLENGTH:100,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre"},
             password: {TIPO:"TP_PASSWORD",VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"contraseña"},
-            is_admin: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",ENUM:{1:"Administrador",0:"Usuario"},NOMBRE:"Tipo",CLASS:"text-uppercase"},
+            is_admin: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",ENUM:{1:"Administrador",0:"Cliente",2:"Vended0or",11:"ADM Ventor"},NOMBRE:"Tipo",CLASS:"text-uppercase"},
         },
         FORM: [
             {
@@ -541,7 +542,8 @@ const ENTIDADES = {
     partes: {
         ATRIBUTOS: {
             cod: {TIPO:"TP_STRING",MAXLENGTH: 200,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"código"},
-            descrp: {TIPO:"TP_STRING",MAXLENGTH: 200,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"}
+            descrp: {TIPO:"TP_STRING",MAXLENGTH: 200,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"descripción"},
+            familia_id: {TIPO:"TP_STRING",MAXLENGTH: 200,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Familia"}
         },
         FORM: [
             {

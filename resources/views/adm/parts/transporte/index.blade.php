@@ -155,7 +155,7 @@
                 table.append('<thead class="thead-dark"></thead>');
             table.find("thead").append(`<th class="${e.CLASS}" style="width:${e.WIDTH}">${e.NAME}</th>`);
         });
-        table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
+        //table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
         
         window.elementos.data.forEach(function(data) {
             let tr = "";
@@ -170,10 +170,10 @@
                 }
                 tr += `<td class="${c.CLASS}">${td}</td>`;
             });
-            tr += `<td class="text-center">`;
-                tr += `<button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button>`;
+            //tr += `<td class="text-center">`;
+                //tr += `<button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button>`;
                 //tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
-            tr += `</td>`;
+            //tr += `</td>`;
             table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
         });
     }

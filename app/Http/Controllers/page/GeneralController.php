@@ -152,6 +152,7 @@ class GeneralController extends Controller
         //dd($link);
         $datos["categoria"] = Categoria::find($datos["producto"]["categoria_id"]);
         $datos["menu"] = self::menu($datos["categoria"]->padres());
+        
         $datos["nombres"] = $datos["categoria"]->padres(0);
         $datos["nombres"][] = ["nombre" => $datos["categoria"]["nombre"], "id" => $datos["categoria"]["id"]];
 
@@ -169,7 +170,7 @@ class GeneralController extends Controller
         $datos["menu"] = self::menu($datos["categoria"]->padres());
         $datos["nombres"] = $datos["categoria"]->padres(0);
         $datos["productos"] = $datos["categoria"]->productos;
-//dd($datos["productos"]);//
+dd($datos["menu"]);//
         foreach($datos["productos"] AS $p)
             $p["modelo"] = $p->marca->getNombreEnteroAttribute(0);
 

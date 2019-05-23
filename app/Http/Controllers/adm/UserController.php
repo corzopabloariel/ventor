@@ -19,8 +19,10 @@ class UserController extends Controller
         if(Auth::user()["is_admin"]) {
             $title = "Usuarios";
             $view = "adm.parts.usuarios.index";
-
-            $usuarios = User::where("id","!=",Auth::user()["id"])->get();
+            if(Auth::user()["is_admin"] == 11)
+                $usuarios = User::where("id","!=",Auth::user()["id"])->where("is_admin",">",1)->paginate(15);
+            else
+                $usuarios = User::where("id","!=",Auth::user()["id"])->paginate(15);
 
             return view('adm.distribuidor',compact('title','view','usuarios'));
         }

@@ -9,6 +9,11 @@ class PartesVentor extends Model
     protected $table = "partesventor";
     protected $fillable = [
         'cod',
-        'descrp'
+        'descrp',
+        'familia_id'
     ];
+    public function familia()
+    {
+        return $this->belongsTo('App\FamiliaVentor');
+    }
 }

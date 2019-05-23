@@ -17,6 +17,10 @@ class ParteController extends Controller
         $title = "Partes de productos";
         $view = "adm.parts.parte.index";
         $familias = PartesVentor::orderBy('cod')->paginate(15);
+        foreach($familias AS $f) {
+            $f["familia_id"] = $f->familia;
+            $f["familia_id"] = $f["familia_id"]["usr_stmati"];
+        }
         
         return view('adm.distribuidor',compact('title','view','familias'));
     }

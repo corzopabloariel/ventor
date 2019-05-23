@@ -15,7 +15,7 @@
                                 <label for="name">Nombre</label>
                                 <input type="text" class="form-control" name="name" id="name" placeholder="Nombre completo" value="{{$usuario['name']}}">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group d-none">
                                 <label for="password">Contraseña</label>
                                 <input type="password" class="form-control" name="password" id="password" placeholder="Contraseña">
                             </div>
@@ -25,7 +25,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="mt-3 alert alert-warning" role="alert">Si no desea cambiar la clave, deje el campo vacío.</div>
+                {{-- <div class="mt-3 alert alert-warning" role="alert">Si no desea cambiar la clave, deje el campo vacío.</div> --}}
             </div>
         </div>
     </div>
