@@ -52,7 +52,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
         }
     }
     this.persona = function(data) {
-        return `${dataPYRUS.datos.name} ${dataPYRUS.datos.lastname}`;
+        return `${dataPYRUS.datos.name}`;
     }
     this.social = function(data) {
         let html = "";

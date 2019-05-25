@@ -7,12 +7,13 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Guardar cambios</button>
-            </div>
+            <form id="formModal" action="" method="post" onsubmit="event.preventDefault(); porcentaje(this);">
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -54,8 +55,13 @@
         let html = "";
         switch(tipo) {
             case "porcentaje":
+                action = `{{ url('/adm/${window.pyrus.entidad}/porcentaje/${id}') }}`;
+                $("#formModal").data("id",id);
+                $("#modalCliente form").attr( "action" , action );
                 actual = $(`table tbody tr[data-id="${id}"]`).find("td:nth-child(4)").text();
-                html += `<input data-suffix="%" value="${actual}" min="0" max="100" type="number" step="1" />`;
+                actual = actual.replace(",",".");
+                html += '<input type="hidden" name="_token" value="{{ csrf_token() }}" />';
+                html += `<input data-suffix="%" value="${actual}" name="descuento" min="0" max="100" type="number" step="1" />`;
                 modal.find(".modal-body").html(html);
                 if(modal.find("input[type='number']").length) {
                     let config = {
@@ -69,6 +75,25 @@
             break;
         }
         modal.modal("show");
+    }
+    porcentaje = function(t) {
+        let modal = $("#modalCliente");
+        let formElement = document.getElementById("formModal");
+        let elementForm = new FormData(formElement);
+        $("#formModal *").attr("disabled", true);
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "POST", t.action );
+        xmlHttp.onload = function() {
+            console.log(xmlHttp.responseText)
+            actual = parseFloat(xmlHttp.responseText);
+            actual = actual.toFixed(2);
+            actual = actual.replace(".",",");
+            console.log(actual)
+            $("#tabla").find(`tr[data-id="${$("#formModal").data("id")}"] td:nth-child(4)`).text(actual);
+            modal.modal("hide");
+        };
+        xmlHttp.send(elementForm);
+        return false;
     }
     /** ------------------------------------- */
     init = function() {
@@ -95,6 +120,10 @@
                     date = new Date();
                     img = `{{ asset('${td}') }}?t=${date.getTime()}`;
                     td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
+                }
+                if(c.COLUMN == "descuento") {
+                    td = td.toFixed(2);
+                    td = td.replace(".",",");
                 }
                 tr += `<td class="${c.CLASS}">${td}</td>`;
             });

@@ -10,4 +10,9 @@ class FamiliaVentor extends Model
     protected $fillable = [
         'usr_stmati'
     ];
+
+    public function hijos()
+    {
+        return $this->hasMany('App\PartesVentor','familia_id','id')->orderBy('descrp');
+    }
 }

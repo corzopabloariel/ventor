@@ -10,6 +10,16 @@ table tbody td {
     margin-bottom: 0;
     justify-content: center !important;
 }
+input[type="number"] + .input-group button > i {
+    margin: 0;
+}
+input[type="number"] + .input-group button {
+    border-color: #ced4da;
+}
+input[type="number"] + .input-group button:hover {
+    background-color: #e9ecef !important;
+    color: #495057;
+}
 /* ---------------------------------------------------
     FIELDSET
 ----------------------------------------------------- */

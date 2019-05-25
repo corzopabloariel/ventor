@@ -5,6 +5,8 @@ namespace App\Http\Controllers\adm;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Categoria;
+use App\FamiliaVentor;
+use App\PartesVentor;
 
 class CategoriaController extends Controller
 {
@@ -18,12 +20,15 @@ class CategoriaController extends Controller
     {
         $title = "Categoría";
         $view = "adm.parts.categoria.index";
-        $categorias = Categoria::whereNull("padre_id")->orderBy('orden')->get();
-
-        foreach($categorias AS $c)
+        $categorias = Categoria::whereNull("padre_id")->orderBy('orden')->paginate(15);
+        $familiasV = FamiliaVentor::orderBy("usr_stmati")->get()->pluck("usr_stmati","id");
+        foreach($categorias AS $c) {
+            $familia_id = $c->familia;
+            $c["familia_id"] = $familia_id["usr_stmati"];
             $c["subcategorias"] = count($c->hijos);
+        }
         
-        return view('adm.distribuidor',compact('title','view','categorias','seccion'));
+        return view('adm.distribuidor',compact('title','view','categorias','seccion','familiasV','partesV'));
     }
 
     /**
@@ -52,6 +57,7 @@ class CategoriaController extends Controller
         $ARR_data["color"] = $datosRequest["color"];
         $ARR_data["hsl"] = $datosRequest["hsl"];
         $ARR_data["padre_id"] = empty($datosRequest["padre_id"]) ? null : $datosRequest["padre_id"];
+        $ARR_data["familia_id"] = empty($datosRequest["familia_id"]) ? null : $datosRequest["familia_id"];
 
         $file = $request->file("image");
         
@@ -96,8 +102,14 @@ class CategoriaController extends Controller
         $data["hijos"] = $data->hijos;
         $data["padre"] = $data->padre;
 
-        foreach($data["hijos"] AS $h)
+        $familia = $data->familia;
+        $data["partes"] = $familia->hijos->pluck("descrp","id");
+
+        foreach($data["hijos"] AS $h) {
+            $cat = $h->categoria;
+            $h["categoria_id"] = $cat["descrp"];
             $h["subcategorias"] = count($h->hijos);
+        }
         return $data;
     }
 

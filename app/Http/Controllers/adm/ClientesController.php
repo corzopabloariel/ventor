@@ -43,9 +43,14 @@ class ClientesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function porcentaje(Request $request, $id)
     {
-        //
+        $dataRequest = $request->all();
+        $u = Usuario::find($id);
+
+        $u->fill(["descuento" => $dataRequest["descuento"] / 100]);
+        $u->save();
+        return $dataRequest["descuento"];
     }
 
     /**

@@ -65,6 +65,7 @@ class SubcategoriaController extends Controller
         $ARR_data["orden"] = $datosRequest["orden_sub"];
         $ARR_data["tipo"] = $datosRequest["tipo"];
         $ARR_data["padre_id"] = empty($datosRequest["padre_id"]) ? null : $datosRequest["padre_id"];
+        $ARR_data["categoria_id"] = empty($datosRequest["categoria_id_sub"]) ? null : $datosRequest["categoria_id_sub"];
 
         $file = $request->file("image_sub");
         
@@ -91,10 +92,14 @@ class SubcategoriaController extends Controller
         if(is_null($data)) {
             $data = Categoria::create($ARR_data);
             $data["subcategorias"] = 0;
+            $cat = $data->categoria;
+            $data["categoria_id"] = $cat["descrp"];
             return $data;
         } else {
             $data->fill($ARR_data);
             $data->save();
+            $cat = $data->categoria;
+            $data["categoria_id"] = $cat["descrp"];
 
             return self::edit($data["id"]);
         }

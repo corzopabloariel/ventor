@@ -60,16 +60,21 @@ class ProductoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $title = "Productos";
+        $buscar = null;
         $view = "adm.parts.productos.index";
         $origenes = Origen::orderBy('nombre')->get();
         $categorias = Categoria::whereNotNull("padre_id")->orderBy("tipo")->orderBy("orden")->get();
         $familias = Categoria::whereNull("padre_id")->orderBy('orden')->get();
         $modelos = Marca::whereNull("padre_id")->orderBy('nombre')->get();
-        $productos = Producto::orderBy("orden")->get();
-        $productos2 = ProductoVentor::orderBy("stmpdh_art")->paginate(15);
+        //$productos = Producto::orderBy("orden")->get();
+        if(!empty($request->all()["buscar"])) {
+            $buscar = $request->all()["buscar"];
+            $productos2 = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate(15);
+        } else
+            $productos2 = ProductoVentor::orderBy("stmpdh_art")->paginate(15);
         $select2 = [];
         $select2["origenes"] = [];
         $select2["familias"] = [];
@@ -95,7 +100,7 @@ class ProductoController extends Controller
             //$p["marcaTexto"] = $p->marca->getNombreEnteroAttribute();
             //$p["categoriaTexto"] = $p->categoria->getCategoriaEnteroAttribute();
         }
-        return view('adm.distribuidor',compact('title','view','productos','select2','productos2'));
+        return view('adm.distribuidor',compact('title','view','select2','productos2','buscar'));
     }
 
     /**
@@ -209,7 +214,15 @@ class ProductoController extends Controller
      */
     public function show($id)
     {
-        //
+        $prod = ProductoVentor::find($id);
+
+        $prod["modelo_id"] = $prod->modelo_id();
+        $prod["familia_id"] = $prod->familia_id();
+        
+        $prod["parte_id"] = $prod->parte_id();
+        $prod["precioSin"] = $prod["precio"];
+        $prod["precio"] = "$ " . $prod->getPrecio();
+        return $prod;
     }
 
     /**

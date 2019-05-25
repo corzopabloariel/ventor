@@ -13,7 +13,7 @@
                 </a>
             </li>
             <li>
-                <a data-link="a" href="{{-- route('compras') --}}">
+                <a data-link="a" href="{{ route('pedido.index') }}">
                     <i class="fas fa-cash-register"></i>
                     <span class="nav-label">Pedidos</span>
                 </a>
@@ -111,7 +111,7 @@
                         </a>
                     </li>
                     <li>
-                        <a data-link="u" href="{{ route('productos.index') }}">
+                        <a data-link="u" href="{{ route('productosIndex') }}">
                             <i class="fas fa-clipboard-list"></i>
                             <span class="nav-label">Todos los productos</span>
                         </a>
@@ -145,7 +145,7 @@
             </li>
             <li><hr/></li>
             <li>
-                <a data-link="a" href="{{-- route('compras') --}}">
+                <a data-link="a" href="{{ route('pedido.index') }}">
                     <i class="fas fa-cash-register"></i>
                     <span class="nav-label">Pedidos</span>
                 </a>
@@ -225,7 +225,7 @@
                 </a>
             </li>
             <li>
-                <a class="bg-danger text-white" href="{{ route('adm.logout') }}">
+                <a onclick="if(localStorage.carrito !== undefined) localStorage.removeItem('carrito');" class="bg-danger text-white" href="{{ route('adm.logout') }}">
                     <i class="fas fa-power-off text-white"></i>
                     <span class="nav-label">Salir</span>
                 </a>

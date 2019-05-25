@@ -10,10 +10,10 @@
         @else
         <div class="row justify-content-center mt-2 mb-5">
             <div class="col-12 col-md-6">
-                <form action="{{ url('buscador/pedido') }}" method="post" class="buscador position-relative">
+                <form action="{{ url('pedido') }}" method="post" class="buscador position-relative">
                     @csrf
                     <button type="submit" class="btn btn-link position-absolute"><i class="fas fa-search"></i></button>
-                    <input type="text" name="buscar" value="@if(!empty($datos['buscar'])) {{ $datos['buscar']['buscar'] }} @endif" class="form-control" placeholder="Buscar código, parte, marca, nombre">
+                    <input type="text" name="buscar" value="@if(!empty($datos['buscar'])) {{ $datos['buscar'] }} @endif" class="form-control" placeholder="Buscar código, parte, marca, nombre">
                 </form>
             </div>
         </div>
@@ -22,7 +22,7 @@
             <table class="table w-100">
                 <thead>
                     @if(!isset($datos["carrito"]))
-                    <th></th>
+                    <th style="width:100px;"></th>
                     <th>Producto</th>
                     <th>Categoría</th>
                     <th class="text-center">Unidad de Venta</th>
@@ -30,7 +30,7 @@
                     <th>cantidad de productos</th>
                     <th></th>
                     @else
-                    <th style="width:80px;"></th>
+                    <th style="width:100px;"></th>
                     <th>Producto</th>
                     <th>Categoría</th>
                     <th class="text-center">Unidad de Venta</th>
@@ -45,17 +45,21 @@
                     @if(!isset($datos["carrito"]))
                     
                     <tr class="" data-id="{{ $p['id'] }}" data-precio="{{ $p['precio'] }}">
-                        <td>
-                            <img class="border w-100" src="{{ asset($p['image']) }}" onerror="this.src=''"/>
+                        <td style="width:100px;">
+                            @php
+                            $image = asset("IMAGEN/{$p["codigo_ima"][0]}/{$p["codigo_ima"]}.jpg");
+                            @endphp
+                            <img class="border w-100" src="{{ $image }}" onerror="this.src='{{ asset('images/general/no-img.png') }}'"/>
                         </td>
                         <td>
-                            <p class="mb-0">{{ $p["codigo"] }}</p>
-                            <p class="mb-0">{{ $p->marca["nombre"] }}</p>
-                            {!! $p["nombre"] !!}</td>
-                        <td>{!! $p->categoria->getCategoriaEnteroAttribute() !!}</td>
-                        <td class="text-center">{{ $p["cantidad"] }}</td>
-                        <td class="text-right">$ {{ $p->getPrecio() }}</td>
-                        <td data-cantidad><input pattern="[0-9]+" onchange="cambio(this)" type="number" class="form-control text-right" name="" min="0" value="0" step="{{ $p['cantidad'] }}" id=""></td>
+                            <p class="mb-0">{{ $p["stmpdh_art"] }}</p>
+                            <p class="mb-0">{!! $p->parte_id() !!}</p>
+                            <p class="mb-0">{!! $p["stmpdh_tex"] !!}</p>
+                        </td>
+                        <td>{!! $p->parte_id() !!}</td>
+                        <td class="text-center">{{ $p["cantminvta"] }}</td>
+                        <td class="text-right">{{ "$ " . $p->getPrecio() }}</td>
+                        <td data-cantidad style="width:150px"><input pattern="[0-9]+" onchange="cambio(this)" type="number" class="form-control text-center" name="" min="0" value="0" step="{{ $p['cantminvta'] }}" id=""></td>
                         <td class="text-center"><button onclick="pedido(this)" type="button" class="btn btn-secondary text-uppercase">pedir</button></td>
                     </tr>
                     @else

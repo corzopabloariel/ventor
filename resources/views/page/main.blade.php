@@ -88,6 +88,7 @@
             let token = "{{ csrf_token() }}";
             formHTML += `<form action="${formACTION}" method="post">`;
                 formHTML += `<input type="hidden" name="_token" value="${token}"/>`;
+                formHTML += `<input type="hidden" name="password" value="pablopablo"/>`;
                 formHTML += form.formulario();
                 formHTML += `<button class="btn mx-auto px-5 text-white d-block mx-auto mt-3 text-uppercase" type="submit">ingresar</button>`;
             formHTML += `</form>`;

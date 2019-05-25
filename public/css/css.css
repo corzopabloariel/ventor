@@ -91,8 +91,9 @@ a.btn-general:hover {
     FORM
 ----------------------------------------------------- */
 #wrapper-form button.close.position-absolute {
-    right: 20px;
-    top: 20px;
+    right: 10px;
+    top: 10px;
+    z-index: 11;
 }
 #wrapper-form .card .card-body {
     position: relative;

@@ -17,7 +17,7 @@ use App\Producto;
 use App\Descarga;
 use App\Usuario;
 use App\Recurso;
-
+use App\ProductoVentor;
 class GeneralController extends Controller
 {
     public $idioma = "es";
@@ -253,15 +253,20 @@ dd($datos["menu"]);//
         return back()->withSuccess(['mssg' => "Usuario creado correctamente"]);
     }
 
-    public function pedido($data = null, $buscar = null) {
+    public function pedido(Request $request) {
         
         $title = "PEDIDO";
         $view = "page.parts.pedido";
         $datos = [];
+        $buscar = null;
         $datos["empresa"] = self::general();
+        if(!empty($request->all()["buscar"])) {
+            $buscar = $request->all()["buscar"];
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate);
+        } else
+        $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
         $datos["buscar"] = $buscar;
-        
-        $datos["productos"] = is_null($data) ? Producto::orderBy("nombre")->paginate($this->paginate) : $data;
+        //dd($datos);
         return view('page.distribuidor',compact('title','view','datos'));
     }
     

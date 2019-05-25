@@ -13,7 +13,9 @@ class Categoria extends Model
         'hsl',
         'padre_id',
         'orden',
-        'tipo'
+        'tipo',
+        'familia_id',
+        'categoria_id'
     ];
     
     public function padre()
@@ -27,6 +29,14 @@ class Categoria extends Model
     public function productos()
     {
         return $this->hasMany('App\Producto')->orderBy('orden');
+    }
+    public function familia()
+    {
+        return $this->belongsTo('App\FamiliaVentor');
+    }
+    public function categoria()
+    {
+        return $this->belongsTo('App\PartesVentor');
     }
 
     public function hijosTodos() {

@@ -71,7 +71,7 @@ class LoginController extends Controller
     }
 
     public function logout(Request $request) {
-        dd("DD");
+        
         Auth::logout();
         return redirect()->route('index');
     }

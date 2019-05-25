@@ -5,6 +5,11 @@
 
 <section class="mt-3">
     <div class="container-fluid">
+        <form class="position-relative mb-2 d-inline-block" action="" method="post">
+            <input style="width: 350px;" type="text" name="buscar" class="form-control" placeholder="Buscador: Código o Nombre" value="{{ $buscar }}"/>
+            @csrf
+            <i style="right:10px;top: calc(50% - 7px); z-index: 1;" class="fas fa-search position-absolute"></i>
+        </form>
         <div class="card" id="wrapper-tabla">
             <div class="card-body">
                 <div class="table-responsive">
@@ -263,7 +268,7 @@
                 table.append('<thead class="thead-dark"></thead>');
             table.find("thead").append(`<th class="${e.CLASS}" style="width:${e.WIDTH};min-width:${e.WIDTH}">${e.NAME}</th>`);
         });
-        table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
+        //table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 
         window.elementos.data.forEach(function(data) {
             let tr = "";
@@ -288,10 +293,10 @@
                 }
                 tr += `<td data-${c.COLUMN} class="${c.CLASS}" style="width:${c.WIDTH};min-width:${c.WIDTH}">${td}</td>`;
             });
-            tr += `<td class="text-center">`;
-                tr += `<button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button>`;
+            //tr += `<td class="text-center">`;
+                //tr += `<button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button>`;
                 //tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
-            tr += `</td>`;
+            //tr += `</td>`;
             table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
         });
     }

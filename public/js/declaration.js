@@ -249,7 +249,8 @@ const ENTIDADES = {
             color: {TIPO:"TP_COLOR",VISIBILIDAD:"TP_VISIBLE"},
             hsl: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
             subcategorias: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"Subcategorías",CLASS:"text-uppercase text-center"},
-            asociado: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Relacionado"}
+            familia_id: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Relacionado"}
+            //asociado: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Relacionado"}
         },
         FORM: [
             {
@@ -259,9 +260,9 @@ const ENTIDADES = {
             {
                 nombre: '<div class="col-12 col-md-6">/nombre/</div>'
             },
-            /*{
-                padre_id: '<div class="col-12 col-md-6">/padre_id/</div>'
-            },*/
+            {
+                familia_id: '<div class="col-12 col-md-6">/familia_id/</div>'
+            },
             {
                 color: '<div class="col-12 col-md-6">/color/</div>',
                 hsl: '/hsl/'
@@ -275,13 +276,41 @@ const ENTIDADES = {
             image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
         }
     },
+    pedidos: {
+        ATRIBUTOS: {
+            cliente_id: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"cliente"},
+            transporte_id: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"transporte"}
+        },
+        FORM: [
+            {
+                cliente_id: '<div class="col-12 col-md-6">/cliente_id/</div>',
+                transporte_id: '<div class="col-12 col-md-6">/transporte_id/</div>'
+            },
+        ],
+    },
+    pedidoProducto: {
+        ATRIBUTOS: {
+            stmpdh_art: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:15,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",NOMBRE:"código",WIDTH:"150px"},
+            stmpdh_tex: {TIPO:"TP_STRING",MAXLENGTH:10,VISIBILIDAD:"TP_VISIBLE", NOMBRE:"NOMBRE",WIDTH:"180px"},
+            codigo_ima: {TIPO:"TP_FILE",VISIBILIDAD:"TP_VISIBLE",WIDTH:"120px",NOMBRE:"imagen"},
+            //usr_stmpdh: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"cantidad"},
+            //cantminvta: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Cant. mínima"},
+            precio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",CLASS:"text-right",WIDTH:"100px"},
+            familia_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"familia"},
+            //modelo_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Modelo",WIDTH: "200px"},
+            parte_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"parte",WIDTH: "100px"},
+            
+        },
+
+    },
     subcategorias: {
         ATRIBUTOS: {
             orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"100px"},
             image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 240x230",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"108px"},
             nombre: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE"},
             hsl: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
-            subcategorias: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"Subcategorías",CLASS:"text-uppercase text-center"}
+            categoria_id: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Relacionado"},
+            //subcategorias: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"Subcategorías",CLASS:"text-uppercase text-center"}
             //padre_id: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"Categoría"}
         },
         FORM: [
@@ -291,6 +320,9 @@ const ENTIDADES = {
             },
             {
                 nombre: '<div class="col-12 col-md-6">/nombre/</div>'
+            },
+            {
+                categoria_id: '<div class="col-12 col-md-6">/categoria_id/</div>'
             },
             {
                 image: '<div class="col-12 col-md-6">/image/</div>',
@@ -621,9 +653,6 @@ const ENTIDADES = {
             {
                 username: '<div class="col-12">/username/</div>',
             },
-            {
-                password: '<div class="col-12">/password/</div>',
-            }
         ]
     },
     formulario_registro: {

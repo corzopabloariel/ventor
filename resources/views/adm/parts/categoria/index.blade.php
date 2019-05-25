@@ -18,6 +18,9 @@
         <div>
             <button id="btnADD" onclick="add(this)" class="btn btn-primary text-uppercase" type="button">Agregar<i class="fas fa-plus ml-2"></i></button>
         </div>
+        <div class="alert alert-warning mt-2" role="alert">
+            Permite enlazar las familias y partes del sistema actual con las nuevas (visibles en la zona pública).
+        </div>
         <div style="display: none;" id="wrapper-form" class="mt-2">
             <div class="card">
                 <div class="card-body">
@@ -36,6 +39,9 @@
                 <div class="table-responsive">
                     <table class="table mb-0" id="tabla"></table>
                 </div>
+                <div class="mt-2">
+                    {{ $categorias->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -43,8 +49,8 @@
 @push('scripts_distribuidor')
 <script>
     const src = "{{ asset('images/general/no-img.png') }}";
-    window.pyrus = new Pyrus("categorias", null, src);
-    window.subcategorias = new Pyrus("subcategorias", null, src);
+    window.familiasV = @json($familiasV);
+    window.pyrus = new Pyrus("categorias", {familia_id:{ DATA : window.familiasV, TIPO: "OP"}}, src);
     window.elementos = @json($categorias);
     
     /** ------------------------------------- */
@@ -74,7 +80,7 @@
                     $(`#src-${x}`).attr("src",img);
                     continue;
                 }
-                $(`[name="${x}"]`).val(data[x]);
+                $(`[name="${x}"]`).val(data[x]).trigger("change");
             }
             $("#src-image").attr("style",`filter:${data.hsl}`);
         } else {
@@ -119,21 +125,21 @@
                     window.familiaID = data[x];
                     continue;
                 }
-                if(window.pyrus.especificacion[x].EDITOR !== undefined) {
+                if(window.subcategorias.especificacion[x].EDITOR !== undefined) {
                     CKEDITOR.instances[`${x}_es`].setData(data[x]);
                     continue;
                 }
-                if(window.pyrus.especificacion[x].TIPO == "TP_FILE") {
+                if(window.subcategorias.especificacion[x].TIPO == "TP_FILE") {
                     date = new Date();
                     img = `{{ asset('${data[x]}') }}?t=${date.getTime()}`;
                     $(`#src-${x}_sub`).attr("src",img);
                     continue;
                 }
-                if(window.pyrus.especificacion[x].TIPO == "TP_ENUM") {
+                if(window.subcategorias.especificacion[x].TIPO == "TP_ENUM") {
                     $(`[name="${x}_sub"]`).val(data[x]).trigger("change");
                     continue;
                 }
-                $(`[name="${x}_sub"]`).val(data[x]);
+                $(`[name="${x}_sub"]`).val(data[x]).trigger("change");
             }
         } else {
             if($("#tablaModal tbody").length)
@@ -141,6 +147,7 @@
             else
                 $("#orden_sub").val("AA");
         }
+        console.log(action)
         elmnt = document.getElementById("formModal");
         elmnt.scrollIntoView();
         $("#formModal").attr("action",action);
@@ -345,7 +352,8 @@
         promiseFunction = () => {
             promise
                 .then(function(data) {
-                    console.log(data)
+                    window.partesV = data.partes;
+                    window.subcategorias = new Pyrus("subcategorias", {categoria_id:{ DATA : window.partesV, TIPO: "OP"}}, src);
                     $(t).removeAttr("disabled");
                     let columnas = window.subcategorias.columnas();
                     title.text(data.nombre);
@@ -359,6 +367,7 @@
                         if(conPadre && data.padre !== null)
                             html += `<button onclick="hijos(this, ${data.padre.id}, ${data.padre.tipo})" class="btn btn-dark text-uppercase" type="button">regresar<i class="fas fa-undo-alt ml-2"></i></button>`;
                     html += '</div>';
+                    html += `<div class="alert alert-warning mt-2" role="alert">Permite enlazar las partes del sistema actual con las nuevas (visibles en la zona pública).</div>`;
                     html += '<div class="table-responsive" id="wrapper-tablaModal"><table class="table mb-0 table-striped table-hover" id="tablaModal"></table></div>';
                     html += '<div style="display: none;" id="wrapper-formModal" class="mt-2 position-relative">'
                         html += '<button style="right: 0; top: 0;" onclick="removeModal(this)" type="button" class="close position-absolute" aria-label="Close">';
@@ -374,6 +383,12 @@
                     body.html(html);
                     let table = body.find("table");
                     $("#formModal .container-formModal").html(window.subcategorias.formulario("sub"));
+                    $("#formModal .container-formModal").find(".select__2").select2({
+                        tags: "true",
+                        allowClear: true,
+                        placeholder: "Seleccione: CATEGORÍA",
+                        width: "resolve"
+                    });
                     columnas.forEach(function(e) {
                         if(!table.find("thead").length) 
                             table.append('<thead class="thead-dark"></thead>');
@@ -389,7 +404,7 @@
                             td = data[c.COLUMN] === null ? "" : data[c.COLUMN];
                             if(typeof td == 'object')
                                 td = td.nombre;
-                            if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_FILE") {
+                            if(window.subcategorias.especificacion[c.COLUMN].TIPO == "TP_FILE") {
                                 date = new Date();
                                 img = `{{ asset('${td}') }}?t=${date.getTime()}`;
                                 td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
@@ -399,7 +414,7 @@
                         tr += `<td class="text-center">`;
                             tr += `<button onclick="editModal(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button>`;
                             tr += `<button onclick="eraseModal(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
-                            tr += `<button onclick="hijos(this,${data.id},${data.tipo}, 1)" type="button" class="btn rounded-0 btn-primary"><i class="fas fa-table" title="Listar hijos"></i></button>`;
+                            //tr += `<button onclick="hijos(this,${data.id},${data.tipo}, 1)" type="button" class="btn rounded-0 btn-primary"><i class="fas fa-table" title="Listar hijos"></i></button>`;
                             //tr += `<hr>`;
                         tr += `</td>`;
                         table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
@@ -413,7 +428,12 @@
         console.log("CONSTRUYENDO FORMULARIO Y TABLA");
         /** */
         $("#form .container-form").html(window.pyrus.formulario());
-
+        $("#familia_id").select2({
+            tags: "true",
+            allowClear: true,
+            placeholder: "Seleccione: FAMILIA",
+            width: "resolve"
+        });
         let columnas = window.pyrus.columnas();
         let table = $("#tabla");
         columnas.forEach(function(e) {
@@ -423,7 +443,7 @@
         });
         table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 
-        window.elementos.forEach(function(data) {
+        window.elementos.data.forEach(function(data) {
             let tr = "";
             if(!table.find("tbody").length) 
                 table.append("<tbody></tbody>");
