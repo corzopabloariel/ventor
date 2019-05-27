@@ -51,15 +51,23 @@
                 @else
                 <div class="row productos">
                     @foreach($datos["productos"] AS $c)
-                        <a href="{{ URL::to('producto/' . $c['link']) }}" class="col-12 col-md-6 col-lg-4">
+                        <a href="{{ URL::to('producto/' . $c['id']) }}" class="col-12 mb-2 col-md-6 col-lg-4">
                             <div>
-                                <img src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" class="w-100" />
+                                @php
+                                $codigo_ima = $c["codigo_ima"];
+                                $image = "IMAGEN/{$codigo_ima[0]}/{$codigo_ima}.jpg";
+                                
+                                @endphp
+                                <img src="{{ asset($image) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" class="w-100" />
                             </div>
-                            <p class="mb-0">{{ $c["codigo"] }}</p>
-                            <p class="mb-1 text-truncate">{{ $c["modelo"] }}</p>
-                            {!! $c["nombre"] !!}
+                            <p class="mb-0">{{ $c["stmpdh_art"] }}</p>
+                            <p class="mb-1 text-truncate">{{ $c->modelo["modelo_y_a"] }}</p>
+                            {!! $c["stmpdh_tex"] !!}
                         </a>
                     @endforeach
+                </div>
+                <div class="row">
+                    {{ $datos["productos"]->links() }}
                 </div>
                 @endif
             </div>

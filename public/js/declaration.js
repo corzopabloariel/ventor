@@ -68,6 +68,43 @@ const ENTIDADES = {
             documento: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
         }
     },
+    descargasprecio: {
+        ATRIBUTOS: {
+            orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
+            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 190x190",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"190px"},
+            nombre: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE"}
+        },
+        FORM: [
+            {
+                orden: '<div class="col-5 col-md-5">/orden/</div>',
+            },
+            {
+                image: '<div class="col-12 col-md-8">/image/</div>',
+            },
+            {
+                nombre: '<div class="col-12 col-md-8">/nombre/</div>'
+            }
+        ],
+        FUNCIONES: {
+            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}},
+            documento: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
+    descargasprecioEXT: {
+        ATRIBUTOS: {
+            documento: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Documento seleccionado",INVALID:"Seleccione documento",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"documento",WIDTH:"190px",SIMPLE:1},
+            formato: {TIPO:"TP_ENUM",ENUM: { dbf: "Formato DBF", txt: "Formato TXT", xls: "Formato XLS"},MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE", COMUN: 1}
+        },
+        FORM: [
+            {
+                documento: '<div class="col-12 col-md-6">/documento/</div>',
+                formato: '<div class="col-12 col-md-6">/formato/</div>'
+            }
+        ],
+        FUNCIONES: {
+            documento: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
     empresa: {
         ATRIBUTOS: {
             page: {TIPO:"TP_ENUM",ENUM:{slider:"Slider"},NECESARIO:1,VISIBILIDAD:"TP_VISIBLE_FORM",CLASS:"text-uppercase",NOMBRE:"secciones",MULTIPLE: 1},
@@ -711,6 +748,31 @@ const ENTIDADES = {
             },
             {
                 observaciones: '<div class="col-12">/observaciones/</div>',
+            }
+        ]
+    },
+    formulario_general: {
+        ATRIBUTOS: {
+            empresa: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE", NECESARIO: 1,NOMBRE:"Empresa o Nombre"},
+            telefono: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Teléfono"},
+            email: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"E-mail"},
+            localidad: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE"},
+            
+            mensaje: {TIPO:"TP_TEXT",NECESARIO: 1,VISIBILIDAD:"TP_VISIBLE"},
+        },
+        FORM: [
+            {
+                empresa: '<div class="col-12">/empresa/</div>',
+            },
+            {
+                email: '<div class="col-12 col-md-6">/email/</div>',
+                telefono: '<div class="col-12 col-md-6">/telefono/</div>',
+            },
+            {
+                localidad: '<div class="col-12">/localidad/</div>'
+            },
+            {
+                mensaje: '<div class="col-12">/mensaje/</div>',
             }
         ]
     },

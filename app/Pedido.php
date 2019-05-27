@@ -12,7 +12,9 @@ class Pedido extends Model
         "vendedor_id",
         "usuario_id",
         "transporte_id",
-        "is_adm"
+        "is_adm",
+        "estado",
+        "observaciones"
     ];
     public function cliente()
     {
@@ -21,5 +23,9 @@ class Pedido extends Model
     public function transporte()
     {
         return $this->belongsTo('App\Transporte');
+    }
+    public function hijos()
+    {
+        return $this->hasMany('App\PedidoProducto','pedido_id','id');
     }
 }

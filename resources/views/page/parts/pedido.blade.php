@@ -19,7 +19,7 @@
         </div>
         @endif
         <div class="table-responsive">
-            <table class="table w-100">
+            <table class="table w-100" id="tabla">
                 <thead>
                     @if(!isset($datos["carrito"]))
                     <th style="width:100px;"></th>
@@ -59,24 +59,8 @@
                         <td>{!! $p->parte_id() !!}</td>
                         <td class="text-center">{{ $p["cantminvta"] }}</td>
                         <td class="text-right">{{ "$ " . $p->getPrecio() }}</td>
-                        <td data-cantidad style="width:150px"><input pattern="[0-9]+" onchange="cambio(this)" type="number" class="form-control text-center" name="" min="0" value="0" step="{{ $p['cantminvta'] }}" id=""></td>
+                        <td data-cantidad style="width:150px"><input pattern="[0-9]+" onchange="cambio(this)" type="number" class="form-control text-center" name="" min="{{ $p['cantminvta'] }}" value="0" step="{{ $p['cantminvta'] }}" id=""></td>
                         <td class="text-center"><button onclick="pedido(this)" type="button" class="btn btn-secondary text-uppercase">pedir</button></td>
-                    </tr>
-                    @else
-                    <tr class="d-none" data-id="{{ $p['id'] }}" data-precio="{{ $p['precio'] }}">
-                        <td style="">
-                            <img class="border w-100" src="{{ asset($p['image']) }}" onerror="this.src=''"/>
-                        </td>
-                        <td>
-                            <p class="mb-0">{{ $p["codigo"] }}</p>
-                            <p class="mb-0">{{ $p->marca["nombre"] }}</p>
-                            {!! $p["nombre"] !!}</td>
-                        <td>{!! $p->categoria->getCategoriaEnteroAttribute() !!}</td>
-                        <td class="text-center">{{ $p["cantidad"] }}</td>
-                        <td class="text-right">$ {{ $p->getPrecio() }}</td>
-                        <td data-cantidad style="width: 140px;"><input onchange="cambio(this)" type="number" class="form-control text-right" name="" min="" step="{{ $p['cantidad'] }}" id=""></td>
-                        <td class="text-right" data-subtotal class="text-right">$ </td>
-                        <td class="text-center"><button onclick="eliminar(this)" type="button" class="btn btn-link text-uppercase" style="color:#9B9B9B"><i class="far fa-times-circle"></i></button></td>
                     </tr>
                     @endif
                     @endforeach
@@ -142,7 +126,29 @@
     if(localStorage.productos !== undefined) {
         window.productos = JSON.parse(localStorage.productos);
         window.normal = 1;
+        @if(isset($datos["carrito"]))
+        for(let id in window.productos) {
+            let promise = new Promise(function (resolve, reject) {
+                let url = `{{ url('productoSHOW/${id}') }}`;
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.responseType = 'json';
+                xmlHttp.open( "GET", url, true );
+                xmlHttp.onload = function() {
+                    resolve(xmlHttp.response);
+                }
+                xmlHttp.send( null );
+            });
 
+            promiseFunction = () => {
+                promise
+                    .then(function(data) {
+                        addRow(data);
+                    })
+            };
+            promiseFunction();
+        }
+
+        @endif
         for(let x in window.productos) {
             $(`table *[data-id="${x}"]`).removeClass("d-none");
             $(`table *[data-id="${x}"]`).find("*[data-cantidad] input").val(window.productos[x].cantidad).trigger("change");
@@ -155,6 +161,32 @@
                 $("#cantProductos").text(Object.keys(window.productos).length);
         }
     }
+    /** ------------------------------------- */
+    addRow = function(data) {
+        
+        $("#tabla tbody").append(`<tr data-id="${data.id}" data-precio="${data.precio}">` +
+            `<td style="">` +
+                `<img class="border w-100" src="${data.image}" onerror="this.src=''"/>` +
+            `</td>` +
+            `<td>${data.stmpdh_tex}</td>` +
+            `<td>${data.parte_id}</td>` +
+            `<td class="text-center">${data.cantminvta}</td>` +
+            `<td class="text-right">$ ${data.precioF}</td>` +
+            `<td data-cantidad style="width: 140px;"><input onchange="cambio(this)" type="number" class="form-control text-right" name="cantidad[]" min="${data.cantminvta}" step="${data.cantminvta}"></td>` +
+            `<td class="text-right" data-subtotal class="text-right">$ </td>` +
+            `<td class="text-center"><button onclick="eliminar(this)" type="button" class="btn btn-link text-uppercase" style="color:#9B9B9B"><i class="far fa-times-circle"></i></button></td>` +
+        `</tr>`);
+        $("#tabla tbody").find("tr:last-child input[type='number']").val(window.productos[data.id]["cantidad"]).trigger("change");
+        if($("#tabla tbody").find("tr:last-child input[type='number']").length) {
+            $("#tabla tbody").find("tr:last-child input[type='number']").inputSpinner({
+                decrementButton: '<i class="fas fa-minus"></i>',
+                incrementButton: '<i class="fas fa-plus"></i>',
+                buttonsClass: "btn-outline-secondary btn-sm",
+                buttonsWidth: "1.5rem",
+            });
+        }
+    };
+
     pedido = function(t) {
         let id = $(t).closest("tr").data("id");
         let precio = $(t).closest("tr").data("precio");
@@ -183,11 +215,11 @@
             function(){
                 let precio = parseFloat($(t).closest("tr").data("precio"));
                 let cantidad = parseInt($(t).closest("tr").find("td[data-cantidad] input").val());
-                window.sumaTotal -= precio * cantidad;
+                window.sumaTotal.TOTAL -= precio * cantidad;
                 if($("#subtotal").length) {
-                    $("#subtotal").text(formatter.format(window.sumaTotal));
-                    $("#bonificacion").text(formatter.format(window.sumaTotal * window.data.descuento * (-1)));
-                    $("#total").text(formatter.format(window.sumaTotal + (window.sumaTotal * window.data.descuento * (-1))));
+                    $("#subtotal").text(formatter.format(window.sumaTotal.TOTAL));
+                    $("#bonificacion").text(formatter.format(window.sumaTotal.TOTAL * window.data.descuento * (-1)));
+                    $("#total").text(formatter.format(window.sumaTotal.TOTAL + (window.sumaTotal.TOTAL * window.data.descuento * (-1))));
                 }
                 $(t).closest("tr").remove();
                 delete window.productos[id];
@@ -212,15 +244,24 @@
         }
         let precio = parseFloat($(t).closest("tr").data("precio"));
         let cantidad = parseInt($(t).val());
+        console.log(precio)
 
         let step = parseInt($(t).attr("step"));
         if(cantidad % step === 0) {
-            if(window.sumaTotal === undefined) window.sumaTotal = 0.0;
+            if(window.sumaTotal === undefined) {
+                window.sumaTotal = {};
+                window.sumaTotal.TOTAL = 0.0;
+            }
+            if(window.sumaTotal[id] !== undefined)
+                window.sumaTotal.TOTAL -= precio * window.sumaTotal[id];
+            if(window.sumaTotal[id] === undefined)
+                window.sumaTotal[id] = 0;    
+            window.sumaTotal[id] = cantidad;
             /*------ RESTO PRIMERO */
             if(window.normal === undefined)
-            window.sumaTotal -= precio * window.productos[id].cantidad;
+            
             /*------ SUMO EL NUEVO VALOR */
-            window.sumaTotal += precio * cantidad;
+            window.sumaTotal.TOTAL += precio * cantidad;
             window.productos[id].cantidad = cantidad;
             localStorage.setItem("productos",JSON.stringify(window.productos));
 
@@ -230,14 +271,39 @@
             $(t).select();
         }
         if($("#subtotal").length) {
-            $("#subtotal").text(formatter.format(window.sumaTotal));
-            $("#bonificacion").text(formatter.format(window.sumaTotal * window.data.descuento * (-1)));
-            $("#total").text(formatter.format(window.sumaTotal + (window.sumaTotal * window.data.descuento * (-1))));
+            $("#subtotal").text(formatter.format(window.sumaTotal.TOTAL));
+            $("#bonificacion").text(formatter.format(window.sumaTotal.TOTAL * window.data.descuento * (-1)));
+            $("#total").text(formatter.format(window.sumaTotal.TOTAL + (window.sumaTotal.TOTAL * window.data.descuento * (-1))));
         }
     }
     pedir = function(t) {
         alertify.confirm("ATENCIÓN","Está por procesar el pedido. ¿Confirma acción?",
-            function(){},
+            function() {
+                let request = new XMLHttpRequest();
+                let formData = new FormData();
+                let url = `{{ url('pedidoCliente') }}`;
+
+                request.responseType = 'json';
+                formData.append("_token","{{ csrf_token() }}");
+                formData.append("idUsuario",window.data.id);
+                formData.append("observaciones",$("#observaciones").val());
+                
+                formData.append("pedido", JSON.stringify(window.productos));
+                
+                request.open("POST", url);
+                request.onload = function() {
+                    localStorage.removeItem("productos");
+                    
+                    //data = request.response;
+                    let url = `{{ route('pedido') }}`;
+                    alertify.success(`Pedido realizado. Espere`);
+                    $("body input,body button").attr("disabled",true);
+                    setTimeout(() => {
+                        window.location = url;
+                    }, 5000);
+                }
+                request.send(formData);
+            },
             function() {}
         ).set('labels', {ok:'Si', cancel:'No'});
     };

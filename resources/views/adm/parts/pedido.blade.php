@@ -105,6 +105,38 @@
         elmnt.scrollIntoView();
         $("#form").attr("action",action);
     };
+    revisar = function(t, id) {
+        let promise = new Promise(function (resolve, reject) {
+            let url = `{{ url('/adm/pedido/show/${id}') }}`;
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.responseType = 'json';
+            xmlHttp.open( "GET", url, true );
+            xmlHttp.onload = function() {
+                resolve(xmlHttp.response);
+            }
+            xmlHttp.send( null );
+        });
+
+        promiseFunction = () => {
+            promise
+                .then(function(data) {
+                    let url = `{{ route('pedido.confirmar') }}`;
+
+                    if(localStorage.carrito === undefined)
+                        localStorage.setItem("carrito","{}");
+                    window.carr_ = JSON.parse(localStorage.carrito);
+                    data.hijos.forEach( function( h ) {
+                        window.carr_[ h.producto_id ] = h.cnt;
+                    });
+                    localStorage.setItem("carrito",JSON.stringify(window.carr_));
+                    localStorage.setItem("idCliente",data.cliente_id);
+                    localStorage.setItem("idPedido",data.id);
+                    window.location = url;
+                })
+        };
+        promiseFunction();
+    };
+
     init = function() {
         console.log("CONSTRUYENDO FORMULARIO Y TABLA");
         /** */
@@ -134,6 +166,7 @@
                 table.append('<thead class="thead-dark"></thead>');
             table.find("thead").append(`<th class="${e.CLASS}" style="width:${e.WIDTH};min-width:${e.WIDTH}">${e.NAME}</th>`);
         });
+        table.find("thead").append(`<th></th>`);
         window.elementos.data.forEach(function(data) {
             let tr = "";
             if(!table.find("tbody").length) 
@@ -157,10 +190,11 @@
                 }
                 tr += `<td data-${c.COLUMN} class="${c.CLASS}" style="width:${c.WIDTH};min-width:${c.WIDTH}">${td}</td>`;
             });
-            //tr += `<td class="text-center">`;
-                //tr += `<button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button>`;
+            tr += `<td class="text-center">`;
+                if(parseInt(data.estado) == 0)
+                    tr += `<button onclick="revisar(this,${data.id})" title="Revisar" class="btn rounded-0 btn-warning"><i class="fas fa-eye"></i></button>`;
                 //tr += `<button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button>`;
-            //tr += `</td>`;
+            tr += `</td>`;
             table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
         });
     };

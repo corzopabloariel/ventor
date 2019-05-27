@@ -30,14 +30,14 @@
                 </ul>
             </div>
             <div class="col-12 col-md-8">
-                <form action="{{ url('/form/contacto') }}" method="post">
+                <form action="{{ url('/form/contacto') }}" novalidate id="form" onsubmit="event.preventDefault(); enviar(this);" method="post">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col-12 col-md-6">
-                            <input placeholder="Nombre" required type="text" value="{{ old('nombre') }}" name="nombre" class="form-control">
+                            <input placeholder="Nombre *" required type="text" value="{{ old('nombre') }}" name="nombre" class="form-control">
                         </div>
                         <div class="col-12 col-md-6">
-                            <input placeholder="Apellido" required type="text" value="{{ old('apellido') }}" name="apellido" class="form-control">
+                            <input placeholder="Apellido" type="text" value="{{ old('apellido') }}" name="apellido" class="form-control">
                         </div>
                     </div>
                     <div class="row">
@@ -50,7 +50,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <textarea name="mensaje" required rows="5" placeholder="Mensaje" class="form-control">{{ old('mensaje') }}</textarea>
+                            <textarea name="mensaje" required rows="5" placeholder="Mensaje *" class="form-control">{{ old('mensaje') }}</textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -59,7 +59,7 @@
                         </div>
                         <div class="col-lg-6 col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="1" name="terminos" id="defaultCheck1">
+                            <input class="form-check-input" required data-placeholder="Términos y condiciones" type="checkbox" value="1" name="terminos" id="defaultCheck1">
                             <label class="form-check-label" for="defaultCheck1">
                                 Acepto los términos y condiciones de privacidad
                             </label>
@@ -78,4 +78,59 @@
 </div>
 @push('scripts')
 <script src='https://www.google.com/recaptcha/api.js'></script>
+
+<script>
+
+validar = function(t, marca = true, visible = true) {
+    let flag = 1;
+    $(t).find('*[required]').each(function() {
+        if($(this).is(":visible")) {
+            flagI = true;
+            if($(this).attr("type") !== undefined) {
+                if($(this).attr("type") == "file" || $(this).attr("type") == "date")
+                    flagI = false;
+            }
+            if(flagI) {
+                if($(this).is(":invalid") || $(this).val() == "") {
+                    flag = 0;
+                    if(marca) $(this).addClass("has-error");
+                }
+            }
+        }
+    });
+    return flag;
+};
+validarSTRING = function(t) {
+    let string = "";
+    $(t).find('*[required]').each(function() {
+        flag = true;
+        if($(this).attr("type") !== undefined) {
+            if($(this).attr("type") == "file" || $(this).attr("type") == "date")
+                flag = false;
+        }
+        if(flag) {
+            if($(this).is(":invalid") || $(this).val() == "") {
+                if(string != "") string += ", ";
+                if($(this).attr("placeholder") === undefined)
+                    string += $(this).data("placeholder");
+                else {
+                    t = $(this).attr("placeholder");
+                    if(t.indexOf("*") >= 0)
+                        t = t.replace(" *","");
+                    string += t;
+                }
+            }
+        }
+    });
+    return string;
+}
+enviar = function(t) {
+    if(!validar($("#form"))) {
+        str = validarSTRING($("#form"));
+        alertify.notify(`Complete ${str} para enviar`, 'warning');
+        return false;
+    }
+    document.getElementById("form").submit();
+}
+</script>
 @endpush

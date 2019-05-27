@@ -1,6 +1,6 @@
 <li class="list-group-item border-0">
     <span class="d-block position-relative  @isset($dato['active']) active @endisset" data-id="{{$dato['id']}}">
-        <a class="d-block" href="{{ URL::to('productos/'. $dato['id']) }}">{{$dato["nombre"]}}</a>
+        <a class="d-block" href="{{ URL::to('productos/'. $dato['id']). '/parte' }}">{{$dato["nombre"]}}</a>
     </span>
     @if(count($dato["hijos"]) > 0)
         <ul class="list-group list-group-flush">

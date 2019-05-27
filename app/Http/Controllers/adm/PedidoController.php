@@ -32,6 +32,7 @@ class PedidoController extends Controller
             $natmer = str_replace("VND_","",$natmer);
             $vendedor = Vendedor::where("natmer",$natmer)->first();
             $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->paginate(15);
+            $clientesUsuarios = Usuario::where("vendedor_id",$vendedor["id"])->get()->pluck("name","nrodoc");
             $pedidos = Pedido::where("vendedor_id",$vendedor["id"])->where("is_adm",0)->orderBy("id","DESC")->paginate(15);
         } else {
             $pedidos = Pedido::orderBy("id","DESC")->paginate(15);
@@ -96,6 +97,9 @@ class PedidoController extends Controller
             $vendedor = Vendedor::where("natmer",$natmer)->first();
             $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->paginate(15);
             $pedidos = Pedido::where("vendedor_id",$vendedor["id"])->orderBy("id","DESC")->paginate(15);
+            
+            $clientesUsuarios = Cliente::where("vendedor_id",$vendedor["id"])->orderBy('nrodoc')->get()->pluck("nombre","id");
+            
         } else {
             $pedidos = Pedido::orderBy("id","DESC")->paginate(15);
             $usuarios = Usuario::orderBy('username')->paginate(15);
@@ -114,8 +118,13 @@ class PedidoController extends Controller
     public function store(Request $request)
     {  
         $data = $request->all();
-        $Arr_data = [];
         $data["pedido"] = json_decode($data["pedido"], true);
+        $Arr_data = [];
+        $Arr_data["cliente_id"] = isset($data["cliente_id"]) ? $data["cliente_id"] : null;
+        if(isset($data["idPedido"])) {
+            Pedido::destroy($data["idPedido"]);
+            $Arr_data["cliente_id"] = $data["idCliente"];
+        }
         $Arr_data["is_adm"] = 1;
         if(Auth::user()["is_admin"] == 2) {
             $Arr_data["is_adm"] = 0;
@@ -142,6 +151,7 @@ class PedidoController extends Controller
             
             PedidoProducto::create($Arr_p);
         }
+        
         Cookie::queue("pedido", $pedido_id, 100);
         return 1;
         //return redirect('adm/export');
@@ -155,7 +165,10 @@ class PedidoController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Pedido::find($id);
+        $data["productos"] = $data->hijos;
+
+        return $data;
     }
 
     /**

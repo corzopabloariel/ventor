@@ -17,4 +17,5 @@ class ClienteController extends Controller
         Auth('client')::logout();
     	return redirect()->route('index');
     }
+
 }

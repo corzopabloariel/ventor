@@ -10,6 +10,11 @@ class Descarga extends Model
         'orden',
         'documento',
         'nombre',
-        'image'
+        'image',
+        'did',
+        'privado',
+        'precio',
+        'formato',
+        'parte'
     ];
 }

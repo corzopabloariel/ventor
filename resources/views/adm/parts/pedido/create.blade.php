@@ -9,7 +9,8 @@
                 @csrf
                 <i style="right:10px;top: calc(50% - 7px); z-index: 1;" class="fas fa-search position-absolute"></i>
             </form>
-            <button type="button" onclick="location.href='{{ route('pedido.confirmar') }}'" class="btn btn-success ml-2">Pedido <span class="badge badge-light" id="cantidad">0</span></button>
+            <button type="button" onclick="pedido(this);" class="btn btn-success ml-2"><i class="fas fa-luggage-cart ml-0 mr-2"></i>Pedido<span class="badge badge-light ml-2" id="cantidad">0</span></button>
+            <button type="button" onclick="limpiar(this);" class="btn btn-danger ml-2"><i class="fas fa-trash-alt ml-0 mr-2"></i>Limpiar pedido</button>
         </div>
         <div class="card" id="wrapper-tabla">
             <div class="card-body">
@@ -37,6 +38,22 @@
     };
     window.pyrus = new Pyrus("pedidoProducto", null, src);
     window.elementos = @json($productos);
+
+    pedido = function(t) {
+        if(window.session !== undefined)
+            location.href='{{ route('pedido.confirmar') }}'
+    }
+    limpiar = function(t) {
+        alertify.confirm("ATENCIÓN","¿Seguro de limpiar el carrito?",
+            function(){
+                if(localStorage.carrito !== undefined)
+                    localStorage.removeItem("carrito");
+                location.reload();
+            },
+            function(){
+            }
+        ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
+    }
     init = function() {
         console.log("CONSTRUYENDO FORMULARIO Y TABLA");
         /** */
@@ -102,7 +119,6 @@
         if(localStorage.carrito === undefined)
             localStorage.setItem("carrito","{}");
         window.session = JSON.parse(localStorage.carrito);
-        $("#cantidad").text(Object.keys(window.session).length);
 
         if(window.session[idProducto] === undefined) {
             window.session[idProducto] = parseInt(cantidad);
@@ -115,6 +131,7 @@
             localStorage.carrito = JSON.stringify(window.session);
             alertify.success('Cantidad modificada');
         }
+        $("#cantidad").text(Object.keys(window.session).length);
     };
 </script>
 @endpush

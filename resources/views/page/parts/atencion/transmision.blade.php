@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <form action="{{ url('/form/transmision') }}" method="post" class="formulario wrapper-formulario border-top-0 bg-white" enctype="multipart/form-data">
+        <form action="{{ url('/form/transmision') }}" novalidate method="post" id="form" onsubmit="event.preventDefault(); enviar(this)" class="formulario wrapper-formulario border-top-0 bg-white" enctype="multipart/form-data">
             @method("post")
             {{ csrf_field() }}
             <div class="row justify-content-center">
@@ -233,8 +233,22 @@
 
 @push('scripts')
 <script>
+enviar = function(t) {
+    if(!validar($("#segundo"))) {
+        str = validarSTRING($("#segundo"));
+        alertify.notify(`Complete ${str} para enviar`, 'warning');
+        return false;
+    }
+    document.getElementById("form").submit();
+}
 siguiente = function(t,tt) {
     if(tt) {
+        if(!validar($("#primero"))) {
+            str = validarSTRING($("#primero"));
+            alertify.notify(`Complete ${str} para continuar`, 'warning');
+            return false;
+        }
+        
         $("#primero").hide();
         $("#segundo").show();
         $('.img-1').addClass("inactivo");
@@ -245,6 +259,27 @@ siguiente = function(t,tt) {
         $('.img-1').removeClass("inactivo");
         $('.img-2').addClass("inactivo");
     }
+}
+
+validar = function(t, marca = true, visible = true) {
+    let flag = 1;
+    $(t).find('*[required]').each(function() {
+        if($(this).is(":visible")) {
+            if($(this).is(":invalid") || $(this).val() == "") {
+                flag = 0;
+                if(marca) $(this).addClass("has-error");
+            }
+        }
+    });
+    return flag;
+};
+validarSTRING = function(t) {
+    let string = "";
+    $(t).find('*[required]').each(function() {
+        if(string != "") string += ", ";
+        string += $(this).attr("placeholder");
+    });
+    return string;
 }
 </script>
 @endpush

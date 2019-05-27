@@ -30,7 +30,7 @@
 @push('scripts_distribuidor')
 <script>
     const src = "{{ asset('images/general/no-descarga.fw.png') }}";
-    console.log(src)
+
     window.pyrus = new Pyrus("descargas", null, src);
     window.elementos = @json($descargas);
     

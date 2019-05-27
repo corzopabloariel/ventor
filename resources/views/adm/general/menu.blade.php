@@ -116,20 +116,36 @@
                             <span class="nav-label">Todos los productos</span>
                         </a>
                     </li>
+                    
+                    @if(Auth::user()["username"] == "EMP_12661482" || Auth::user()["username"] == "pablo")
                     <li>
                         <a data-link="u" href="{{-- route('familias.carga') --}}">
                         <i class="fas fa-file-upload"></i>
                             <span class="nav-label">Carga masiva</span>
                         </a>
                     </li>
-
+                    @endif
                 </ul>
             </li>
             <li>
-                <a data-link="a" href="{{ route('descargas.index') }}">
+                <a href="#descargaSubmenu" data-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-download"></i>
                     <span class="nav-label">Descargas</span>
                 </a>
+                <ul class="collapse list-unstyled" id="descargaSubmenu">
+                    <li>
+                        <a data-link="u" href="{{ route('descargas.index') }}">
+                            <i class="fas fa-lock-open"></i>
+                            <span class="nav-label">Pública</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-link="u" href="{{ route('descargas.private') }}">
+                            <i class="fas fa-lock"></i>
+                            <span class="nav-label">Privada</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a data-link="a" href="{{ route('contenido.edit', ['seccion' => 'calidad']) }}">

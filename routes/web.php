@@ -19,16 +19,19 @@ Route::match(['get', 'post'], 'buscador/{tipo}',['as' => 'buscador','uses' => 'p
 Route::group(['prefix' => 'productos', 'as' => 'productos'], function() {
     Route::get('/', ['uses' => 'page\GeneralController@productos', 'as' => '.productos']);
     Route::get('/{id?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
+    Route::get('/{id}/{tipo?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
 });
 Route::get('atencion/{id?}', ['uses' => 'page\GeneralController@atencion', 'as' => '.atencion']);
 
 Route::get('producto/{link?}', ['uses' => 'page\GeneralController@producto', 'as' => '.producto']);
+Route::get('productoSHOW/{id}', ['uses' => 'page\GeneralController@productoSHOW', 'as' => '.productoSHOW']);
 Route::get('calidad', 'page\GeneralController@calidad')->name('calidad');
 Route::get('descargas', 'page\GeneralController@descargas')->name('descargas');
 Route::get('trabaje', 'page\GeneralController@trabaje')->name('trabaje');
 Route::get('contacto', 'page\GeneralController@contacto')->name('contacto');
 
 Route::match(['get', 'post'], 'pedido',['uses' => 'page\GeneralController@pedido'])->name("pedido");
+Route::post('pedidoCliente', ['uses' => 'page\GeneralController@pedidoCliente', 'as' => 'pedidoCliente']);
 
 Route::get('carrito', 'page\GeneralController@carrito')->name('carrito');
 Route::get('registro', 'page\GeneralController@registro')->name('registro');
@@ -60,6 +63,7 @@ Route::post('form/{seccion}', ['uses' => 'page\FormController@index', 'as' => 'f
 Route::post('login', 'Auth\LoginController@login')->name("login");
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::get('/', 'adm\AdmController@index');
+    Route::get('/', 'adm\AdmController@index')->name("indexADM");
     Route::get('logout', ['uses' => 'adm\AdmController@logout' , 'as' => 'adm.logout']);
     Route::get('export', ['uses' => 'adm\AdmController@export' , 'as' => 'adm.export']);
     /**
@@ -88,7 +92,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('index', ['uses' => 'adm\PedidoController@index', 'as' => '.index']);
         Route::get('confirmar', ['uses' => 'adm\PedidoController@confirmar', 'as' => '.confirmar']);
         Route::post('store', ['uses' => 'adm\PedidoController@store', 'as' => '.store']);
-        Route::get('edit/{id}', ['uses' => 'adm\PedidoController@edit', 'as' => '.edit']);
+        Route::get('show/{id}', ['uses' => 'adm\PedidoController@show', 'as' => '.show']);
         Route::get('delete/{id}', ['uses' => 'adm\PedidoController@destroy', 'as' => '.destroy']);
         Route::post('update/{id}', ['uses' => 'adm\PedidoController@update', 'as' => 'update']);
     });
@@ -127,10 +131,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
      */
     Route::group(['prefix' => 'descargas', 'as' => 'descargas'], function() {
         Route::get('index', ['uses' => 'adm\DescargasController@index', 'as' => '.index']);
+        Route::get('private', ['uses' => 'adm\DescargasController@private', 'as' => '.private']);
         Route::post('store', ['uses' => 'adm\DescargasController@store', 'as' => '.store']);
+        Route::post('storeEXT', ['uses' => 'adm\DescargasController@storeEXT', 'as' => '.storeEXT']);
         Route::get('edit/{id}', ['uses' => 'adm\DescargasController@edit', 'as' => '.edit']);
+        Route::get('show/{id}', ['uses' => 'adm\DescargasController@show', 'as' => '.show']);
         Route::get('delete/{id}', ['uses' => 'adm\DescargasController@destroy', 'as' => '.destroy']);
+        Route::get('deleteEXT/{id}', ['uses' => 'adm\DescargasController@deleteEXT', 'as' => '.deleteEXT']);
         Route::post('update/{id}', ['uses' => 'adm\DescargasController@update', 'as' => 'update']);
+        Route::post('updateEXT/{id}', ['uses' => 'adm\DescargasController@updateEXT', 'as' => 'updateEXT']);
+        
     });
     /**
      * RECURSOS

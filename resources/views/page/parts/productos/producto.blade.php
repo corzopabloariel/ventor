@@ -2,14 +2,12 @@
     <div class="container pb-4 pt-2 navegador">
         <a href="{{ URL::to('productos') }}">Productos</a>
         @foreach($datos["nombres"] AS $n)
-            <a href="{{ URL::to('productos/' . $n['id']) }}">{{ $n["nombre"] }}</a>
+            @if(isset($n["parte"]))
+                <a href="{{ URL::to('productos/' . $n['id']) . '/parte' }}">{{ $n["nombre"] }}</a>
+            @else
+                <a href="{{ URL::to('productos/' . $n['id']) }}">{{ $n["nombre"] }}</a>
+            @endif
         @endforeach
-        @php
-        $nombre = $datos["producto"]["nombre"];
-        $nombre = str_replace("<br />"," ",$nombre);
-        $nombre = strip_tags($nombre);
-        @endphp
-        <a>{{ $nombre }}</a>
     </div>
     <div class="container pb-5">
         <div class="row">
@@ -43,36 +41,36 @@
                         <img src="{{ asset($datos['producto']['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" class="w-100 border" />
                     </div>
                     <div class="col-12 col-md-6">
-                        <p class="codigo mb-1">{{ $datos["producto"]["codigo"] }}</p>
-                        <p class="para text-uppercase mb-1">para {{ $datos["producto"]->marca->getNombreEnteroAttribute(0) }}</p>
-                        <div class="title">{!! $datos["producto"]["nombre"] !!}</div>
+                        <p class="codigo mb-1">{{ $datos["producto"]["stmpdh_art"] }}</p>
+                        <p class="para text-uppercase mb-1">para {{ $datos["producto"]["modelo_id"] }}</p>
+                        <div class="title">{!! $datos["producto"]["stmpdh_tex"] !!}</div>
                         <div class="table-responsive">
                             <table class="table w-100">
                                 <tbody>
                                     <tr>
                                         <td class="title">Código</td>
-                                        <td>{{ $datos["producto"]["codigo"] }}</td>
+                                        <td>{{ $datos["producto"]["stmpdh_art"] }}</td>
                                     </tr>
                                     <tr>
                                         <td class="title">Marca</td>
-                                        <td>{{ $datos["producto"]->marca->padre["nombre"] }}</td>
+                                        <td>{{ $datos["producto"]->modelo->marca["web_marcas"] }}</td>
                                     </tr>
                                     <tr>
                                         <td class="title">Modelo</td>
-                                        <td>{{ $datos["producto"]->marca["nombre"] }}</td>
+                                        <td>{{ $datos["producto"]->modelo["modelo_y_a"] }}</td>
                                     </tr>
-                                    <tr>
+                                    {{--<tr>
                                         <td class="title">Origen</td>
                                         <td>{!! $datos["producto"]->origen->nombre() !!}</td>
-                                    </tr>
+                                    </tr>--}}
                                     <tr>
                                         <td class="title">Cantidad Envasada</td>
-                                        <td>{{ $datos["producto"]["cantidad"] == 1 ? $datos["producto"]["cantidad"] . " unidad" : $datos["producto"]["cantidad"] . " unidades"}}</td>
+                                        <td>{{ $datos["producto"]["cantminvta"] == 1 ? $datos["producto"]["cantminvta"] . " unidad" : $datos["producto"]["cantminvta"] . " unidades"}}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row">
+                        {{--<div class="row">
                             @if(!empty($datos["producto"]["catalogo"]))
                             <div class="col-12 col-md-6">
                                 <a download href="{{ asset($datos['producto']['catalogo']) }}" class="btn btn-block text-uppercase text-center"><i class="fas fa-download mr-1"></i>catálogo</a>
@@ -83,7 +81,7 @@
                                 <a href="{{ asset($datos['producto']['mercadolibre']) }}" target="blank" class="btn btn-block btn-ml text-uppercase text-center"><img src="{{ asset('images/general/ml.fw.png')}}" class="d-block mx-auto" alt="Mercadolibre"></a>
                             </div>
                             @endif
-                        </div>
+                        </div>--}}
                     </div>
                 </div>
             </div>

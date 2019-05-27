@@ -1,7 +1,7 @@
 
 <h3 class="title">{{$title}}</h3>
 
-<section class="mt-3">
+<section class="my-3">
     <div class="container-fluid">
         <form id="form">
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -28,6 +28,11 @@
                 </div>
                 <div class="col-12 col-md-4 col-xl-3">
                     <button type="button" disabled="true" id="btnPago" onclick="confirmarOp(this)" class="btn btn-block btn-primary text-white text-uppercase">confirmar</button>
+                </div>
+            </div>
+            <div class="row justify-content-end mt-4 custom">
+                <div class="col-12 col-md-4 col-xl-3">
+                    <button type="button" onclick="cancelar(this)" class="btn btn-block btn-danger text-uppercase">cancelar</button>
                 </div>
             </div>
         </form>
@@ -71,18 +76,42 @@
         style: 'currency',
         currency: 'ARS',
     });
+    cancelar = function(t) {
+        alertify.confirm("ATENCIÓN","¿Seguro de cancelar el pedido?",
+            function(){
+                if(localStorage.idCliente !== undefined) {
+                    localStorage.removeItem("idCliente");
+                    localStorage.removeItem("idPedido");
+                }
+                localStorage.removeItem("carrito");
+                localStorage.removeItem("pedido");
+
+                let url = `{{ route('pedido.index') }}`;
+                window.location = url;
+            },
+            function(){
+            }
+        ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
+    };
     procesar = function(t) {
         let formElement = document.getElementById("form");
         let request = new XMLHttpRequest();
         let formData = new FormData(formElement);
         let url = `{{ url('adm/pedido/store') }}`;
 
-        console.log(url)
         request.responseType = 'json';
         formData.append("pedido", localStorage.pedido);
+        if(localStorage.idCliente !== undefined) {
+            formData.append("idCliente", localStorage.idCliente);
+            formData.append("idPedido", localStorage.idPedido);
+            localStorage.removeItem("idCliente");
+            localStorage.removeItem("idPedido");
+        }
         
         request.open("POST", url);
         request.onload = function() {
+            localStorage.removeItem("carrito");
+            localStorage.removeItem("pedido");
             data = request.response;
             let url = `{{ url('/adm/export') }}`;
             window.location = url;
@@ -229,6 +258,11 @@
             for(let x in window.session) {
                 edit(x);
             }
+        }
+
+        if(localStorage.idCliente !== undefined) {
+            $("#cliente_id").val(localStorage.idCliente).trigger("change");
+            $("#cliente_id").attr("disabled",true);
         }
     }
     /** */

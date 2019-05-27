@@ -10,14 +10,18 @@ use Cookie;
 use Illuminate\Support\Facades\DB;
 
 use App\Empresa;
+use App\Cliente;
 use App\Slider;
 use App\Categoria;
+use App\PartesVentor;
 use App\Contenido;
 use App\Producto;
 use App\Descarga;
 use App\Usuario;
 use App\Recurso;
 use App\ProductoVentor;
+use App\Pedido;
+use App\PedidoProducto;
 class GeneralController extends Controller
 {
     public $idioma = "es";
@@ -45,9 +49,9 @@ class GeneralController extends Controller
             foreach($data AS $c) {
                 $aux = [
                     "id" => $c["id"],
-                    "nombre" => $c["nombre"],
-                    "tipo" => $c["tipo"],
-                    "hijos" => self::menuRecursivo($c["hijos"], $ids)
+                    "nombre" => $c["descrp"],
+                    //"tipo" => $c["tipo"],
+                    "hijos" => []
                 ];
                 if(in_array($c["id"], $ids))
                     $aux["active"] = 1;
@@ -65,7 +69,7 @@ class GeneralController extends Controller
                 "color" => $c["color"],
                 "nombre" => $c["nombre"],
                 "tipo" => $c["tipo"],
-                "hijos" => self::menuRecursivo($c->hijosTodos(), $ids)
+                "hijos" => self::menuRecursivo($c->familia->hijos, $ids)
             ];
             if(in_array($c["id"], $ids))
                 $aux["active"] = 1;
@@ -99,7 +103,6 @@ class GeneralController extends Controller
                         ->select("productos.*")
                         ->orderBy("productos.nombre")->paginate($this->paginate);
             
-            //dd($data);
             return self::pedido($data, ["buscar" => $buscar]);
             break;
         }
@@ -128,7 +131,7 @@ class GeneralController extends Controller
         $datos["empresa"] = self::general();
 
         $datos["contenido"] = json_decode(Contenido::where("seccion","empresa")->first()["data"], true)["CONTENIDO"][$this->idioma];
-        //dd($datos["contenido"]);
+        
         return view('page.distribuidor',compact('title','view','datos'));
     }
     public function productos() {
@@ -147,32 +150,44 @@ class GeneralController extends Controller
         $view = "page.parts.productos.producto";
         $datos = [];
         $datos["empresa"] = self::general();
-        $datos["producto"] = Producto::where("link",$link)->first();
-        $title .= $datos["producto"]["nombre"];
+        $datos["producto"] = ProductoVentor::find($link);
+        $title .= $datos["producto"]["stmpdh_tex"];
         //dd($link);
-        $datos["categoria"] = Categoria::find($datos["producto"]["categoria_id"]);
-        $datos["menu"] = self::menu($datos["categoria"]->padres());
+        $datos["categoria"] = PartesVentor::find($datos["producto"]["parte_id"]);
         
-        $datos["nombres"] = $datos["categoria"]->padres(0);
-        $datos["nombres"][] = ["nombre" => $datos["categoria"]["nombre"], "id" => $datos["categoria"]["id"]];
+        $ids = $datos["categoria"]->familia->categoria->padres();
+        $ids[] = $datos["producto"]["parte_id"];
+        $datos["menu"] = self::menu($ids);
+        
+        $datos["nombres"] = $datos["categoria"]->familia->categoria->padres(0);
+        $datos["nombres"][] = ["nombre" => $datos["categoria"]["descrp"], "id" => $datos["categoria"]["id"], "parte" => 1];
 
         return view('page.distribuidor',compact('title','view','datos'));
     }
-    public function familia($id = null) {
+    public function familia($id = null, $tipo = null) {
         if(empty($id))
             return redirect()->route('index');
         $title = "PRODUCTOS";
         $view = "page.parts.productos.familia";
         $datos = [];
         $datos["empresa"] = self::general();
-        $datos["categoria"] = Categoria::find($id);
-        $datos["categorias"] = Categoria::where("padre_id",$id)->orderBy('orden')->get();
-        $datos["menu"] = self::menu($datos["categoria"]->padres());
-        $datos["nombres"] = $datos["categoria"]->padres(0);
-        $datos["productos"] = $datos["categoria"]->productos;
-dd($datos["menu"]);//
-        foreach($datos["productos"] AS $p)
-            $p["modelo"] = $p->marca->getNombreEnteroAttribute(0);
+        if(empty($tipo)) {
+            $datos["categoria"] = Categoria::find($id);
+            $datos["categorias"] = Categoria::where("padre_id",$id)->orderBy('orden')->get();
+            $datos["menu"] = self::menu($datos["categoria"]->padres());
+            $datos["nombres"] = $datos["categoria"]->padres(0);
+
+            $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->paginate(15);
+        } else {
+            $datos["categoria"] = PartesVentor::find($id);
+            $datos["categorias"] = [];
+            $ids = $datos["categoria"]->familia->categoria->padres();
+            $ids[] = $id;
+            $datos["menu"] = self::menu($ids);
+            $datos["nombres"] = $datos["categoria"]->familia->categoria->padres(0);
+            
+            $datos["productos"] = ProductoVentor::where("parte_id",$id)->paginate(15);
+        }
 
         return view('page.distribuidor',compact('title','view','datos'));
     }
@@ -192,7 +207,11 @@ dd($datos["menu"]);//
         $datos = [];
         $datos["empresa"] = self::general();
 
-        $datos["descargas"] = Descarga::orderBy("orden")->get();
+        if(auth()->guard('client')->check()) {
+            $datos["descargas"] = Descarga::where("privado",1)->get();
+            $datos["privado"] = 1;
+        } else
+            $datos["descargas"] = Descarga::where("privado",0)->orderBy("orden")->get();
         //dd($datos["contenido"]);
         return view('page.distribuidor',compact('title','view','datos'));
     }
@@ -231,26 +250,15 @@ dd($datos["menu"]);//
         return view('page.distribuidor',compact('title','view','datos'));
     }
     public function registroUSER(Request $request) {
-        $requestData = $request->all();
-        $ARR_data = [];
-
-        $aux = Usuario::where("username",$requestData["username"])->orWhere("email",$requestData["email"])->first();
         
-        if(!empty($aux)) {
+    }
 
-            return back()
-                        ->withErrors(['mssg' => "Datos en uso [Usuario o Email]"])
-                        ->withInput($requestData);
-        }
-
-        $ARR_data["name"] = $requestData["nombre"];
-        $ARR_data["lastname"] = $requestData["apellido"];
-        $ARR_data["username"] = $requestData["username"];
-        $ARR_data["password"] = Hash::make($requestData["password"]);
-        $ARR_data["email"] = $requestData["email"];
-
-        Usuario::create($ARR_data);
-        return back()->withSuccess(['mssg' => "Usuario creado correctamente"]);
+    public function productoSHOW($id) {
+        $data = ProductoVentor::find($id);
+        $data["image"] = asset("IMAGEN/{$data["codigo_ima"][0]}/{$data["codigo_ima"]}.jpg");
+        $data["parte_id"] = $data->parte_id();
+        $data["precioF"] = $data->getPrecio();
+        return $data;
     }
 
     public function pedido(Request $request) {
@@ -269,6 +277,39 @@ dd($datos["menu"]);//
         //dd($datos);
         return view('page.distribuidor',compact('title','view','datos'));
     }
+
+    public function pedidoCliente(Request $request) {
+        $data = $request->all();
+        
+        $data["pedido"] = json_decode($data["pedido"], true);
+        
+        $usuario = Usuario::find($data["idUsuario"]);
+        $cliente = Cliente::where("nrodoc",$usuario["username"])->first();
+
+        $Arr_data = [];
+        $Arr_data["is_adm"] = 2;
+        
+        $Arr_data["usuario_id"] = NULL;
+        $Arr_data["transporte_id"] = NULL;
+        $Arr_data["cliente_id"] = $cliente["id"];
+        $Arr_data["estado"] = 0;
+        $Arr_data["observaciones"] = $data["observaciones"];
+        
+        $pedido = Pedido::create($Arr_data);
+        $pedido_id = $pedido["id"];
+        //dd($pedido_id);
+        foreach($data["pedido"] AS $id => $val) {
+            if($id == "TOTAL") continue;
+            $Arr_p = [];
+            $Arr_p["pedido_id"] = $pedido_id;
+            $Arr_p["producto_id"] = $id;
+            $Arr_p["cnt"] = $val["cantidad"];
+            $Arr_p["observ"] = "0";
+            
+            PedidoProducto::create($Arr_p);
+        }
+        return 1;
+    }
     
     public function carrito() {
         
@@ -277,7 +318,7 @@ dd($datos["menu"]);//
         $datos = [];
         $datos["empresa"] = self::general();
         $datos["carrito"] = 1;
-        $datos["productos"] = Producto::orderBy("orden")->get();
+        $datos["productos"] = [];
         return view('page.distribuidor',compact('title','view','datos'));
     }
 }

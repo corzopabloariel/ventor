@@ -14,7 +14,8 @@ class Usuario extends Authenticatable
         'password',
         'email',
         'username',
-        'descuento'
+        'descuento',
+        'vendedor_id'
     ];
 
     public function nombre() {

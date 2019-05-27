@@ -4,6 +4,7 @@ namespace App\Http\Controllers\adm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use DB;
 use App\Descarga;
 class DescargasController extends Controller
 {
@@ -14,10 +15,22 @@ class DescargasController extends Controller
      */
     public function index()
     {
-        $title = "Descargas";
+        $title = "Descargas públicas";
         $view = "adm.parts.descargas.index";
-        $descargas = Descarga::orderBy('orden')->get();
+        $descargas = Descarga::where("privado",0)->orderBy('orden')->get();
         return view('adm.distribuidor',compact('title','view','descargas'));
+    }
+    public function private()
+    {
+        $title = "Descargas privadas";
+        $view = "adm.parts.descargas.private";
+        /*$descargasPrecio = DB::table('descargas')
+                            ->where("privado",1)
+                            ->where("precio",1)
+                            ->groupBy('did')
+                            ->get();*/
+        $descargasPrecio = Descarga::where("privado",1)->groupBy("did")->get();
+        return view('adm.distribuidor',compact('title','view','descargasPrecio'));
     }
 
     public function cleanURL($string)
@@ -38,6 +51,100 @@ class DescargasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function storeEXT(Request $request, $data = null) {
+        $datosRequest = $request->all();
+        
+        $aux = Descarga::where("did","!=",0)->orderBy("id","DESC")->first();
+        
+        $ARR_data = [];
+        $ARR_data["image"] = null;
+        if(empty($data))
+            $ARR_data["did"] = empty($aux) ? 1 : $aux["did"] + 1;
+        else {
+            $ARR_data["did"] = $data[0]["did"];
+            $ARR_data["image"] = $data[0]["image"];
+
+            for( $i = 0; $i < count($data) ; $i++)
+                $data[$i]["sigue"] = 1;
+        }
+        $ARR_data["orden"] = $datosRequest["orden"];
+        $ARR_data["nombre"] = $datosRequest["nombre"];
+        $ARR_data["privado"] = 1;
+        $ARR_data["precio"] = 1;
+        
+        $file = $request->file("image");
+        
+        $documento_ext = $request->file("documento_ext");
+        if(!is_null($file)) {
+            $path = public_path('images/descargas/');
+            if (!file_exists($path))
+                mkdir($path, 0777, true);
+            $imageName = time().".".$file->getClientOriginalExtension();
+            
+            $file->move($path, $imageName);
+            $ARR_data["image"] = "images/descargas/{$imageName}";
+            
+            if(!is_null($data)) {
+                if(!empty($data["image"])) {
+                    $filename = public_path() . "/" . $data["image"];
+                    if (file_exists($filename))
+                        unlink($filename);
+                }
+            }
+        }
+        for($i = 0; $i < count($datosRequest["ext_formato"]); $i ++) {
+            $obj = null;
+            $ARR_data["documento"] = null;
+            if(!empty($data)) {
+                for( $j = 0; $j < count($data) ; $j++) {
+                    if($data[$j]["id"] == $datosRequest["idEXT"][$i]) {
+                        $obj = $data[$j];
+                        unset($obj["sigue"]);
+                        $ARR_data["documento"] = $obj["documento"];
+
+                        break;
+                    }
+                }
+            }
+            $ARR_data["formato"] = strtoupper($datosRequest["ext_formato"][$i]);
+            if(!is_null($documento_ext[$i])) {
+                $path = public_path('images/descargas/');
+                if (!file_exists($path))
+                    mkdir($path, 0777, true);
+                $imageName = time() . "-{($i + 1)}." . $documento_ext[$i]->getClientOriginalExtension();
+                
+                $documento_ext[$i]->move($path, $imageName);
+                $ARR_data["documento"] = "images/descargas/{$imageName}";
+                
+                if(!is_null($data)) {
+                    if(!empty($obj["documento"])) {
+                        $filename = public_path() . "/" . $obj["documento"];
+                        if (file_exists($filename))
+                            unlink($filename);
+                    }
+                }
+            }
+            if(is_null($data))
+                Descarga::create($ARR_data);
+            else {
+                $obj->fill($ARR_data);
+                $obj->save();
+            }
+        }
+        if(!empty($data)) {
+            for( $i = 0; $i < count($data) ; $i++) {
+                if(isset($data[$i]["sigue"])) {
+                    Descarga::destroy($data[$i]["id"]);
+                    if(!empty($data[$i]["documento"])) {
+                        $filename = public_path() . "/{$data[$i]["documento"]}";
+                        if (file_exists($filename))
+                            unlink($filename);
+                    }
+                }
+            }
+        }
+        return back();
+    }
     public function store(Request $request, $data = null)
     {
         $datosRequest = $request->all();
@@ -108,7 +215,8 @@ class DescargasController extends Controller
      */
     public function show($id)
     {
-        //
+        $aux = Descarga::find($id);
+        return Descarga::where("did",$aux["did"])->get();
     }
 
     /**
@@ -134,6 +242,10 @@ class DescargasController extends Controller
         return self::store($request,self::edit($id));
     }
 
+    public function updateEXT(Request $request, $id) {
+        return self::storeEXT($request,self::show($id));
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -151,6 +263,24 @@ class DescargasController extends Controller
             unlink($filename);
 
         Descarga::destroy($id);
+        return 1;
+    }
+
+    public function deleteEXT($id) {
+        $datas = self::show($id);
+        foreach($datas AS $data) {
+            if(!empty($data["image"])) {
+                $filename = public_path() . "/{$data["image"]}";
+                if (file_exists($filename))
+                    unlink($filename);
+            }
+            if(!empty($data["documento"])) {
+                $filename = public_path() . "/{$data["documento"]}";
+                if (file_exists($filename))
+                    unlink($filename);
+            }
+            Descarga::destroy($data["id"]);
+        }
         return 1;
     }
 }

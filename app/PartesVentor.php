@@ -16,4 +16,14 @@ class PartesVentor extends Model
     {
         return $this->belongsTo('App\FamiliaVentor');
     }
+
+    public function productos()
+    {
+        return $this->hasMany('App\ProductoVentor')->orderBy('stmpdh_art');
+    }
+    
+    public function padre()
+    {
+        return $this->belongsTo('App\FamiliaVentor');
+    }
 }

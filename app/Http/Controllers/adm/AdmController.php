@@ -33,7 +33,17 @@ class AdmController extends Controller
     public function export() {
         $archivo = Excel::download(new PedidoExport, 'PEDIDO.xls');
         
-        $mensaje = "lo que sea";
+        $mensaje = "lo que sea - falta formato VENTOR";
+        
+        Mail::to('pcabanuz@osole.es')
+            ->send(
+                new Pedido(
+                    $mensaje,
+                    Excel::download(
+                        new PedidoExport, 
+                            'PEDIDO.xls'
+                        )->getFile(), ['as' => 'PEDIDO.xls'])
+            );
         Mail::to('corzo.pabloariel@gmail.com')
             ->send(
                 new Pedido(
@@ -43,7 +53,6 @@ class AdmController extends Controller
                             'PEDIDO.xls'
                         )->getFile(), ['as' => 'PEDIDO.xls'])
             );
-
-        
+        return redirect()->route('indexADM');
     }
 }
