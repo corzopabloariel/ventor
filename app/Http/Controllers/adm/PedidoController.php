@@ -98,14 +98,18 @@ class PedidoController extends Controller
             $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->paginate(15);
             $pedidos = Pedido::where("vendedor_id",$vendedor["id"])->orderBy("id","DESC")->paginate(15);
             
-            $clientesUsuarios = Cliente::where("vendedor_id",$vendedor["id"])->orderBy('nrodoc')->get()->pluck("nombre","id");
+            $clientesUsuarios = Cliente::where("vendedor_id",$vendedor["id"])->orderBy('nrodoc')->get();
             
         } else {
             $pedidos = Pedido::orderBy("id","DESC")->paginate(15);
             $usuarios = Usuario::orderBy('username')->paginate(15);
-            $clientesUsuarios = Cliente::orderBy('nrodoc')->get()->pluck("nombre","id");
+            $clientesUsuarios = Cliente::orderBy('nrodoc')->get();
         }
 
+        $Arr = [];
+        foreach($clientesUsuarios AS $c) 
+            $Arr[$c["id"]] = "{$c["nrocta"]} {$c["nombre"]}";
+        $clientesUsuarios = $Arr;
         return view('adm.distribuidor',compact('title','view','buscar','clientesUsuarios','transporte'));
     }
 
@@ -121,6 +125,7 @@ class PedidoController extends Controller
         $data["pedido"] = json_decode($data["pedido"], true);
         $Arr_data = [];
         $Arr_data["cliente_id"] = isset($data["cliente_id"]) ? $data["cliente_id"] : null;
+        $Arr_data["observaciones"] = $data["observaciones"];
         if(isset($data["idPedido"])) {
             Pedido::destroy($data["idPedido"]);
             $Arr_data["cliente_id"] = $data["idCliente"];

@@ -119,7 +119,7 @@
                     
                     @if(Auth::user()["username"] == "EMP_12661482" || Auth::user()["username"] == "pablo")
                     <li>
-                        <a data-link="u" href="{{-- route('familias.carga') --}}">
+                        <a data-link="u" href="{{ route('productos.carga') }}">
                         <i class="fas fa-file-upload"></i>
                             <span class="nav-label">Carga masiva</span>
                         </a>
@@ -196,21 +196,12 @@
                             <span class="nav-label">Metadatos</span>
                         </a>
                     </li>
-                    @if(Auth::user()["is_admin"])
                     <li>
-                        <a data-link="u" href="{{-- route('empresa.usuarios') --}}">
-                            <i class="fas fa-users-cog"></i>
-                            <span class="nav-label">Usuarios</span>
+                        <a data-link="u" href="{{ route('empresa.numeros') }}">
+                            <i class="fas fa-phone-square"></i>
+                            <span class="nav-label">Números</span>
                         </a>
                     </li>
-                    @else
-                    <li>
-                        <a data-link="u" href="{{ route('empresa.mis_datos') }}">
-                            <i class="fab fa-bandcamp"></i>
-                            <span class="nav-label">Mis datos</span>
-                        </a>
-                    </li>
-                    @endif
                 </ul>
             </li>
             <li>
@@ -241,7 +232,7 @@
                 </a>
             </li>
             <li>
-                <a onclick="if(localStorage.carrito !== undefined) localStorage.removeItem('carrito');" class="bg-danger text-white" href="{{ route('adm.logout') }}">
+                <a onclick="limpiar(this)" class="bg-danger text-white" href="{{ route('adm.logout') }}">
                     <i class="fas fa-power-off text-white"></i>
                     <span class="nav-label">Salir</span>
                 </a>

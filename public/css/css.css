@@ -87,6 +87,24 @@ a.btn-general:hover {
 .row + .row {
     margin-top: 1em;
 }
+.numeros p {
+    margin-bottom: 0;
+}
+.numeros .article {
+    background-color: #F7F7F7;
+    border-left: 5px solid #1FA6DB;
+    padding: 10px;
+    color: #595959;
+    font-size: 17px;
+}
+.numeros .article p.title:not(.text-uppercase) {
+    font-size: 20px;
+    color:#595959;
+    font-weight: bold;
+}
+.numeros .article p.title.text-uppercase {
+    font-size: 18px;
+}
 /* ---------------------------------------------------
     FORM
 ----------------------------------------------------- */

@@ -51,7 +51,7 @@ class PedidoExport implements FromCollection, WithHeadings
                 'pedidos.bonif2',
                 'pedidoproductos.observ',
                 'clientesventor.nrocta AS cliente',
-                'transportesventor.tradir AS destrp',
+                'transportesventor.descrp AS destrp',
                 'transportesventor.tradir AS dirtrp',
                 'pedidos.id AS idpedido')
             ->where('pedidos.id', $pedido_id)

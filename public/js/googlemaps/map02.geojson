@@ -1,0 +1,76 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -64.75341,
+                -54.79435
+              ],
+              [
+                -64.764404,
+                -54.882927
+              ],
+              [
+                -64.676514,
+                -54.908192
+              ],
+              [
+                -64.456779,
+                -54.914509
+              ],
+              [
+                -64.280998,
+                -54.819672
+              ],
+              [
+                -64.182121,
+                -54.857639
+              ],
+              [
+                -63.896481,
+                -54.826
+              ],
+              [
+                -63.665771,
+                -54.730965
+              ],
+              [
+                -64.127197,
+                -54.718273
+              ],
+              [
+                -64.489738,
+                -54.718269
+              ],
+              [
+                -64.533691,
+                -54.807011
+              ],
+              [
+                -64.75341,
+                -54.79435
+              ]
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "cartodb_id": 23,
+        "draworder": null,
+        "visibility": -1,
+        "extrude": -1,
+        "tessellate": -1,
+        "icon": null,
+        "description": "Tierra del Fuego",
+        "name": "Isla de los Estados",
+        "timestamp": null
+      }
+    }
+  ]
+}

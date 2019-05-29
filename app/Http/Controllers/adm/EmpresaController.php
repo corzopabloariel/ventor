@@ -5,6 +5,7 @@ namespace App\Http\Controllers\adm;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Empresa;
+use App\Numero;
 class EmpresaController extends Controller
 {
     /**
@@ -33,6 +34,14 @@ class EmpresaController extends Controller
         $view = "adm.parts.empresa.terminos";
         $seccion = "empresa";
         return view('adm.distribuidor',compact('title','view','seccion'));
+    }
+
+    public function numeros() {
+        $title = "Empresa :: Números";
+        $view = "adm.parts.empresa.numeros";
+        $seccion = "empresa";
+        $numeros = Numero::orderBy("orden")->get();
+        return view('adm.distribuidor',compact('title','view','seccion','numeros'));
     }
     /**
      * Update the specified resource in storage.

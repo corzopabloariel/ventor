@@ -72,15 +72,15 @@
         <div class="row mt-3">
             <div class="col-12 col-md-7 obs">
                 <p>Observaciones</p>
-                <textarea name="observaciones" id="observaciones" rows="3" class="form-control" placeholder="Texto de nota de pedido, condiciones de pago"></textarea>
+                <textarea name="observaciones" id="observaciones" rows="3" class="form-control" placeholder="Observaciones"></textarea>
             </div>
             <div class="col-12 col-md-5 valor">
-                <p class="mb-2 d-flex w-100 justify-content-between">Subtotal (no incluye IVA)<span id="subtotal">$ 0</span></p>
+                {{--<p class="mb-2 d-flex w-100 justify-content-between">Subtotal (no incluye IVA)<span id="subtotal">$ 0</span></p>
                 @php
                 $descuento = auth()->guard('client')->user()["descuento"];
                 $descuento *= 100;
                 @endphp
-                <p class="mb-4 d-flex w-100 justify-content-between"><span>Bonificacion (<span id="bonificacionCliente">{{$descuento}}%</span>)</span> <span id="bonificacion">$ 0</span></p>
+                <p class="mb-4 d-flex w-100 justify-content-between"><span>Bonificacion (<span id="bonificacionCliente">{{$descuento}}%</span>)</span> <span id="bonificacion">$ 0</span></p>--}}
                 <p class="total border-bottom border-dark mb-1 d-flex w-100 align-items-center justify-content-between">Total (c/ bonificación) <span id="total">$ 0</span></p>
                 <p style="color: #C01939; font-size: 13px mb-0">El total no incluye IVA ni impuestos internos</p>
 

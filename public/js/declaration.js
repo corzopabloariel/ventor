@@ -9,6 +9,34 @@ const ENTIDADES = {
         }
     },
 
+    numeros: {
+        ATRIBUTOS: {
+            orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
+            provincia: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
+            nombre: {TIPO:"TP_STRING",MAXLENGTH:50,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"título"},
+            persona: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre completo"},
+            interno: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE"},
+            is_vendedor: {TIPO:"TP_CHECK",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Vendedor?"}
+        },
+        FORM: [
+            {
+                orden: '<div class="col-5 col-md-3">/orden/</div>',
+                BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
+            },
+            {
+                provincia: '<div class="col-12 col-md-6">/provincia/</div>',
+            },
+            {
+                nombre: '<div class="col-12 col-md-6">/nombre/</div>',
+            },
+            {
+                persona: '<div class="col-12 col-md-6">/persona/</div>'
+            }
+        ],
+        FUNCIONES: {
+            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
     slider: {
         ATRIBUTOS: {
             orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
@@ -324,6 +352,9 @@ const ENTIDADES = {
                 transporte_id: '<div class="col-12 col-md-6">/transporte_id/</div>'
             },
         ],
+        FUNCIONES: {
+            cliente_id: {onchange: "buscarTransporte(this);"}
+        }
     },
     pedidoProducto: {
         ATRIBUTOS: {
@@ -692,27 +723,21 @@ const ENTIDADES = {
             },
         ]
     },
-    formulario_registro: {
+    formulario_cliente: {
         ATRIBUTOS: {
-            nombre: {TIPO:"TP_STRING",MAXLENGTH:70,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
-            apellido: {TIPO:"TP_STRING",MAXLENGTH:120,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
-            
-            email: {TIPO:"TP_EMAIL",NECESARIO:1,MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE"},
-            
-            username: {TIPO:"TP_STRING",NECESARIO:1,MAXLENGTH:20,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"usuario"},
-            password: {TIPO:"TP_PASSWORD",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"contraseña"}
+            nombre: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Nombre y Apellido"},
+            telefono: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Teléfono"},
+            domicilio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NECESARIO: 1},
+            localidad: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
         },
         FORM: [
             {
                 nombre: '<div class="col-12 col-md-6">/nombre/</div>',
-                apellido: '<div class="col-12 col-md-6">/apellido/</div>',
+                telefono: '<div class="col-12 col-md-6">/telefono/</div>',
             },
             {
-                username: '<div class="col-12 col-md-6">/username/</div>',
-                password: '<div class="col-12 col-md-6">/password/</div>',
-            },
-            {
-                email: '<div class="col-12">/email/</div>',
+                domicilio: '<div class="col-12 col-md-6">/domicilio/</div>',
+                localidad: '<div class="col-12 col-md-6">/localidad/</div>',
             }
         ]
     },

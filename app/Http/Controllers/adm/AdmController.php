@@ -7,10 +7,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\PedidoExport;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\Pedido;
+use App\Mail\PedidoM;
 
 use Excel;
-
+use App\Pedido;
+use App\Transporte;
+use App\Vendedor;
+use App\Cliente;
 use Cookie;
 use DB;
 use Redirect;
@@ -32,22 +35,40 @@ class AdmController extends Controller
 
     public function export() {
         $archivo = Excel::download(new PedidoExport, 'PEDIDO.xls');
+        $pedido_id = Cookie::get("pedido");
+
+        $pedido = Pedido::find($pedido_id);
+        $transporte = Transporte::find($pedido["transporte_id"]);
+        $cliente = Cliente::find($pedido["cliente_id"]);
+        $codVendedor = 44; // DIRECTA-Zona Centro
+        if(!empty($pedido["vendedor_id"])) {
+            $vendedor = Vendedor::find($pedido["vendedor_id"]);
+            $codVendedor = $vendedor["vnddor"];
+        }
+        $traCod = $transporte["tracod"] < 10 ? "0{$transporte["tracod"]}" : $transporte["tracod"];
+        $codCliente = $cliente["nrocta"];
+        $fecha = date("Ymd-His");
+        $title = "Pedido {$codVendedor}-{$codCliente}-{$pedido_id}-{$fecha} Cliente {$codCliente}";
+
+        $mensaje = [];
+        $mensaje[] = "<&TEXTOS>{$pedido["observaciones"]}</&TEXTOS>";
+        $mensaje[] = "<&TRACOD>{$traCod}|{$transporte["descrp"]} {$transporte["tradir"]}</&TRACOD>";
         
-        $mensaje = "lo que sea - falta formato VENTOR";
-        
-        Mail::to('pcabanuz@osole.es')
+        Mail::to('corzo.pabloariel@gmail.com')
             ->send(
-                new Pedido(
+                new PedidoM(
                     $mensaje,
+                    $title,
                     Excel::download(
                         new PedidoExport, 
                             'PEDIDO.xls'
                         )->getFile(), ['as' => 'PEDIDO.xls'])
             );
-        Mail::to('corzo.pabloariel@gmail.com')
+        Mail::to('pedidos.ventor@gmx.com')
             ->send(
-                new Pedido(
+                new PedidoM(
                     $mensaje,
+                    $title,
                     Excel::download(
                         new PedidoExport, 
                             'PEDIDO.xls'

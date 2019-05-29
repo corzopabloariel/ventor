@@ -4,8 +4,61 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "602f16461337514a06bf74f140a75f29",
+    "content-hash": "96fb2951127ccec72457c50b529c1892",
     "packages": [
+        {
+            "name": "artisaninweb/laravel-soap",
+            "version": "0.3.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/artisaninweb/laravel-soap.git",
+                "reference": "48f16b0d56c565bbe776d3242865e4b5c47d53e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/artisaninweb/laravel-soap/zipball/48f16b0d56c565bbe776d3242865e4b5c47d53e4",
+                "reference": "48f16b0d56c565bbe776d3242865e4b5c47d53e4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-soap": "*",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Artisaninweb\\SoapWrapper\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "SoapWrapper": "Artisaninweb\\SoapWrapper\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Artisaninweb\\SoapWrapper": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael van de Rijt",
+                    "email": "me@mvdrijt.com"
+                }
+            ],
+            "description": "A SoapClient wrapper integration for Laravel",
+            "keywords": [
+                "client",
+                "laravel",
+                "soap",
+                "wrapper"
+            ],
+            "time": "2018-05-28T08:54:07+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
@@ -1235,6 +1288,68 @@
                 "serialize"
             ],
             "time": "2019-02-22T10:30:00+00:00"
+        },
+        {
+            "name": "org.majkel/dbase",
+            "version": "1.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/majkel89/dbase.git",
+                "reference": "f13207172916cc4b0e248d2cafd4e4ef13877885"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/majkel89/dbase/zipball/f13207172916cc4b0e248d2cafd4e4ef13877885",
+                "reference": "f13207172916cc4b0e248d2cafd4e4ef13877885",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "athletic/athletic": "^0.1.8",
+                "ext-iconv": "*",
+                "phpunit/phpunit": "4.*",
+                "ptrofimov/xpmock": "1.*",
+                "squizlabs/php_codesniffer": "2.*",
+                "symfony/yaml": "~2.1"
+            },
+            "suggest": {
+                "ext-iconv": "CharsetFilter will not work without it"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "org\\majkel\\dbase\\": "src/",
+                    "org\\majkel\\dbase\\tests\\": "tests/",
+                    "org\\majkel\\dbase\\benchmarks\\": "benchmarks/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "majkel",
+                    "email": "maf.michal@gmail.com",
+                    "homepage": "https://github.com/majkel89",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Tomáš Prokop",
+                    "homepage": "https://github.com/naril",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Library to access dbase / xbase / dbf database files",
+            "homepage": "https://github.com/majkel89",
+            "keywords": [
+                "dbase",
+                "dbf",
+                "xbase"
+            ],
+            "time": "2018-09-15T21:54:01+00:00"
         },
         {
             "name": "paragonie/random_compat",

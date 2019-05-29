@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data Layer: Simple</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #info-box {
+        background-color: white;
+        border: 1px solid black;
+        bottom: 30px;
+        height: 20px;
+        padding: 10px;
+        position: absolute;
+        left: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="info-box">?</div>
+    <script>
+function zfill(number, width) {
+    var numberOutput = Math.abs(number); /* Valor absoluto del número */
+    var length = number.toString().length; /* Largo del número */ 
+    var zero = "0"; /* String de cero */  
+    
+    if (width <= length) {
+        if (number < 0) {
+             return ("-" + numberOutput.toString()); 
+        } else {
+             return numberOutput.toString(); 
+        }
+    } else {
+        if (number < 0) {
+            return ("-" + (zero.repeat(width - length)) + numberOutput.toString()); 
+        } else {
+            return ((zero.repeat(width - length)) + numberOutput.toString()); 
+        }
+    }
+}
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: {lat: -40, lng: -60}
+        });
+        var mapLayers = [];
+        for (var i = 26; i >= 1; i--) {
+          var mapLayer = new google.maps.Data();
+          mapLayer.loadGeoJson('http://localhost/googlemaps/map'+zfill(i, 2)+'.geojson');
+          mapLayer.setStyle({
+            fillColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+            strokeColor: '#000',
+            strokeOpacity: 1,
+            strokeWeight: 1
+          });
+          // Set mouseover event for each feature.
+          mapLayer.addListener('mouseover', function(event) {
+            document.getElementById('info-box').textContent = event.feature.getProperty('description');
+          });
+          mapLayer.setMap(map);
+        }
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZUlidy4Exa3bvZLRh4qgqx4lwlLy6khw&callback=initMap">
+    </script>
+  </body>
+</html>

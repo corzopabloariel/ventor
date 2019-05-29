@@ -22,30 +22,7 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-md-7">
                     <div id="primero">
-                        <div class="row">
-                            <div class="col-md-6 col-12">
-                                <input required type="text" name="empresa" placeholder="Empresa" class="form-control"/>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <input type="text" name="area" placeholder="Área" class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-12">
-                                <input required type="text" name="domicilio" placeholder="Domicilio" class="form-control"/>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <input type="phone" name="telefono" placeholder="Teléfono" class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6 col-12">
-                                <input required type="email" name="email" placeholder="E-Mail" class="form-control"/>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <input type="text" name="localidad" placeholder="Localidad" class="form-control"/>
-                            </div>
-                        </div>
+                        <div class="form-primero"></div>
                         
                         <div class="row mt-5">
                             <div class="col-12 d-flex justify-content-end">
@@ -233,6 +210,8 @@
 
 @push('scripts')
 <script>
+    window.pyrus = new Pyrus("formulario_cliente");
+    $("#primero > .form-primero").html(window.pyrus.formulario());
 enviar = function(t) {
     if(!validar($("#segundo"))) {
         str = validarSTRING($("#segundo"));

@@ -16,23 +16,20 @@
                 </div>
             </div>
             <div class="row justify-content-end mt-4 custom">
-                <div class="col-12 col-md-6 col-lg-4">
+                <div class="col-12 col-md-6 col-lg-7">
+                    <h5 class="text-uppercase">Observaciones</h5>
+                    <textarea maxlength="80" name="observaciones" id="observaciones" placeholder="Observaciones" class="form-control"></textarea>
+                </div>
+                <div class="col-12 col-md-6 col-lg-5 d-flex flex-column justify-content-between">
                     <h5 class="title border-bottom text-uppercase">Los precios no incluyen IVA</h5>
                     
                     <h4 class="title mt-2 pb-2 border-bottom" style="border-color: #2D3E75 !important;">Total a pagar<big class="float-right" id="total">$ 0,00</big></h4>
-                </div>
-            </div>
-            <div class="row justify-content-end mt-4 custom">
-                <div class="col-12 col-md-4 col-xl-3">
-                    <a href="{{ URL::to('adm/pedido/create') }}" class="btn btn-block btn-outline-primary text-uppercase mr-2">agregar al pedido    </a>
-                </div>
-                <div class="col-12 col-md-4 col-xl-3">
-                    <button type="button" disabled="true" id="btnPago" onclick="confirmarOp(this)" class="btn btn-block btn-primary text-white text-uppercase">confirmar</button>
-                </div>
-            </div>
-            <div class="row justify-content-end mt-4 custom">
-                <div class="col-12 col-md-4 col-xl-3">
-                    <button type="button" onclick="cancelar(this)" class="btn btn-block btn-danger text-uppercase">cancelar</button>
+
+                    <a href="{{ URL::to('adm/pedido/create') }}" class="btn btn-block btn-outline-primary mt-3 text-uppercase mr-2">agregar al pedido    </a>
+
+                    <button type="button" disabled="true" id="btnPago" onclick="confirmarOp(this)" class="btn mt-3 btn-block btn-primary text-white text-uppercase">confirmar</button>
+
+                    <button type="button" onclick="cancelar(this)" class="btn mt-3 btn-block btn-danger text-uppercase">cancelar</button>
                 </div>
             </div>
         </form>
@@ -76,12 +73,35 @@
         style: 'currency',
         currency: 'ARS',
     });
+    buscarTransporte = function(t) {
+        let idCliente = $(t).val();
+        if(idCliente != "") {
+            let promise = new Promise(function (resolve, reject) {
+                let url = `{{ url('adm/clientes/transporte/${idCliente}') }}`;
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open( "GET", url, true );
+                xmlHttp.onload = function() {
+                    resolve(xmlHttp.response);
+                }
+                xmlHttp.send( null );
+            });
+
+            promiseFunction = () => {
+                promise
+                    .then(function(data) {
+                        $("#transporte_id").val(data).trigger("change");
+                    })
+            };
+            promiseFunction();
+        } else $("#transporte_id").val("").trigger("change");
+    };
     cancelar = function(t) {
         alertify.confirm("ATENCIÓN","¿Seguro de cancelar el pedido?",
             function(){
                 if(localStorage.idCliente !== undefined) {
                     localStorage.removeItem("idCliente");
                     localStorage.removeItem("idPedido");
+                    localStorage.removeItem("observaciones");
                 }
                 localStorage.removeItem("carrito");
                 localStorage.removeItem("pedido");
@@ -119,15 +139,21 @@
         request.send(formData);
     }
     confirmarOp = function(t) {
-        let url = `{{ url('/adm/confirmar/finalizar') }}`;
-        let cliente = $("#cliente_id").val();
-        let transporte = $("#transporte_id").val();
-        if(cliente == "" || transporte == "") {
-            alertify.notify('Complete cliente y transporte', 'warning');
-            return false;
-        }
-        localStorage.setItem("pedido",JSON.stringify(window.sumTotal));
-        procesar(t);
+        alertify.confirm("ATENCIÓN","¿Seguro de procesar el pedido?",
+            function(){
+                let url = `{{ url('/adm/confirmar/finalizar') }}`;
+                let cliente = $("#cliente_id").val();
+                let transporte = $("#transporte_id").val();
+                if(cliente == "" || transporte == "") {
+                    alertify.notify('Complete cliente y transporte', 'warning');
+                    return false;
+                }
+                localStorage.setItem("pedido",JSON.stringify(window.sumTotal));
+                procesar(t);
+            },
+            function(){
+            }
+        ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
     };
     
     /** ------------------------------------- */
@@ -263,6 +289,8 @@
         if(localStorage.idCliente !== undefined) {
             $("#cliente_id").val(localStorage.idCliente).trigger("change");
             $("#cliente_id").attr("disabled",true);
+
+            $("#observaciones").val(localStorage.observaciones == "null" ? "" : localStorage.observaciones).trigger("change");
         }
     }
     /** */

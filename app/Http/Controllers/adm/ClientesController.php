@@ -5,6 +5,7 @@ namespace App\Http\Controllers\adm;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Cliente;
 use App\Usuario;
 use App\User;
 use App\Vendedor;
@@ -43,6 +44,10 @@ class ClientesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function transporte($id) {
+        $data = Cliente::find($id);
+        return empty($data["transporte_id"]) ? "" : $data["transporte_id"];
+    }
     public function porcentaje(Request $request, $id)
     {
         $dataRequest = $request->all();

@@ -12,6 +12,22 @@
 */
 
 Route::get('/', 'page\GeneralController@index')->name('index');
+
+Route::get('prueba', function() {
+    $wsdl = 'http://181.170.160.91:9090/WSUtils.asmx';
+    $client=new nusoap_client($wsdl,'wsdl');
+
+    $cliente = new \Soap($wsdl, [
+        'login' => 'Test',
+        'password' => 'c2d*-f',
+        'encoding' => 'UTF-8',
+        'trace' => true
+    ]);
+    
+    $resultado = $cliente->EjecutarSP_String("ConsultaStock", "$ARTCOD;0019");
+
+});
+
 Route::get('empresa', 'page\GeneralController@empresa')->name('empresa');
 //Route::post('buscador/{tipo}', ['uses' => 'page\GeneralController@buscador', 'as' => 'buscador']);
 Route::match(['get', 'post'], 'buscador/{tipo}',['as' => 'buscador','uses' => 'page\GeneralController@buscador' ]);
@@ -39,13 +55,14 @@ Route::post('registro', 'page\GeneralController@registroUSER')->name('registroUS
 
 Auth::routes();
 
+Route::get('salir', 'PrivateArea\LoginController@salir')->name('salir');
+
 Route::group(['prefix' => 'cliente', 'as' => 'client.'], function() {
     // Authentication Routes...
     //Route::get('login', 'PrivateArea\LoginController@showLoginForm')->name('login');
     Route::post('acceso', 'PrivateArea\LoginController@login')->name("acceso");
     
     // Route::post('logout', 'PrivateArea\LoginController@logout')->name('logout');
-    Route::get('salir', 'PrivateArea\LoginController@logou')->name('salir');
     
     Route::post('register', 'PrivateArea\RegisterController@register')->name('register');
     // Registration Routes...
@@ -102,6 +119,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::group(['prefix' => 'clientes', 'as' => 'clientes'], function() {
         Route::get('index', ['uses' => 'adm\ClientesController@index', 'as' => '.index']);
         Route::get('edit/{id}', ['uses' => 'adm\ClientesController@edit', 'as' => '.edit']);
+        Route::get('transporte/{id}', ['uses' => 'adm\ClientesController@transporte', 'as' => '.transporte']);
         Route::post('porcentaje/{id}', ['uses' => 'adm\ClientesController@porcentaje', 'as' => '.porcentaje']);
         Route::get('delete/{id}', ['uses' => 'adm\ClientesController@destroy', 'as' => '.destroy']);
         Route::post('update/{id}', ['uses' => 'adm\ClientesController@update', 'as' => 'update']);
@@ -219,6 +237,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::match(['get', 'post'], 'productos/index',['uses' => 'adm\ProductoController@index'])->name("productosIndex");
     Route::group(['prefix' => 'productos', 'as' => 'productos'], function() {
         //Route::match(['get', 'post'], 'productos/index',['uses' => 'adm\ProductoController@index', 'as' => '.index']);
+        Route::get('carga', ['uses' => 'adm\ProductoController@carga', 'as' => '.carga']);
+        Route::post('actualizar/{id}', ['uses' => 'adm\ProductoController@actualizar', 'as' => '.actualizar']);
+
         Route::get('show/{id}', ['uses' => 'adm\ProductoController@show', 'as' => '.show']);
         Route::post('store', ['uses' => 'adm\ProductoController@store', 'as' => '.store']);
         Route::get('edit/{id}', ['uses' => 'adm\ProductoController@edit', 'as' => '.edit']);
@@ -232,6 +253,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::group(['prefix' => 'empresa', 'as' => 'empresa'], function() {
         Route::get('datos', ['uses' => 'adm\EmpresaController@datos', 'as' => '.datos']);
         Route::get('terminos', ['uses' => 'adm\EmpresaController@terminos', 'as' => '.terminos']);
+        Route::get('numeros', ['uses' => 'adm\EmpresaController@numeros', 'as' => '.numeros']);
         Route::post('update', ['uses' => 'adm\EmpresaController@update', 'as' => '.update']);
 
         Route::group(['prefix' => 'metadatos', 'as' => '.metadatos'], function() {

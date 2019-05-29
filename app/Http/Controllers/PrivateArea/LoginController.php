@@ -70,9 +70,10 @@ class LoginController extends Controller
         return Auth::guard('client');
     }
 
-    public function logout(Request $request) {
-        
-        Auth::logout();
+    public function salir(Request $request) {
+        //dd("D");
+        Auth::guard('client')->logout();
         return redirect()->route('index');
     }
+    
 }

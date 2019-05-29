@@ -15,6 +15,7 @@
         <!-- </Fonts> -->
         <!-- <Styles> -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
         <link href="{{ asset('css/alertifyjs/alertify.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/alertifyjs/themes/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('css/css.css') }}" rel="stylesheet">
@@ -73,7 +74,7 @@
             header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE, BUSCADOR: {PLACEHOLDER: "Estoy buscando...", NAME: "input", ACTION: "{{ url('/buscador/home') }}"}, REDES: datos.empresa.redes});
             @if(auth()->guard('client')->check())
                 window.data = @json(auth()->guard('client')->user());
-                const URLLOGOUT = `{{ route("client.salir") }}`;
+                const URLLOGOUT = `{{ route("salir") }}`;
                 header = new PyrusCuerpo("headerLog", {imgDEFAULT: imgDEFAULT,URLLOGOUT: URLLOGOUT,BUSCADOR: {PLACEHOLDER: "Estoy buscando...", NAME: "buscar", ACTION: "{{ url('/buscador/pedido') }}"}, datos: window.data, logo: logo, URLBASE: URLBASE, REDES: datos.empresa.redes});
                 $("#wrapper-header").html(header.html());
             @endif

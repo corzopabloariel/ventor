@@ -1,4 +1,37 @@
 <div class="wrapper-contacto py-5">
+    <div class="container mb-5">
+        <h3 class="title text-uppercase" style="font-size: 32px; color: #595959; font-weight: 200">Sede ciudad de buenos aires</h3>
+        <div class="row numeros">
+            @foreach($datos["numeros"] AS $n)
+                @if($n["is_vendedor"] == 0)
+                @php
+                $n["email"] = json_decode($n["email"], true);
+                @endphp
+                <div class="col-12 col-md-4 col-lg-3 d-flex align-items-stretch mt-2">
+                    <article class="article w-100">
+                        <p class="title text-uppercase">{{ $n["nombre"] }}</p>
+                        <p class="title">{{ $n["persona"] }}</p>
+                        @foreach($n["email"] AS $e)
+                        <p class="text-truncate"><a href="mailto:{{$e}}">{!!$e!!}</a></p>
+                        @endforeach
+                        <p><strong>Interno</strong> {{ $n["interno"] }}</p>
+                        @if(!empty($n["celular"]))
+                            <p><strong>Celular</strong> {{ $n["celular"] }}</p>
+                        @endif
+                    </article>
+                </div>
+                @endif
+            @endforeach
+        </div>
+    </div>
+    <div class="container-fluid mb-2">
+        <div class="row">
+            <div class="col-12 col-md-6 pl-0">
+                <div id="map" style="height: 450px;"></div>
+            </div>
+            <div class="col-12 col-md-6"></div>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-12 col-md-4">
@@ -81,6 +114,49 @@
 
 <script>
 
+function zfill(number, width) {
+    var numberOutput = Math.abs(number); /* Valor absoluto del número */
+    var length = number.toString().length; /* Largo del número */ 
+    var zero = "0"; /* String de cero */  
+    
+    if (width <= length) {
+        if (number < 0) {
+             return ("-" + numberOutput.toString()); 
+        } else {
+             return numberOutput.toString(); 
+        }
+    } else {
+        if (number < 0) {
+            return ("-" + (zero.repeat(width - length)) + numberOutput.toString()); 
+        } else {
+            return ((zero.repeat(width - length)) + numberOutput.toString()); 
+        }
+    }
+}
+var map;
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 4,
+        center: {lat: -40, lng: -60}
+    });
+    var mapLayers = [];
+    for (var i = 26; i >= 1; i--) {
+        var mapLayer = new google.maps.Data();
+        mapLayer.loadGeoJson(`{{ asset('js/googlemaps') }}/map${zfill(i, 2)}.geojson`);
+        mapLayer.setStyle({
+        fillColor: '#'+Math.floor(Math.random()*16777215).toString(16),
+        strokeColor: '#000',
+        strokeOpacity: 1,
+        strokeWeight: 1
+        });
+        // Set mouseover event for each feature.
+        mapLayer.addListener('mouseover', function(event) {
+            //document.getElementById('info-box').textContent = event.feature.getProperty('description');
+        });
+        mapLayer.setMap(map);
+    }
+}
+
 validar = function(t, marca = true, visible = true) {
     let flag = 1;
     $(t).find('*[required]').each(function() {
@@ -132,5 +208,7 @@ enviar = function(t) {
     }
     document.getElementById("form").submit();
 }
+
 </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZUlidy4Exa3bvZLRh4qgqx4lwlLy6khw&callback=initMap"></script>
 @endpush

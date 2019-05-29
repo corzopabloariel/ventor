@@ -1,6 +1,2 @@
-<!DOCTYPE html>
-<html>
-<body>
-    {{$mensaje}}
-</body>
-</html>
+{{ $mensaje[0] }}
+{{ $mensaje[1] }}

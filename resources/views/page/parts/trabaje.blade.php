@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-12 col-md-7">
                     <blockquote class="blockquote bg-light py-2 px-3 border-left">
-                        <p class="title mb-0">Se precisa</p>
+                        <p class="title mb-0">Búsqueda activa</p>
                         <ol class="mb-0 pl-0" style="list-style-position: inside">
                             @foreach($datos["trabajos"] AS $t)
                             <li>{{ $t["titulo"] }} {{ $t["zona"] }} @if($t["in_zone"])(Domicilio en zona)@endif</li>

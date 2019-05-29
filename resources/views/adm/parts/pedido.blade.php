@@ -131,6 +131,7 @@
                     localStorage.setItem("carrito",JSON.stringify(window.carr_));
                     localStorage.setItem("idCliente",data.cliente_id);
                     localStorage.setItem("idPedido",data.id);
+                    localStorage.setItem("observaciones",data.observaciones);
                     window.location = url;
                 })
         };

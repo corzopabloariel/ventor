@@ -5,7 +5,7 @@ namespace App\Http\Controllers\page;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 use Cookie;
 use Illuminate\Support\Facades\DB;
 
@@ -20,6 +20,7 @@ use App\Descarga;
 use App\Usuario;
 use App\Recurso;
 use App\ProductoVentor;
+use App\Numero;
 use App\Pedido;
 use App\PedidoProducto;
 class GeneralController extends Controller
@@ -37,6 +38,10 @@ class GeneralController extends Controller
         $empresa["redes"] = json_decode($empresa["redes"], true);
         return $empresa;
     }
+    /*public function salir() {
+        Auth('client')::logout();
+        return redirect()->route('index');
+    }*/
     /**
      * @param $data []
      * @return []
@@ -239,6 +244,8 @@ class GeneralController extends Controller
         $view = "page.parts.contacto";
         $datos = [];
         $datos["empresa"] = self::general();
+        
+        $datos["numeros"] = Numero::orderBy("orden")->get();
         return view('page.distribuidor',compact('title','view','datos'));
     }
     

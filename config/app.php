@@ -175,7 +175,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        Artisaninweb\SoapWrapper\ServiceProvider::class,
     ],
 
     /*
@@ -227,7 +227,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-
+        'SoapWrapper' => Artisaninweb\SoapWrapper\Facade\SoapWrapper::class,
     ],
 
 ];

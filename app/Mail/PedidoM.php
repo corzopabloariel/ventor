@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Storage;
 
 
-class Pedido extends Mailable
+class PedidoM extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,10 +19,11 @@ class Pedido extends Mailable
      *
      * @return void
      */
-    public function __construct($mensaje, $archivo)
+    public function __construct($mensaje, $title, $archivo)
     {
         $this->mensaje = $mensaje;
         $this->archivo = $archivo;
+        $this->title = $title;
     }
 
     /**
@@ -32,9 +33,7 @@ class Pedido extends Mailable
      */
     public function build()
     {
-        //$this->archivo = Storage::disk('public')->path($this->archivo->file('document')->store('folder', 'public'));
-
-        return $this->view('page.form.pedido')->with([
+        return $this->subject($this->title)->view('page.form.pedido')->with([
             'mensaje' => $this->mensaje
         ])->attach($this->archivo, ['as' => 'PEDIDO.xls']);
     }
