@@ -11,30 +11,59 @@
 
 <section class="mt-3">
     <div class="container-fluid">
+        <h3 class="text-right">
+            Últimos cambios<br/>
+        </h3>
+        <p class="text-right">{!! $cambios !!}</p>
+
+
         <h1>Archivos subidos</h1>
+        <form id="form" onsubmit="event.preventDefault(); actualizarArchivos(this);" action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
         <ul>
         <?php
             foreach (new DirectoryIterator('file') as $file) {
                 if($file->isDot()) continue;
                 $a = "{$file->getFilename()}";
-                echo "<li>{$a} <a class='text-primary' href='subir/{$a}'><i class='ml-2 fas fa-edit'></i></a></li>";
+                echo "<li class='mt-2'>{$a} <input type='hidden' name='nombre[]' value='{$a}'/><input type='file' name='archivos[]' accept='.dbf,.DBF'/></li>";
             }
         ?>
         </ul>
+        <button type="submit" class="btn btn-primary text-uppercase px-5">cargar</button>
+        </form>
         <hr>
         <h1>Actualizar información</h1>
         <ul>
-            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'producto']) }}">Productos</a> - Producto, Modelo, Marca, Familia y Parte</li>
-            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'transporte']) }}">Transportes</a></li>
-            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'vendedores']) }}">Vendedores x</a></li>
-            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'clientes']) }}">Clientes x</a></li>
-            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'usuarios']) }}">Empleados x</a></li>
+            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'producto']) }}">Productos</a> (cnv_precios) - Producto, Modelo, Marca, Familia y Parte</li>
+            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'transporte']) }}">Transportes</a> (TRALST)</li>
+            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'vendedores']) }}">Vendedores</a> (cnv_Vendedores)</li>
+            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'clientes']) }}">Clientes</a> (cnv_clientes)</li>
+            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'usuarios']) }}">Empleados</a> (USR_EMPLEADOS)</li>
         </ul>
     </div>
 </section>
 
 @push('scripts_distribuidor')
 <script>
+actualizarArchivos = function(t) {
+    let flag = 1;
+    $("#form").find("input[type='file']").each(function(e) {
+        if($(this).val() != "")
+            flag = 0;
+    });
+    if(flag) {
+        alertify.error('No agregó ningún archivo para subir');
+        return false;
+    }
+    alertify.confirm("ATENCIÓN","¿Seguro de actualizar archivos?<br><p class='text-muted mb-0' style='font-size:15px'>El nombre debe ser idéntico al que se encuentra, caso contrario se obviara.<br/>Solo serán reemplazados los elementos seleccionados.</p>",
+        function() {
+            document.getElementById("form").submit();
+        },
+        function() {
+            alertify.error('Cancelado');
+        }
+    ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
+}
 actualizar = function(t) {
     let url = $(t).attr("href");
     alertify.confirm("ATENCIÓN","¿Seguro de actualizar la información?<br>Una vez que comience el proceso no debe ser detenido o cerrado el navegador.",

@@ -23,6 +23,7 @@ use App\ProductoVentor;
 use App\Numero;
 use App\Pedido;
 use App\PedidoProducto;
+use App\Novedad;
 class GeneralController extends Controller
 {
     public $idioma = "es";
@@ -123,6 +124,7 @@ class GeneralController extends Controller
         $datos["empresa"] = self::general();
         $datos["categorias"] = Categoria::whereNull("padre_id")->orderBy('orden')->get();
         $datos["productos"] = Producto::where("novedad",1)->orderBy("orden")->get();
+        $datos["novedades"] = Novedad::orderBy('orden')->get();
         
         return view('page.distribuidor',compact('title','view','datos'));
     }
@@ -213,10 +215,12 @@ class GeneralController extends Controller
         $datos["empresa"] = self::general();
 
         if(auth()->guard('client')->check()) {
-            $datos["descargas"] = Descarga::where("privado",1)->get();
+            $datos["descargas"] = Descarga::where("privado",1)->orderBy("orden")->get();
             $datos["privado"] = 1;
-        } else
+        } else {
             $datos["descargas"] = Descarga::where("privado",0)->orderBy("orden")->get();
+            $datos["descargasP"] = Descarga::where("privado",1)->orderBy("orden")->get();
+        }
         //dd($datos["contenido"]);
         return view('page.distribuidor',compact('title','view','datos'));
     }

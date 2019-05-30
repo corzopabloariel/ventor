@@ -70,11 +70,13 @@ validar = function(t, marca = true, visible = true) {
 validarSTRING = function(t) {
     let string = "";
     $(t).find('*[required]').each(function() {
-        if(string != "") string += ", ";
-        if($(this).attr("placeholder") === undefined)
-            string += $(this).data("placeholder");
-        else
-            string += $(this).attr("placeholder");
+        if($(this).is(":invalid") || $(this).val() == "") {
+            if(string != "") string += ", ";
+            if($(this).attr("placeholder") === undefined)
+                string += $(this).data("placeholder");
+            else
+                string += $(this).attr("placeholder");
+        }
     });
     return string;
 }

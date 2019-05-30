@@ -152,12 +152,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('private', ['uses' => 'adm\DescargasController@private', 'as' => '.private']);
         Route::post('store', ['uses' => 'adm\DescargasController@store', 'as' => '.store']);
         Route::post('storeEXT', ['uses' => 'adm\DescargasController@storeEXT', 'as' => '.storeEXT']);
+        Route::post('storePARTE', ['uses' => 'adm\DescargasController@storePARTE', 'as' => '.storePARTE']);
         Route::get('edit/{id}', ['uses' => 'adm\DescargasController@edit', 'as' => '.edit']);
         Route::get('show/{id}', ['uses' => 'adm\DescargasController@show', 'as' => '.show']);
         Route::get('delete/{id}', ['uses' => 'adm\DescargasController@destroy', 'as' => '.destroy']);
         Route::get('deleteEXT/{id}', ['uses' => 'adm\DescargasController@deleteEXT', 'as' => '.deleteEXT']);
+        Route::get('deletePARTE/{id}', ['uses' => 'adm\DescargasController@deletePARTE', 'as' => '.deletePARTE']);
         Route::post('update/{id}', ['uses' => 'adm\DescargasController@update', 'as' => 'update']);
         Route::post('updateEXT/{id}', ['uses' => 'adm\DescargasController@updateEXT', 'as' => 'updateEXT']);
+        Route::post('updatePARTE/{id}', ['uses' => 'adm\DescargasController@updatePARTE', 'as' => 'updatePARTE']);
         
     });
     /**
@@ -169,6 +172,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('edit/{id}', ['uses' => 'adm\RecursosController@edit', 'as' => '.edit']);
         Route::get('delete/{id}', ['uses' => 'adm\RecursosController@destroy', 'as' => '.destroy']);
         Route::post('update/{id}', ['uses' => 'adm\RecursosController@update', 'as' => 'update']);
+    });
+    /**
+     * NOVEDADES
+     */
+    Route::group(['prefix' => 'novedades', 'as' => 'novedades'], function() {
+        Route::get('index', ['uses' => 'adm\NovedadesController@index', 'as' => '.index']);
+        Route::post('store', ['uses' => 'adm\NovedadesController@store', 'as' => '.store']);
+        Route::get('edit/{id}', ['uses' => 'adm\NovedadesController@edit', 'as' => '.edit']);
+        Route::get('delete/{id}', ['uses' => 'adm\NovedadesController@destroy', 'as' => '.destroy']);
+        Route::post('update/{id}', ['uses' => 'adm\NovedadesController@update', 'as' => 'update']);
     });
     /**
      * FAMILIAS
@@ -238,6 +251,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::group(['prefix' => 'productos', 'as' => 'productos'], function() {
         //Route::match(['get', 'post'], 'productos/index',['uses' => 'adm\ProductoController@index', 'as' => '.index']);
         Route::get('carga', ['uses' => 'adm\ProductoController@carga', 'as' => '.carga']);
+        Route::match(['get', 'post'], 'carga', ['uses' => 'adm\ProductoController@carga', 'as' => '.carga']);
         Route::post('actualizar/{id}', ['uses' => 'adm\ProductoController@actualizar', 'as' => '.actualizar']);
 
         Route::get('show/{id}', ['uses' => 'adm\ProductoController@show', 'as' => '.show']);
@@ -253,8 +267,24 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::group(['prefix' => 'empresa', 'as' => 'empresa'], function() {
         Route::get('datos', ['uses' => 'adm\EmpresaController@datos', 'as' => '.datos']);
         Route::get('terminos', ['uses' => 'adm\EmpresaController@terminos', 'as' => '.terminos']);
-        Route::get('numeros', ['uses' => 'adm\EmpresaController@numeros', 'as' => '.numeros']);
+        //Route::get('numeros', ['uses' => 'adm\EmpresaController@numeros', 'as' => '.numeros']);
         Route::post('update', ['uses' => 'adm\EmpresaController@update', 'as' => '.update']);
+
+        Route::group(['prefix' => 'numeros', 'as' => '.numeros'], function() {
+            Route::get('/', ['uses' => 'adm\NumerosController@index', 'as' => '.index']);
+            Route::get('edit/{page}', ['uses' => 'adm\NumerosController@edit', 'as' => '.edit']);
+            Route::post('update/{page}', ['uses' => 'adm\NumerosController@update', 'as' => '.update']);
+            Route::post('store', ['uses' => 'adm\NumerosController@store', 'as' => '.store']);
+            Route::get('delete/{page}', ['uses' => 'adm\NumerosController@destroy', 'as' => '.destroy']);
+        });
+
+        Route::group(['prefix' => 'emails', 'as' => '.emails'], function() {
+            Route::get('/', ['uses' => 'adm\EmailController@index', 'as' => '.index']);
+            Route::get('edit/{id}', ['uses' => 'adm\EmailController@edit', 'as' => '.edit']);
+            Route::post('update/{id}', ['uses' => 'adm\EmailController@update', 'as' => '.update']);
+            Route::post('store', ['uses' => 'adm\EmailController@store', 'as' => '.store']);
+            Route::get('delete/{id}', ['uses' => 'adm\EmailController@destroy', 'as' => '.destroy']);
+        });
 
         Route::group(['prefix' => 'metadatos', 'as' => '.metadatos'], function() {
             Route::get('/', ['uses' => 'adm\MetadatosController@index', 'as' => '.index']);

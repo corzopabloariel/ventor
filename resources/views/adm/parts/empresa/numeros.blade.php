@@ -14,6 +14,15 @@
                     <form id="form" novalidate class="pt-2" action="{{ url('/adm/familia/store') }}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                         <div class="container-form"></div>
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-6"><hr></div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-6">
+                                <button id="btnEmail" type="button" class="btn btn-block btn-info text-center text-uppercase" onclick="addEmail(this)">Email<i class="fas fa-plus ml-2"></i></button>
+                                <div class="container-form-email row" id="wrapper-email"></div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -30,7 +39,8 @@
 @push('scripts_distribuidor')
 <script>
 
-    window.pyrus = new Pyrus("numeros", null, src);
+    window.pyrus = new Pyrus("numeros", null);
+    window.pyrusEmail = new Pyrus("empresa_email");
     window.elementos = @json($numeros);
     
     /** ------------------------------------- */
@@ -45,9 +55,9 @@
         $("#wrapper-tabla").toggle("fast");
 
         if(id != 0)
-            action = `{{ url('/adm/${window.pyrus.entidad}/update/${id}') }}`;
+            action = `{{ url('/adm/empresa/${window.pyrus.entidad}/update/${id}') }}`;
         else
-            action = `{{ url('/adm/${window.pyrus.entidad}/store') }}`;
+            action = `{{ url('/adm/empresa/${window.pyrus.entidad}/store') }}`;
         if(data !== null) {
             for(let x in window.pyrus.especificacion) {
                 if(window.pyrus.especificacion[x].EDITOR !== undefined) {
@@ -62,6 +72,11 @@
                 }
                 $(`[name="${x}"]`).val(data[x]);
             }
+
+            data.email = JSON.parse(data.email);
+            data.email.forEach(function(e) {
+                addEmail($("#btnEmail"), e);
+            });
         } else {
             if($("#tabla tbody").length)
                 $("#orden").val($("#tabla tbody").find("tr:last-child() td[data-orden]").text());
@@ -73,12 +88,29 @@
         $("#form").attr("action",action);
     };
     /** ------------------------------------- */
+    addEmail = function(t, value = null) {
+        let target = $(`#wrapper-email`);
+        let html = "";
+        if(window.email === undefined) window.email = 0;
+        window.email ++;
+
+        html += '<div class="col-12 mt-2 tel position-relative">';
+            html += '<div class="bg-light p-2 border">';
+                html += window.pyrusEmail.formulario(window.email,"email");
+                html += `<i style="line-height:14px; cursor: pointer; right: 5px; top: -10px; padding: 5px;" onclick="$(this).closest('.tel').remove()" class="fas fa-times position-absolute text-white bg-danger rounded-circle"></i>`;
+            html += '</div>';
+        html += '</div>';
+    
+        target.append(html);
+        if(value !== null)
+            target.find("> div:last-child input").val(value);
+    }
     erase = function(t, id) {
         $(t).attr("disabled",true);
         alertify.confirm("ATENCIÓN","¿Eliminar registro?",
             function(){
                 let promise = new Promise(function (resolve, reject) {
-                    let url = `{{ url('/adm/${window.pyrus.entidad}/delete/${id}') }}`;
+                    let url = `{{ url('/adm/empresa/${window.pyrus.entidad}/delete/${id}') }}`;
                     var xmlHttp = new XMLHttpRequest();
                     xmlHttp.open( "GET", url, true );
                     
@@ -102,6 +134,7 @@
     /** ------------------------------------- */
     remove = function(t) {
         add($("#btnADD"));
+        $(`#wrapper-email`).html("");
 
         for(let x in window.pyrus.especificacion) {
             if(window.pyrus.especificacion[x].EDITOR !== undefined) {
@@ -117,7 +150,7 @@
     edit = function(t, id) {
         $(t).attr("disabled",true);
         let promise = new Promise(function (resolve, reject) {
-            let url = `{{ url('/adm/${window.pyrus.entidad}/edit/${id}') }}`;
+            let url = `{{ url('/adm/empresa/${window.pyrus.entidad}/edit/${id}') }}`;
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.responseType = 'json';
             xmlHttp.open( "GET", url, true );
@@ -165,6 +198,11 @@
                     date = new Date();
                     img = `{{ asset('${td}') }}?t=${date.getTime()}`;
                     td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
+                } else if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_JSON") {
+                    aux = JSON.parse(td);
+                    td = "";
+                    for(x in aux)
+                        td += `<p class="mb-0">${aux[x]}</p>`;
                 }
                 tr += `<td data-${c.COLUMN} class="${c.CLASS}">${td}</td>`;
             });

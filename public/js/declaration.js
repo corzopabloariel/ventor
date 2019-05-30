@@ -5,7 +5,7 @@ const ENTIDADES = {
             username: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"usuario"},
             nombre: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"nombre",CLASS:"text-uppercase"},
             email: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE"},
-            descuento: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"desc. (%)",CLASS:"text-center"},
+            descuento: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE",NOMBRE:"desc. (%)",CLASS:"text-center"},
         }
     },
 
@@ -15,8 +15,8 @@ const ENTIDADES = {
             provincia: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase"},
             nombre: {TIPO:"TP_STRING",MAXLENGTH:50,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase",NOMBRE:"título"},
             persona: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre completo"},
-            interno: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE"},
-            is_vendedor: {TIPO:"TP_CHECK",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Vendedor?"}
+            interno: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-right"},
+            email: {TIPO:"TP_JSON",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Email"}
         },
         FORM: [
             {
@@ -31,11 +31,58 @@ const ENTIDADES = {
             },
             {
                 persona: '<div class="col-12 col-md-6">/persona/</div>'
+            },
+            {
+                interno: '<div class="col-12 col-md-6">/interno/</div>'
             }
         ],
         FUNCIONES: {
             image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
         }
+    },
+    novedades: {
+        ATRIBUTOS: {
+            orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
+            nombre: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE"},
+            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 209x297",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"190px"},
+            documento: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Documento seleccionado",INVALID:"Seleccione documento",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE_FORM",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"documento",WIDTH:"190px",SIMPLE:1},
+            url: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE_FORM"}
+        },
+        FORM: [
+            {
+                orden: '<div class="col-5 col-md-3">/orden/</div>',
+                BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
+            },
+            {
+                image: '<div class="col-12 col-md-6">/image/</div>'
+            },
+            {
+                nombre: '<div class="col-12 col-md-6">/nombre/</div>',
+            },
+            {
+                documento: '<div class="col-12 col-md-6">/documento/</div>',
+            }
+        ],
+        FUNCIONES: {
+            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
+    emails: {
+        ATRIBUTOS: {
+            formulario: {TIPO:"TP_ENUM",ENUM:{ atencion: "Atención al Cliente", pagos: "Información de Pagos", consulta: "Consulta General", trabaje: "Trabaje con nosotros", contacto: "Contacto"},VISIBILIDAD:"TP_VISIBLE",COMUN:1,CLASS:"text-uppercase"},
+            email: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",COMUN:1}
+        },
+        FORM: [
+            {
+                BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
+            },
+            {
+                formulario: '<div class="col-12 col-md-6">/formulario/</div>'
+            },
+            {
+                email: '<div class="col-12 col-md-6">/email/</div>',
+            }
+        ]
     },
     slider: {
         ATRIBUTOS: {
@@ -118,15 +165,52 @@ const ENTIDADES = {
             documento: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
         }
     },
+    descargasparte: {
+        ATRIBUTOS: {
+            orden2: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px",NOMBRE:"orden"},
+            image2: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 190x190",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"190px"},
+            nombre2: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre"}
+        },
+        FORM: [
+            {
+                orden2: '<div class="col-5 col-md-5">/orden2/</div>',
+            },
+            {
+                image2: '<div class="col-12 col-md-8">/image2/</div>',
+            },
+            {
+                nombre2: '<div class="col-12 col-md-8">/nombre2/</div>'
+            }
+        ],
+        FUNCIONES: {
+            image2: {onchange:{F:"readURL(this,'/id/')",C:"id"}},
+            documento: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
     descargasprecioEXT: {
         ATRIBUTOS: {
-            documento: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Documento seleccionado",INVALID:"Seleccione documento",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"documento",WIDTH:"190px",SIMPLE:1},
-            formato: {TIPO:"TP_ENUM",ENUM: { dbf: "Formato DBF", txt: "Formato TXT", xls: "Formato XLS"},MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE", COMUN: 1}
+            documento: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Documento seleccionado",INVALID:"Seleccione documento",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/jpeg,application/pdf,.dbf,.DBF,.txt,.xls",NOMBRE:"documento",WIDTH:"190px",SIMPLE:1},
+            formato: {TIPO:"TP_ENUM",ENUM: { dbf: "Formato DBF", pdf: "Formato PDF", txt: "Formato TXT", xls: "Formato XLS"},MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE", COMUN: 1}
         },
         FORM: [
             {
                 documento: '<div class="col-12 col-md-6">/documento/</div>',
                 formato: '<div class="col-12 col-md-6">/formato/</div>'
+            }
+        ],
+        FUNCIONES: {
+            documento: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
+    descargasparteEXT: {
+        ATRIBUTOS: {
+            documento: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Documento seleccionado",INVALID:"Seleccione documento",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"documento",WIDTH:"190px",SIMPLE:1},
+            nombre: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE"}
+        },
+        FORM: [
+            {
+                documento: '<div class="col-12 col-md-6">/documento/</div>',
+                nombre: '<div class="col-12 col-md-6">/nombre/</div>'
             }
         ],
         FUNCIONES: {
@@ -729,6 +813,8 @@ const ENTIDADES = {
             telefono: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Teléfono"},
             domicilio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NECESARIO: 1},
             localidad: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
+            email: {TIPO:"TP_EMAIL",VISIBILIDAD:"TP_VISIBLE",NECESARIO:1,NOMBRE:"Email"},
+            localidad: {TIPO:"TP_STRING",NECESARIO:1,VISIBILIDAD:"TP_VISIBLE"},
         },
         FORM: [
             {
@@ -738,6 +824,9 @@ const ENTIDADES = {
             {
                 domicilio: '<div class="col-12 col-md-6">/domicilio/</div>',
                 localidad: '<div class="col-12 col-md-6">/localidad/</div>',
+            },
+            {
+                email: '<div class="col-12">/email/</div>',
             }
         ]
     },

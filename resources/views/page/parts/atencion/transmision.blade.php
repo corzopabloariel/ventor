@@ -26,7 +26,7 @@
                         
                         <div class="row mt-5">
                             <div class="col-12 d-flex justify-content-end">
-                                <button onclick="siguiente(this,1)" type="button" class="btn px-5 text-white text-uppercase">siguiente</button>
+                                <button id="btnPrimero" onclick="siguiente(this,1)" type="button" class="btn px-5 text-white text-uppercase">siguiente</button>
                             </div>
                         </div>
                     </div>
@@ -37,13 +37,13 @@
                                 <div class="form-check">
                                     <input checked class="form-check-input" type="radio" value="nueva" name="transmision" id="transmisionNueva">
                                     <label class="form-check-label" for="transmisionNueva">
-                                        Transmmisión Nueva
+                                        Transmisión Nueva
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" value="existente" name="transmision" id="transmisionExistente">
                                     <label class="form-check-label" for="transmisionExistente">
-                                        Transmmisión Existente
+                                        Transmisión Existente
                                     </label>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" value="sincrónica" name="correa" id="correaSincronica">
+                                    <input class="form-check-input" type="radio" value="sincronica" name="correa" id="correaSincronica">
                                     <label class="form-check-label" for="correaSincronica">
                                         Correas Sincrónicas
                                     </label>
@@ -213,6 +213,10 @@
     window.pyrus = new Pyrus("formulario_cliente");
     $("#primero > .form-primero").html(window.pyrus.formulario());
 enviar = function(t) {
+    if(validar($("#primero")) && !validar($("#segundo"))) {
+        $("#btnPrimero").click();
+        return false;
+    }
     if(!validar($("#segundo"))) {
         str = validarSTRING($("#segundo"));
         alertify.notify(`Complete ${str} para enviar`, 'warning');
@@ -243,7 +247,8 @@ siguiente = function(t,tt) {
 validar = function(t, marca = true, visible = true) {
     let flag = 1;
     $(t).find('*[required]').each(function() {
-        if($(this).is(":visible")) {
+        //if($(this).is(":visible")) {
+        if(true) {
             if($(this).is(":invalid") || $(this).val() == "") {
                 flag = 0;
                 if(marca) $(this).addClass("has-error");
@@ -255,8 +260,10 @@ validar = function(t, marca = true, visible = true) {
 validarSTRING = function(t) {
     let string = "";
     $(t).find('*[required]').each(function() {
-        if(string != "") string += ", ";
-        string += $(this).attr("placeholder");
+        if($(this).is(":invalid") || $(this).val() == "") {
+            if(string != "") string += ", ";
+            string += $(this).attr("placeholder");
+        }
     });
     return string;
 }

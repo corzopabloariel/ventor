@@ -35,14 +35,7 @@ class EmpresaController extends Controller
         $seccion = "empresa";
         return view('adm.distribuidor',compact('title','view','seccion'));
     }
-
-    public function numeros() {
-        $title = "Empresa :: Números";
-        $view = "adm.parts.empresa.numeros";
-        $seccion = "empresa";
-        $numeros = Numero::orderBy("orden")->get();
-        return view('adm.distribuidor',compact('title','view','seccion','numeros'));
-    }
+    
     /**
      * Update the specified resource in storage.
      *

@@ -68,7 +68,19 @@
                 
                 <div class="col-12 col-md-8">
                     <h3 class="titleC">Curriculum Vitae</h3>
-                    <div class="curriculum"></div>
+                    <div class="curriculum">
+                        <div class="input-group">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input value="" required="true" style="width:auto" accept="image/jpeg,application/pdf" name="curriculum" id="curriculum" class="form-control  custom-file-input invalid" type="file" placeholder="CURRICULUM VATAE">
+                                    <label data-invalid="Seleccione Curriculum Vitae" data-valid="Curriculum Vitae seleccionado" class="custom-file-label mb-0 text-truncate" data-browse="CARGAR ARCHIVO" for="curriculum"></label>
+                                </div>
+                            </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-danger" type="button"><i class="fas fa-times-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
 
                     <h3 class="title text-uppercase mt-5">trabajo</h3>
                     <div class="trabajos"></div>
@@ -139,12 +151,11 @@
     window.redes = new Pyrus("formulario_redes");
     window.trabajos = new Pyrus("formulario_trabajo");
     window.educacion = new Pyrus("formulario_educacion");
-    window.curriculum = new Pyrus("formulario_curriculum");
+    
     window.redesID = 1;
     window.trabajosID = 1;
     window.educacionID = 1;
     $("#formulario").html(window.pyrus.formulario());
-    $("form .curriculum").html(window.curriculum.formulario());
     $("form .redes").html(window.redes.formulario(window.redesID,"redes"));
     $("form .trabajos").html(`<div class="bg-light p-4 position-relative trabajo"><small onclick="removeThis(this,'.trabajo','¿Eliminar Trabajo?');" class="text-danger position-absolute" style="right:10px;top:10px; z-index:1; cursor: pointer"><i class="fas fa-times"></i> Eliminar</small>${window.trabajos.formulario(window.trabajosID,"trabajos")}</div>`);
     $("form .educaciones").html(`<div class="bg-light p-4 position-relative educacion"><small onclick="removeThis(this,'.educacion','¿Eliminar Educación?');" class="text-danger position-absolute" style="right:10px;top:10px; z-index:1; cursor: pointer"><i class="fas fa-times"></i> Eliminar</small>${window.educacion.formulario(window.educacionID,"educacion")}</div>`);

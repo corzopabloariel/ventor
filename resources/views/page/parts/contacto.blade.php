@@ -26,10 +26,9 @@
     </div>
     <div class="container-fluid mb-2">
         <div class="row">
-            <div class="col-12 col-md-6 pl-0">
-                <div id="map" style="height: 450px;"></div>
+            <div class="col-12 px-0">
+                <iframe src="https://www.google.com/maps/d/embed?mid=1jX6Gl5rvxwMRNP-QFoWdofQHGxWr5zce" class="w-100 border-0" height="480"></iframe>
             </div>
-            <div class="col-12 col-md-6"></div>
         </div>
     </div>
     <div class="container">
@@ -133,29 +132,6 @@ function zfill(number, width) {
         }
     }
 }
-var map;
-function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
-        center: {lat: -40, lng: -60}
-    });
-    var mapLayers = [];
-    for (var i = 26; i >= 1; i--) {
-        var mapLayer = new google.maps.Data();
-        mapLayer.loadGeoJson(`{{ asset('js/googlemaps') }}/map${zfill(i, 2)}.geojson`);
-        mapLayer.setStyle({
-        fillColor: '#'+Math.floor(Math.random()*16777215).toString(16),
-        strokeColor: '#000',
-        strokeOpacity: 1,
-        strokeWeight: 1
-        });
-        // Set mouseover event for each feature.
-        mapLayer.addListener('mouseover', function(event) {
-            //document.getElementById('info-box').textContent = event.feature.getProperty('description');
-        });
-        mapLayer.setMap(map);
-    }
-}
 
 validar = function(t, marca = true, visible = true) {
     let flag = 1;
@@ -179,21 +155,23 @@ validar = function(t, marca = true, visible = true) {
 validarSTRING = function(t) {
     let string = "";
     $(t).find('*[required]').each(function() {
-        flag = true;
-        if($(this).attr("type") !== undefined) {
-            if($(this).attr("type") == "file" || $(this).attr("type") == "date")
-                flag = false;
-        }
-        if(flag) {
-            if($(this).is(":invalid") || $(this).val() == "") {
-                if(string != "") string += ", ";
-                if($(this).attr("placeholder") === undefined)
-                    string += $(this).data("placeholder");
-                else {
-                    t = $(this).attr("placeholder");
-                    if(t.indexOf("*") >= 0)
-                        t = t.replace(" *","");
-                    string += t;
+        if($(this).is(":invalid") || $(this).val() == "") {
+            flag = true;
+            if($(this).attr("type") !== undefined) {
+                if($(this).attr("type") == "file" || $(this).attr("type") == "date")
+                    flag = false;
+            }
+            if(flag) {
+                if($(this).is(":invalid") || $(this).val() == "") {
+                    if(string != "") string += ", ";
+                    if($(this).attr("placeholder") === undefined)
+                        string += $(this).data("placeholder");
+                    else {
+                        t = $(this).attr("placeholder");
+                        if(t.indexOf("*") >= 0)
+                            t = t.replace(" *","");
+                        string += t;
+                    }
                 }
             }
         }
@@ -210,5 +188,5 @@ enviar = function(t) {
 }
 
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZUlidy4Exa3bvZLRh4qgqx4lwlLy6khw&callback=initMap"></script>
+
 @endpush

@@ -46,6 +46,14 @@
                             <span class="nav-label">Slider</span>
                         </a>
                     </li>
+                    @if(Auth::user()["username"] == "publicidad" || Auth::user()["username"] == "pablo")
+                    <li>
+                        <a data-link="u" href="{{ route('novedades.index') }}">
+                            <i class="fas fa-star"></i>
+                            <span class="nav-label">Novedades</span>
+                        </a>
+                    </li>
+                    @endif
                 </ul>
             </li>
             <li>
@@ -197,9 +205,15 @@
                         </a>
                     </li>
                     <li>
-                        <a data-link="u" href="{{ route('empresa.numeros') }}">
+                        <a data-link="u" href="{{ route('empresa.numeros.index') }}">
                             <i class="fas fa-phone-square"></i>
                             <span class="nav-label">Números</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-link="u" href="{{ route('empresa.emails.index') }}">
+                            <i class="fas fa-envelope-open-text"></i>
+                            <span class="nav-label">Email</span>
                         </a>
                     </li>
                 </ul>

@@ -11,6 +11,7 @@ use App\Marca;
 use App\Producto;
 use App\ProductoVentor;
 
+use App\Archivo;
 use App\User;
 use App\Vendedor;
 use App\Localidad;
@@ -253,12 +254,38 @@ class ProductoController extends Controller
         return self::store($request, self::edit($id));
     }
 
-    public function carga()
+    public function carga(Request $request)
     {
+        $cambios = "";
+        if(isset($request["_token"])) {
+            $data = $request->all();
+            $files = $request->file("archivos");
+            //dd($files);
+            if(!empty($files)) {
+                $path = public_path('file/');
+                $archivos = "";
+                $total = 0;
+                foreach($files AS $i => $file) {
+                    if(!empty($archivos)) $archivos .= " / ";
+                    $actual = $file->getClientOriginalName();
+                    if(strcmp($actual,$data["nombre"][$i]) === 0) {
+                        $total ++;
+                        $aux = explode(".",$data["nombre"][$i]);
+                        
+                        $doc = "{$aux[0]}." .$file->getClientOriginalExtension();
+                        $archivos .= $doc;
+                        $file->move($path, $doc);
+                    }
+                }
+                Archivo::create(["archivos" => $archivos, "cantidad" => $total]);
+            }
+        }
+        $data = Archivo::orderBy('id','DESC')->first();
+        $cambios = "{$data["archivos"]}<br/>{$data["autofecha"]}";
         $title = "Carga de datos";
         $buscar = null;
         $view = "adm.parts.productos.carga";
-        return view( 'adm.distribuidor' , compact( 'title' , 'view' ) );
+        return view( 'adm.distribuidor' , compact( 'title' , 'view' , 'cambios' ) );
     }
     public function actualizar($id) {
         self::$id();
@@ -447,7 +474,7 @@ class ProductoController extends Controller
                 $aux = $data["id"];
             $arrDataP["vendedor_id"] = $aux;
             $aux = null;
-            $data = Transporte::where('tracod','LIKE',$usrvt_003)->first();
+            $data = Transporte::where('tracod','LIKE',$usrvt_021)->first();
             if(!empty($data))
                 $aux = $data["id"];
             $arrDataP["transporte_id"] = $aux;
