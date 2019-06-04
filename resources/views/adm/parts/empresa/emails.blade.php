@@ -74,7 +74,7 @@
     erase = function(t, id) {
         $(t).attr("disabled",true);
         alertify.confirm("ATENCIÓN","¿Eliminar registro?",
-            function(){
+            function() {
                 let promise = new Promise(function (resolve, reject) {
                     let url = `{{ url('/adm/empresa/${window.pyrus.entidad}/delete/${id}') }}`;
                     var xmlHttp = new XMLHttpRequest();
