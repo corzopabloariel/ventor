@@ -38,7 +38,12 @@
             <div class="col-12 col-md-8">
                 <div class="row">
                     <div class="col-12 col-md-6">
-                        <img src="{{ asset($datos['producto']['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" class="w-100 border" />
+                        @php
+                        $codigo_ima = $datos['producto']["codigo_ima"];
+                        $image = "IMAGEN/{$codigo_ima[0]}/{$codigo_ima}.jpg";
+                        
+                        @endphp
+                        <img src="{{ asset($image) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" class="w-100 border" />
                     </div>
                     <div class="col-12 col-md-6">
                         <p class="codigo mb-1">{{ $datos["producto"]["stmpdh_art"] }}</p>

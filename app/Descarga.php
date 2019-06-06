@@ -15,6 +15,7 @@ class Descarga extends Model
         'privado',
         'precio',
         'formato',
-        'parte'
+        'parte',
+        'otras'
     ];
 }

@@ -29,8 +29,20 @@ class DescargasController extends Controller
                             ->where("precio",1)
                             ->groupBy('did')
                             ->get();*/
-        $descargasPrecio = Descarga::where("privado",1)->groupBy("did")->get();
+        $descargasPrecio = Descarga::where("privado",1)->where("otras",0)->groupBy("did")->get();
         return view('adm.distribuidor',compact('title','view','descargasPrecio'));
+    }
+    public function otras()
+    {
+        $title = "Descargas privadas - otras";
+        $view = "adm.parts.descargas.otras";
+        /*$descargasPrecio = DB::table('descargas')
+                            ->where("privado",1)
+                            ->where("precio",1)
+                            ->groupBy('did')
+                            ->get();*/
+        $descargas = Descarga::where("privado",1)->where("otras",1)->get();
+        return view('adm.distribuidor',compact('title','view','descargas'));
     }
 
     public function cleanURL($string)
@@ -302,7 +314,70 @@ class DescargasController extends Controller
         }
         return back();
     }
+    
+    public function storeOTRAS(Request $request, $data = null)
+    {
+        $datosRequest = $request->all();
+        $ARR_data = [];
+        $ARR_data["image"] = null;
+        $ARR_data["documento"] = null;
+        $ARR_data["orden"] = $datosRequest["orden"];
+        $ARR_data["nombre"] = $datosRequest["nombre"];
+        $ARR_data["privado"] = 1;
+        $ARR_data["otras"] = 1;
 
+        $nameDOC = self::cleanURL($datosRequest["nombre"]);
+        
+        $file = $request->file("image");
+        $documento = $request->file("documento");
+        
+        if(!is_null($data)) {
+            $ARR_data["image"] = $data["image"];
+            $ARR_data["documento"] = $data["documento"];
+        }
+        if(!is_null($file)) {
+            $path = public_path('images/descargas/');
+            if (!file_exists($path))
+                mkdir($path, 0777, true);
+            $imageName = time().".".$file->getClientOriginalExtension();
+            
+            $file->move($path, $imageName);
+            $ARR_data["image"] = "images/descargas/{$imageName}";
+            
+            if(!is_null($data)) {
+                if(!empty($data["image"])) {
+                    $filename = public_path() . "/" . $data["image"];
+                    if (file_exists($filename))
+                        unlink($filename);
+                }
+            }
+        }
+        if(!is_null($documento)) {
+            $path = public_path('images/descargas/');
+            if (!file_exists($path))
+                mkdir($path, 0777, true);
+            $imageName = "{$nameDOC}.".$documento->getClientOriginalExtension();
+            
+            $documento->move($path, $imageName);
+            $ARR_data["documento"] = "images/descargas/{$imageName}";
+            
+            if(!is_null($data)) {
+                if(!empty($data["documento"])) {
+                    $filename = public_path() . "/" . $data["documento"];
+                    if (file_exists($filename))
+                        unlink($filename);
+                }
+            }
+        }
+        
+        if(is_null($data))
+            Descarga::create($ARR_data);
+        else {
+            $data->fill($ARR_data);
+            $data->save();
+        }
+        return back();
+    }
     /**
      * Display the specified resource.
      *
@@ -345,6 +420,11 @@ class DescargasController extends Controller
     public function updatePARTE(Request $request, $id) {
         return self::storePARTE($request,self::show($id));
     }
+
+    public function updateOTRAS(Request $request, $id) {
+        return self::storeOTRAS($request,self::show($id));
+    }
+    
     /**
      * Remove the specified resource from storage.
      *

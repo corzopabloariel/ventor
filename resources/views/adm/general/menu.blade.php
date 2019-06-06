@@ -153,6 +153,12 @@
                             <span class="nav-label">Privada</span>
                         </a>
                     </li>
+                    <li>
+                        <a data-link="u" href="{{ route('descargas.otras') }}">
+                            <i class="fas fa-lock"></i>
+                            <span class="nav-label">Otras</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li>

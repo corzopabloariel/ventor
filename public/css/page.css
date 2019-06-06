@@ -26,7 +26,8 @@ body {
 }
 .sidebar > .title + ul > li > span {
     text-transform: uppercase;
-    font-weight: 500
+    font-weight: 300;
+    color: #797979;
 }
 .sidebar ul {
     display: none;
@@ -109,7 +110,7 @@ body {
 .categorias a p,
 .productos a p:last-child {
     color: #0099D6;
-    font-weight: bold;
+    font-weight: 500;
     font-size: 15px;
     margin-top: 5px;
 }
@@ -681,11 +682,11 @@ footer .marca {
 }
 .wrapper-producto div.title {
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 500;
 }
 .wrapper-producto .para {
     color: #BF1939;
-    font-size: 14px;
+    font-size: 18px;
 }
 .wrapper-producto table {
     font-size: 14px;

@@ -62,7 +62,7 @@
                             </div>
                             <p class="mb-0">{{ $c["stmpdh_art"] }}</p>
                             <p class="mb-1 text-truncate">{{ $c->modelo["modelo_y_a"] }}</p>
-                            {!! $c["stmpdh_tex"] !!}
+                            <p class="mb-0">{{ $c["stmpdh_tex"] }}</p>
                         </a>
                     @endforeach
                 </div>

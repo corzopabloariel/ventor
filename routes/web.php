@@ -12,94 +12,10 @@
 */
 
 Route::get('/', 'page\GeneralController@index')->name('index');
-
+Route::get('soap/{idC}', 'page\GeneralController@soap')->name('soap');
 Route::get('prueba', function() {
-    /*$wsdl = 'http://181.170.160.91:9090/WSUtils.asmx';
-    $client=new nusoap_client($wsdl,'wsdl');
 
-    $cliente = new \Soap($wsdl, [
-        'login' => 'Test',
-        'password' => 'c2d*-f',
-        'encoding' => 'UTF-8',
-        'trace' => true
-    ]);
     
-    $resultado = $cliente->EjecutarSP_String("ConsultaStock", "$ARTCOD;0019");*/
-    //require_once(app_path() . '\lib\nusoap.php');
-
-    $msserver="192.168.0.9";
-$msserver="200.117.254.149:9090";
-
-$msserver="ventorsa.no-ip.info:9090";
-
-$msserver="ventorsa1.no-ip.info:9090";
-$msserver="24.232.33.120:9090";
-$msserver="190.17.239.18:9090";
-$msserver="ventorsa1.no-ip.info:9090";
-$msserver="181.170.160.91:9090";
-
-
-//include('ipserver.php');
-//echo "---->>>".$msserver;
-
-
- 
-
-$proxyhost = isset($_POST['proxyhost']) ? $_POST['proxyhost'] : '';
-$proxyport = isset($_POST['proxyport']) ? $_POST['proxyport'] : '';
-$proxyusername = isset($_POST['proxyusername']) ? $_POST['proxyusername'] : '';
-$proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : '';
-//$client = new SoapClient('http://'.$msserver.'/dotWSUtils/WSUtils.asmx?WSDL', 'wsdl',
-//						$proxyhost, $proxyport, $proxyusername, $proxypassword);
-//dd($client);
-
-//$err = $client->getError();
-/*if ($err) {
-	echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-}
-else
-{*/
-//echo "bien paso 1";
-//}
-// Doc/lit parameters get wrapped
-//$param = array('Symbol' => 'IBM');
-//$result = $client->call('GetQuickQuotes', array('parameters' => $param), '', '', false, true);
-
-//$_REQUEST["idC"] = str_replace('@',' ',$_REQUEST["idC"]);
-
-$param = array('$ARTCOD;0019', 'Test', 'c2d*-f', '1');
-$param = array( "pSPName" => "ConsultaStock", "pParamList" => '$ARTCOD;0019', "pUserId" => "Test", "pPassword" => "c2d*-f",  "pGenLog" => "1");
-
-//$client = new SoapClient('http://'.$msserver.'/dotWSUtils/WSUtils.asmx?WSDL', $param);
-$client = new \nusoap_client('http://'.$msserver.'/dotWSUtils/WSUtils.asmx?WSDL', true);
-
-//dd($client);
-$result = $client->call('EjecutarSP_String', $param, '', '', false, true);
-
-// Check for a fault
-if ($client->fault) {
-	echo 'error al conectar';
-} else {
-
-	// Check for errors
-	$err = $client->getError();
-
-	//echo "error <br>" .$err ;
-		
-	if ($err) {
-		// Display the error
-		echo 'error de ejecucion ';
-	} else {
-		// Display the result
-		//print_r($result);
-		$cadena = explode(",", $result["EjecutarSP_StringResult"]);
-	
-		if ($cadena[2] > 0 )echo "1@".$cadena[2];
-		else echo "3@".$cadena[2];
-//		echo "<br>";
-//		echo $result["EjecutarSP_StringResult"];
-	}
-}
 });
 
 Route::get('empresa', 'page\GeneralController@empresa')->name('empresa');
@@ -224,9 +140,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::group(['prefix' => 'descargas', 'as' => 'descargas'], function() {
         Route::get('index', ['uses' => 'adm\DescargasController@index', 'as' => '.index']);
         Route::get('private', ['uses' => 'adm\DescargasController@private', 'as' => '.private']);
+        Route::get('otras', ['uses' => 'adm\DescargasController@otras', 'as' => '.otras']);
         Route::post('store', ['uses' => 'adm\DescargasController@store', 'as' => '.store']);
         Route::post('storeEXT', ['uses' => 'adm\DescargasController@storeEXT', 'as' => '.storeEXT']);
         Route::post('storePARTE', ['uses' => 'adm\DescargasController@storePARTE', 'as' => '.storePARTE']);
+        Route::post('storeOTRAS', ['uses' => 'adm\DescargasController@storeOTRAS', 'as' => '.storeOTRAS']);
+
         Route::get('edit/{id}', ['uses' => 'adm\DescargasController@edit', 'as' => '.edit']);
         Route::get('show/{id}', ['uses' => 'adm\DescargasController@show', 'as' => '.show']);
         Route::get('delete/{id}', ['uses' => 'adm\DescargasController@destroy', 'as' => '.destroy']);
@@ -235,6 +154,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::post('update/{id}', ['uses' => 'adm\DescargasController@update', 'as' => 'update']);
         Route::post('updateEXT/{id}', ['uses' => 'adm\DescargasController@updateEXT', 'as' => 'updateEXT']);
         Route::post('updatePARTE/{id}', ['uses' => 'adm\DescargasController@updatePARTE', 'as' => 'updatePARTE']);
+        Route::post('updateOTRAS/{id}', ['uses' => 'adm\DescargasController@updateOTRAS', 'as' => 'updateOTRAS']);
         
     });
     /**

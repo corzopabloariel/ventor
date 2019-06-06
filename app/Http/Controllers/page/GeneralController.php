@@ -216,10 +216,12 @@ class GeneralController extends Controller
 
         if(auth()->guard('client')->check()) {
             $datos["descargas"] = Descarga::where("privado",1)->orderBy("orden")->get();
+            $datos["descargasO"] = Descarga::where("privado",1)->where("otras",1)->orderBy("orden")->get();
             $datos["privado"] = 1;
         } else {
             $datos["descargas"] = Descarga::where("privado",0)->orderBy("orden")->get();
-            $datos["descargasP"] = Descarga::where("privado",1)->orderBy("orden")->get();
+            $datos["descargasP"] = Descarga::where("privado",1)->where("otras",0)->orderBy("orden")->get();
+            $datos["descargasO"] = Descarga::where("privado",1)->where("otras",1)->orderBy("orden")->get();
         }
         //dd($datos["contenido"]);
         return view('page.distribuidor',compact('title','view','datos'));
@@ -260,8 +262,51 @@ class GeneralController extends Controller
         $datos["empresa"] = self::general();
         return view('page.distribuidor',compact('title','view','datos'));
     }
-    public function registroUSER(Request $request) {
-        
+    public function soap($ipC) {
+        $msserver="192.168.0.9";
+        $msserver="200.117.254.149:9090";
+
+        $msserver="ventorsa.no-ip.info:9090";
+
+        $msserver="ventorsa1.no-ip.info:9090";
+        $msserver="24.232.33.120:9090";
+        //$msserver="190.17.239.18:9090";
+        //$msserver="ventorsa1.no-ip.info:9090";
+        $msserver="181.170.160.91:9090";
+
+        $proxyhost = isset($_POST['proxyhost']) ? $_POST['proxyhost'] : '';
+        $proxyport = isset($_POST['proxyport']) ? $_POST['proxyport'] : '';
+        $proxyusername = isset($_POST['proxyusername']) ? $_POST['proxyusername'] : '';
+        $proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : '';
+
+        //$_REQUEST["idC"] = str_replace('@',' ',$_REQUEST["idC"]);
+
+        $param = array('$ARTCOD;0019', 'Test', 'c2d*-f', '1');
+        $param = array( "pSPName" => "ConsultaStock", "pParamList" => '$ARTCOD;' . $ipC, "pUserId" => "Test", "pPassword" => "c2d*-f",  "pGenLog" => "1");
+
+        //$client = new SoapClient('http://'.$msserver.'/dotWSUtils/WSUtils.asmx?WSDL', $param);
+        $client = new \nusoap_client('http://'.$msserver.'/dotWSUtils/WSUtils.asmx?WSDL', 'wsdl');
+
+        //dd($client);
+        $result = $client->call('EjecutarSP_String', $param, '', '', false, true);
+
+        // Check for a fault
+        if ($client->fault) {
+            echo 'error al conectar';
+        } else {
+
+            // Check for errors
+            $err = $client->getError();
+            if ($err) {
+                // Display the error
+                echo 'error de ejecucion ';
+            } else {
+                $cadena = explode(",", $result["EjecutarSP_StringResult"]);
+            
+                if ($cadena[2] > 0 )echo "1@".$cadena[2];
+                else echo "3@".$cadena[2];
+            }
+        }
     }
 
     public function productoSHOW($id) {
