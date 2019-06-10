@@ -12,7 +12,7 @@
                         <p class="title text-uppercase">{{ $n["nombre"] }}</p>
                         <p class="title">{{ $n["persona"] }}</p>
                         @foreach($n["email"] AS $e)
-                        <p class="text-truncate"><a href="mailto:{{$e}}">{!!$e!!}</a></p>
+                        <p class="text-truncate"><a href="mailto:{{$e}}" target="_blank">{!!$e!!}</a></p>
                         @endforeach
                         <p><strong>Interno</strong> {{ $n["interno"] }}</p>
                         @if(!empty($n["celular"]))
@@ -55,7 +55,7 @@
                         <i class="far fa-envelope"></i>
                         <div class="ml-2">
                             @foreach($datos["empresa"]["email"] as $e)
-                                <a title="{{$e}}" class="text-truncate d-block" href="mailto:{!!$e!!}" target="blank">{!!$e!!}</a>
+                                <a title="{{$e}}" class="text-truncate d-block" href="mailto:{!!$e!!}" target="_blank">{!!$e!!}</a>
                             @endforeach
                         </div>
                     </li>
@@ -64,6 +64,21 @@
             <div class="col-12 col-md-8">
                 <form action="{{ url('/form/contacto') }}" novalidate id="form" onsubmit="event.preventDefault(); enviar(this);" method="post">
                     {{ csrf_field() }}
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-6">
+                            <label for="mandar">Enviar a</label>
+                            <select name="mandar" id="mandar" class="form-control">
+                            <option>ventor@ventor.com.ar</option>
+                            @foreach($datos["numeros"] AS $n)
+                                <optgroup label="{{ $n['nombre'] . ' - ' . $n['persona'] }}">
+                                    @foreach($n["email"] AS $e)
+                                    <option>{!!$e!!}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <input placeholder="Nombre *" required type="text" value="{{ old('nombre') }}" name="nombre" class="form-control">

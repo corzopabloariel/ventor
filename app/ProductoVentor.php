@@ -22,6 +22,8 @@ class ProductoVentor extends Model
         'grupo_web',
         'cantminvta',
         'nro_refere',
+        'marca_id',
+        'marca'
 
         //'web_marcas',
         //'parte',

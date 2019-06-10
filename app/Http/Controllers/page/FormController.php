@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Transmision;
+use App\Mail\Trabajo;
 use App\Mail\Pago;
 use App\Mail\Consulta;
 use App\Mail\Contacto;
@@ -17,8 +18,10 @@ class FormController extends Controller
         $datosRequest = $request->all();
         unset($datosRequest["_method"]);
         unset($datosRequest["_token"]);
-
-        return self::$seccion($datosRequest);
+        if($seccion == "trabaje")
+            return self::$seccion($request, $datosRequest);
+        else
+            return self::$seccion($datosRequest);
         /**
          * ATENCIÓN AL CLIENTE: atencionalcliente@ventor.com.ar
          * INFORMACIÓN DE PAGOS: cuentascorrientes@ventor.com.ar
@@ -75,11 +78,18 @@ class FormController extends Controller
         else
             return back()->withSuccess(['mssg' => "Correo enviado correctamente"]);
     }
-    public function trabaje($data) {
-        dd($data);
+    public function trabaje($request, $data) {
+        $archivo = $request->file('curriculum');
+        Mail::to('corzo.pabloariel@gmail.com')->send(new Trabajo($data, $archivo));
+        //Mail::to($mandar)->send(new Contacto($data));
+        
+        if (count(Mail::failures()) > 0)
+            return back()->withErrors(['mssg' => "Ha ocurrido un error al enviar el correo"]);
+        else
+            return back()->withSuccess(['mssg' => "Correo enviado correctamente"]);
     }
     public function contacto($data) {
-        
+        $mandar = $data["mandar"];
         $email = Email::where("formulario","contacto")->first();
 
         if(empty($data["g-recaptcha-response"]))
@@ -89,7 +99,7 @@ class FormController extends Controller
             return back()->withInput($data)->withErrors(['mssg' => "Acepte los términos y condiciones"]);
         
         Mail::to('corzo.pabloariel@gmail.com')->send(new Contacto($data));
-        Mail::to($email["email"])->send(new Contacto($data));
+        Mail::to($mandar)->send(new Contacto($data));
         
         if (count(Mail::failures()) > 0)
             return back()->withErrors(['mssg' => "Ha ocurrido un error al enviar el correo"]);

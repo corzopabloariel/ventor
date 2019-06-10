@@ -21,16 +21,11 @@ body {
 .sidebar > .title > i[data-tipo="open"] {
     display: none;
 }
-.sidebar > .title + ul > li {
+.sidebar .subPartes {
     font-size: 15px;
-}
-.sidebar > .title + ul > li > span {
     text-transform: uppercase;
     font-weight: 300;
     color: #797979;
-}
-.sidebar ul {
-    display: none;
 }
 .sidebar > .title.active > i[data-tipo="open"] {
     display: block;
@@ -38,14 +33,25 @@ body {
 .sidebar > .title.active > i[data-tipo="close"] {
     display: none;
 }
-.sidebar > .title.active + ul,
-.sidebar > .title.active + ul span.active + ul {
-    display: block;
-}
-.sidebar > .title.active + ul span.active > a {
+.sidebar .subPartes span.active > a {
     color: #009AD6;
 }
-
+.sidebar .card .card-header {
+    border-bottom: 2px solid rgba(163,163,163,.34) !important
+}
+.sidebar .parte .rotate-icon {
+    color: #A2A2A2;
+}
+.sidebar h5.parte[aria-expanded="true"] .rotate-icon {
+    -webkit-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+.sidebar h5.parte[aria-expanded="false"] .rotate-icon {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
 /* ---------------------------------------------------
     CATEGORIAS / PRODUCTOS HOVER
 ----------------------------------------------------- */
@@ -1040,20 +1046,20 @@ footer .marca {
 .wrapper-pedido .buscador input::placeholder {
     color: #0099D8;
 }
-.wrapper-pedido .pagination {
+.pagination {
     margin-bottom: 0;
 }
-.wrapper-pedido .pagination .page-link {
+.pagination .page-link {
     border: none;
     color: #595959;
 }
-.wrapper-pedido .pagination .page-item .page-link {
+.pagination .page-item .page-link {
     border-radius: 0;
     padding: 10px 7px;
     border-radius: 3px;
     line-height: 12px;
 }
-.wrapper-pedido .page-item.active .page-link {
+.page-item.active .page-link {
     background-color: #A0B2BC;
     color: #fff;
 }

@@ -1,5 +1,5 @@
 <div class="wrapper-producto">
-    <div class="container pb-4 pt-2 navegador">
+    <div class="container pb-4 pt-2 navegador text-uppercase">
         <a href="{{ URL::to('productos') }}">Productos</a>
         @foreach($datos["nombres"] AS $n)
             @if(isset($n["parte"]))
@@ -16,20 +16,31 @@
                     categorias<i class="fas fa-sort-amount-down ml-2"></i>
                 </button>
                 <div class="sidebar collapse dont-collapse-sm" id="collapseExample">
-                    <div class="sidebar">
+                    <div class="sidebar accordion" id="accordionExample">
                         @foreach($datos["menu"] AS $dato)
-                            <h5 class="title mb-1 position-relative @isset($dato['active']) active @endisset" data-id="{{$dato['id']}}" style="color:{{$dato['color']}}">
-                                <a href="{{ URL::to('productos/'. $dato['id']) }}">{{$dato["nombre"]}}</a>
-                                <i data-tipo="close" class="fas fa-angle-down"></i>
-                                <i data-tipo="open" class="fas fa-angle-right"></i>
-                            </h5>
-                            @if(count($dato["hijos"]) > 0)
-                                <ul data-nivel="{{$dato['tipo']}}" class="list-group list-group-flush">
-                                @foreach ($dato["hijos"] AS ${"dato_". $dato["id"]})
-                                    @include('page.parts.productos._menuItem', ["dato" => ${"dato_". $dato["id"]}])
-                                @endforeach
-                                </ul>
-                            @endif
+                        <div class="accordion md-accordion border-0" id="accordionEx" role="tablist" aria-multiselectable="true">
+                            <div class="card border-0">
+                                <div class="card-header bg-white p-0 border-bottom" role="tab" id="Hproductos{{$dato['id']}}">
+                                    <h5 style="color:{{$dato['color']}}; cursor: pointer" class="mb-0 parte py-3" data-parent="#accordionEx" data-toggle="collapse" data-target="#productos{{$dato['id']}}" aria-expanded="@if(isset($dato['active'])) true @else false @endif" aria-controls="productos{{$dato['id']}}">
+                                        <a class="" href="{{ URL::to('productos/' . $dato['id']) }}">
+                                            {{$dato["nombre"]}}
+                                        </a>
+                                        <i class="fas fa-angle-down rotate-icon float-right"></i>
+                                    </h5>
+                                </div>
+                                <div id="productos{{$dato['id']}}" class="collapse @if(isset($dato['active'])) show @endif" role="tabpanel" aria-labelledby="Hproductos{{$dato['id']}}" data-parent="#accordionEx">
+                                    <div class="card-body p-0">
+                                    @if(count($dato["hijos"]) > 0)
+                                        <ul data-nivel="{{$dato['tipo']}}" class="list-group list-group-flush subPartes">
+                                        @foreach ($dato["hijos"] AS ${"dato_". $dato["id"]})
+                                            @include('page.parts.productos._menuItem', ["dato" => ${"dato_". $dato["id"]}])
+                                        @endforeach
+                                        </ul>
+                                    @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         @endforeach
                     </div>
                 </div>
@@ -47,7 +58,7 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <p class="codigo mb-1">{{ $datos["producto"]["stmpdh_art"] }}</p>
-                        <p class="para text-uppercase mb-1">para {{ $datos["producto"]["modelo_id"] }}</p>
+                        <p class="para text-uppercase mb-1">para {{ $datos["producto"]->modelo->marca["web_marcas"] }}</p>
                         <div class="title">{!! $datos["producto"]["stmpdh_tex"] !!}</div>
                         <div class="table-responsive">
                             <table class="table w-100">

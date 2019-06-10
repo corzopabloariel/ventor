@@ -313,21 +313,43 @@ class ProductoController extends Controller
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('productosventor')->truncate();
 
+        
+		//$fichero_dbf = asset('file/cnv_precios.DBF');
+        //print_r($fichero_dbf);die();
+        //$conex       = dbase_open($fichero_dbf, 0);
+        //dd($conex);
         $dbf = Table::fromFile('file/cnv_precios.dbf');
-
+        $asd = 0;
 		foreach ($dbf as $record) {
+            //dd($record);
             $codigo = $record->STMPDH_ART;
-            $nombre = $record->STMPDH_TEX;
+            //$nombre = $record->STMPDH_TEX;
+            //$nombre = mb_convert_encoding($record->STMPDH_TEX);
+            //$nombre = iconv("CP850","UTF-8", $record->STMPDH_TEX);
+            //$nombre = iconv("IBM850", "UTF-8//TRANSLIT", $record->STMPDH_TEX);
+            $nombre = iconv("850", "ISO-8859-1", $record->STMPDH_TEX);
+            //$nombre = iconv("IBM850", "UTF-8", $record->STMPDH_TEX);
+            //$nombre = mb_convert_encoding($record->STMPDH_TEX, "CP850", mb_detect_encoding($record->STMPDH_TEX, "UTF-8, CP850, ISO-8859-15", true));
+
+            //print_r(mb_detect_encoding($nombre));
+            //return 0;
             $data = ProductoVentor::where('stmpdh_art','LIKE',$codigo)->where('stmpdh_tex','LIKE',$nombre)->first();
             if( empty( $data ) ) {
                 $total ++;
-                $web_marcas = $modelo_y_a = $parte = $parte_dbf_ = $usr_stmati = null;
+                $web_marcas = $modelo_y_a = $parte = $parte_dbf_ = $usr_stmati = $stmpdh_tex =null;
                 for( $j = 0 ; $j < count( $property ) ; $j++ ) {
                     $key = strtoupper( $property[$j] );
                     $valor = $record->$key;
-                    $valor = mb_convert_encoding ($valor, "ISO-8859-1");
-                    if($property[$j] == "web_marcas" || $property[$j] == "parte" || $property[$j] == "parte_dbf_" || $property[$j] == "modelo_y_a" || $property[$j] == "usr_stmati") {
+                    //$valor = iconv("IBM850", "UTF-8", $valor);
+                    $valor = iconv("IBM850", "UTF-8//TRANSLIT", $valor);
+                    //$valor = mb_convert_encoding ($valor, "ISO-8859-1");
+                    if($property[$j] == "web_marcas" || $property[$j] == "parte" || $property[$j] == "parte_dbf_" || $property[$j] == "modelo_y_a" || $property[$j] == "usr_stmati" || $property[$j] == "stmpdh_tex") {
                         ${$property[$j]} = $valor;
+                        //${$property[$j]} = iconv("IBM850", "UTF-8", $valor);
+                        //${$property[$j]} = iconv("850", "ISO-8859-1", $valor);
+                        //${$property[$j]} = iconv("IBM850", "UTF-8//TRANSLIT", $valor);
+                        //${$property[$j]} = iconv("CP850","UTF-8", $valor);
+                        //${$property[$j]} = mb_convert_encoding($valor, "CP850", mb_detect_encoding($valor, "UTF-8, CP850, ISO-8859-15", true));
                         continue;
                     }
                     if( strtolower( $property[$j] ) == "precio" || strtolower( $property[$j] ) == "cantminvta" || strtolower( $property[$j] ) == "usr_stmpdh" )
@@ -352,14 +374,20 @@ class ProductoController extends Controller
                     }
                     $echo[$property[$j]] = $valor;
                 }
+                $echo["stmpdh_tex"] = $stmpdh_tex;
                 if(empty($modelo_y_a))
                     $modelo_y_a = "Sin especificar";
                 $data_marca = MarcaVentor::where('web_marcas','LIKE',$web_marcas)->first();
                 if(empty($data_marca)) {
                     $aux = MarcaVentor::create(["web_marcas" => $web_marcas]);
+                    $echo["marca_id"] = $aux["id"];
+                    $echo["marca"] = $web_marcas;
                     $aux = ModeloVentor::create(["modelo_y_a" => $modelo_y_a, "marca_id" => $aux["id"]]);
                     $echo["modelo_id"] = $aux["id"];
                 } else {
+                    $echo["marca_id"] = $data_marca["id"];
+                    $echo["marca"] = $web_marcas;
+
                     $data_modelo = ModeloVentor::where('modelo_y_a','LIKE',$modelo_y_a)->where('marca_id',$data_marca["id"])->first();
                     if(empty($data_modelo)) {
                         $aux = ModeloVentor::create( [ "modelo_y_a" => $modelo_y_a, "marca_id" => $data_marca["id"] ] );
@@ -371,8 +399,11 @@ class ProductoController extends Controller
                 if(empty($data_familia)) {
                     $aux = FamiliaVentor::create( [ "usr_stmati" => $usr_stmati ] );
                     $echo["familia_id"] = $aux["id"];
-                } else 
+                } else {
+                    $data_familia->fill( [ "usr_stmati" => $usr_stmati ] );
+                    $data_familia->save();
                     $echo["familia_id"] = $data_familia["id"];
+                }
                 $data_parte = PartesVentor::where('cod','LIKE',$parte)->where('familia_id',$echo["familia_id"])->first();
                 if(empty($data_parte)) {
                     $aux = PartesVentor::create([ "cod" => $parte , "descrp" => $parte_dbf_ , "familia_id" => $echo["familia_id"] ] );

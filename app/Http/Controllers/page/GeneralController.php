@@ -111,6 +111,21 @@ class GeneralController extends Controller
             
             return self::pedido($data, ["buscar" => $buscar]);
             break;
+            case "body":
+            $buscar = $request->all()["buscar"];
+            if(empty($buscar)) 
+                return back()->withInput($request->all())->withErrors(['mssg' => "La búsqueda no puede estar vacia"]);
+            $title = "PRODUCTOS";
+            $view = "page.parts.productos.buscar";
+            $datos = [];
+            $datos["empresa"] = self::general();
+            $datos["productos"] = ProductoVentor::
+                                where("stmpdh_art","LIKE","%{$buscar}%")->
+                                orWhere("stmpdh_tex","LIKE","%{$buscar}%")->
+                                    orderBy("marca")->paginate(15);
+
+            return view('page.distribuidor',compact('title','view','datos'));
+            break;
         }
     }
     /** ---------------------------- */
@@ -161,31 +176,44 @@ class GeneralController extends Controller
         $title .= $datos["producto"]["stmpdh_tex"];
         //dd($link);
         $datos["categoria"] = PartesVentor::find($datos["producto"]["parte_id"]);
-        
-        $ids = $datos["categoria"]->familia->categoria->padres();
+        $ids = [];
+        if(!empty($datos["categoria"]->familia->categoria))
+            $ids = $datos["categoria"]->familia->categoria->padres();
         $ids[] = $datos["producto"]["parte_id"];
         $datos["menu"] = self::menu($ids);
-        
-        $datos["nombres"] = $datos["categoria"]->familia->categoria->padres(0);
+        //dd($datos["menu"]);
+        $datos["nombres"] = [];
+        if(!empty($datos["categoria"]->familia->categoria))
+            $datos["nombres"] = $datos["categoria"]->familia->categoria->padres(0);
         $datos["nombres"][] = ["nombre" => $datos["categoria"]["descrp"], "id" => $datos["categoria"]["id"], "parte" => 1];
 
         return view('page.distribuidor',compact('title','view','datos'));
     }
-    public function familia($id = null, $tipo = null) {
+    public function familia(Request $request, $id = null, $tipo = null) {
+        $dataRequest = $request->all();
+        
         if(empty($id))
             return redirect()->route('index');
         $title = "PRODUCTOS";
         $view = "page.parts.productos.familia";
         $datos = [];
+        
         $datos["empresa"] = self::general();
         if(empty($tipo)) {
             $datos["categoria"] = Categoria::find($id);
             $datos["categorias"] = Categoria::where("padre_id",$id)->orderBy('orden')->get();
             $datos["menu"] = self::menu($datos["categoria"]->padres());
             $datos["nombres"] = $datos["categoria"]->padres(0);
-
-            $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->paginate(15);
+            
+            $datos["para"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->orderBy("marca")->pluck("marca","marca_id");
+            if(!isset($dataRequest["para"]))
+                $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->paginate(15);
+            else {
+                $datos["paraID"] = $dataRequest["para"];
+                $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->where("marca_id",$dataRequest["para"])->paginate(15);
+            }
         } else {
+            $datos["para"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->pluck("marca","marca_id");
             $datos["categoria"] = PartesVentor::find($id);
             $datos["categorias"] = [];
             $ids = $datos["categoria"]->familia->categoria->padres();
@@ -193,9 +221,13 @@ class GeneralController extends Controller
             $datos["menu"] = self::menu($ids);
             $datos["nombres"] = $datos["categoria"]->familia->categoria->padres(0);
             
-            $datos["productos"] = ProductoVentor::where("parte_id",$id)->paginate(15);
+            if(!isset($dataRequest["para"]))
+                $datos["productos"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->paginate(15);
+            else {
+                $datos["paraID"] = $dataRequest["para"];
+                $datos["productos"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->where("marca_id",$dataRequest["para"])->paginate(15);
+            }
         }
-
         return view('page.distribuidor',compact('title','view','datos'));
     }
     public function calidad() {

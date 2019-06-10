@@ -1,5 +1,14 @@
 <div class="wrapper-categorias bg-white">
     <div class="container">
+        <div class="row justify-content-center buscador">
+            <div class="col-12 col-md-6">
+                <form class="position-relative d-flex" action="{{ url('/buscador/body') }}" method="post">
+                    @csrf
+                    <button type="submit" class="btn"><i class="fas fa-search"></i></button>
+                    <input placeholder="Buscar producto..." type="text" name="buscar" id="" class="form-control">
+                </form>
+            </div>
+        </div>
         <div class="row justify-content-center">
             <div class="col-12 col-md-10">
                 <div class="row justify-content-center">

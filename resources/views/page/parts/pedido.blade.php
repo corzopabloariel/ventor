@@ -81,7 +81,7 @@
                 $descuento *= 100;
                 @endphp
                 <p class="mb-4 d-flex w-100 justify-content-between"><span>Bonificacion (<span id="bonificacionCliente">{{$descuento}}%</span>)</span> <span id="bonificacion">$ 0</span></p>--}}
-                <p class="total border-bottom border-dark mb-1 d-flex w-100 align-items-center justify-content-between">Total (c/ bonificación) <span id="total">$ 0</span></p>
+                <p class="total border-bottom border-dark mb-1 d-flex w-100 align-items-center justify-content-between">Total <span id="total">$ 0</span></p>
                 <p style="color: #C01939; font-size: 13px mb-0">El total no incluye IVA ni impuestos internos</p>
 
                 <div class="row">
@@ -96,7 +96,9 @@
         </div>
         @else
         <div class="row col-12 justify-content-center">
-            {{ $datos["productos"]->onEachSide(5)->links() }}
+            <div class="overflow-auto">
+                {{ $datos["productos"]->onEachSide(5)->links() }}
+            </div>
         </div>
         @endif
     </div>

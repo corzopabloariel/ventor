@@ -24,8 +24,10 @@ Route::match(['get', 'post'], 'buscador/{tipo}',['as' => 'buscador','uses' => 'p
 
 Route::group(['prefix' => 'productos', 'as' => 'productos'], function() {
     Route::get('/', ['uses' => 'page\GeneralController@productos', 'as' => '.productos']);
-    Route::get('/{id?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
-    Route::get('/{id}/{tipo?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
+    Route::match(['get', 'post'], '/{id?}',['as' => '.familia','uses' => 'page\GeneralController@familia' ]);
+    Route::match(['get', 'post'], '/{id}/{tipo?}',['as' => '.familia','uses' => 'page\GeneralController@familia' ]);
+    //Route::get('/{id?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
+    //Route::get('/{id}/{tipo?}', ['uses' => 'page\GeneralController@familia', 'as' => '.familia']);
 });
 Route::get('atencion/{id?}', ['uses' => 'page\GeneralController@atencion', 'as' => '.atencion']);
 

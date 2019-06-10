@@ -69,15 +69,15 @@
                 <div class="col-12 col-md-8">
                     <h3 class="titleC">Curriculum Vitae</h3>
                     <div class="curriculum">
-                        <div class="input-group">
-                            <div class="input-group">
+                        <div class="input-group d-flex">
+                            <div class="input-group" style="width: calc(100% - 42px)">
                                 <div class="custom-file">
-                                    <input value="" required="true" style="width:auto" accept="image/jpeg,application/pdf" name="curriculum" id="curriculum" class="form-control  custom-file-input invalid" type="file" placeholder="CURRICULUM VATAE">
+                                    <input onchange="cvActivo(this)" value="" required="true" style="width:auto" accept="image/jpeg,application/pdf" name="curriculum" id="curriculum" class="form-control  custom-file-input invalid" type="file" placeholder="CURRICULUM VATAE">
                                     <label data-invalid="Seleccione Curriculum Vitae" data-valid="Curriculum Vitae seleccionado" class="custom-file-label mb-0 text-truncate" data-browse="CARGAR ARCHIVO" for="curriculum"></label>
                                 </div>
                             </div>
                             <div class="input-group-append">
-                                <button class="btn btn-danger" type="button"><i class="fas fa-times-circle"></i></button>
+                                <button onclick="cvDesactivado(this)" class="btn btn-danger" disabled type="button"><i class="fas fa-times-circle"></i></button>
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,7 @@
                         <div class="col-12 col-md-6 d-flex align-items-center">
                             <div class="form-check">
                                 <input class="form-check-input" required data-placeholder="Términos y condiciones" type="checkbox" value="1" name="terminos" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1" style="display: inline-block; ">
                                     Acepto los términos y condiciones de privacidad
                                 </label>
                             </div>
@@ -159,6 +159,14 @@
     $("form .redes").html(window.redes.formulario(window.redesID,"redes"));
     $("form .trabajos").html(`<div class="bg-light p-4 position-relative trabajo"><small onclick="removeThis(this,'.trabajo','¿Eliminar Trabajo?');" class="text-danger position-absolute" style="right:10px;top:10px; z-index:1; cursor: pointer"><i class="fas fa-times"></i> Eliminar</small>${window.trabajos.formulario(window.trabajosID,"trabajos")}</div>`);
     $("form .educaciones").html(`<div class="bg-light p-4 position-relative educacion"><small onclick="removeThis(this,'.educacion','¿Eliminar Educación?');" class="text-danger position-absolute" style="right:10px;top:10px; z-index:1; cursor: pointer"><i class="fas fa-times"></i> Eliminar</small>${window.educacion.formulario(window.educacionID,"educacion")}</div>`);
+
+    cvActivo = function(t) {
+        $(t).closest(".curriculum").find("button").removeAttr("disabled");
+    };
+    cvDesactivado = function(t) {
+        $(t).closest(".curriculum").find("input[type='file']").val("");
+        $(t).attr("disabled", true);
+    };
 
     redesAdd = function(t) {
         window.redesID ++;
