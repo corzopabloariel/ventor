@@ -42,7 +42,7 @@ const ENTIDADES = {
     },
     novedades: {
         ATRIBUTOS: {
-            orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
+            orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_INVISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
             nombre: {TIPO:"TP_STRING",MAXLENGTH:150,VISIBILIDAD:"TP_VISIBLE"},
             image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 209x297",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"190px"},
             documento: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Documento seleccionado",INVALID:"Seleccione documento",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE_FORM",ACCEPT:"image/jpeg,application/pdf",NOMBRE:"documento",WIDTH:"190px",SIMPLE:1},
@@ -50,7 +50,7 @@ const ENTIDADES = {
         },
         FORM: [
             {
-                orden: '<div class="col-5 col-md-3">/orden/</div>',
+                orden: '/orden/',
                 BTN: '<div class="d-flex col-3 col-md-3">/BTN/</div>'
             },
             {
@@ -147,7 +147,8 @@ const ENTIDADES = {
         ATRIBUTOS: {
             orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},
             image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 190x190",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"190px"},
-            nombre: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE"}
+            nombre: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE"},
+            documento: {TIPO:"TP_DOC",VISIBILIDAD:"TP_VISIBLE_TABLE"}
         },
         FORM: [
             {
@@ -169,7 +170,8 @@ const ENTIDADES = {
         ATRIBUTOS: {
             orden2: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px",NOMBRE:"orden"},
             image2: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 190x190",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"190px"},
-            nombre2: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre"}
+            nombre2: {TIPO:"TP_STRING",MAXLENGTH:50,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre"},
+            documento: {TIPO:"TP_DOC",VISIBILIDAD:"TP_VISIBLE_TABLE"}
         },
         FORM: [
             {
@@ -397,8 +399,7 @@ const ENTIDADES = {
             nombre: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE"},
             color: {TIPO:"TP_COLOR",VISIBILIDAD:"TP_VISIBLE"},
             hsl: {TIPO:"TP_STRING",VISIBILIDAD:"TP_INVISIBLE"},
-            subcategorias: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE_TABLE",NOMBRE:"Subcategorías",CLASS:"text-uppercase text-center"},
-            familia_id: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Relacionado"}
+            familia_id: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Relacionado",MULTIPLE: 1}
             //asociado: {TIPO:"TP_STRING",MAXLENGTH: 100,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Relacionado"}
         },
         FORM: [
@@ -448,7 +449,7 @@ const ENTIDADES = {
             //usr_stmpdh: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"cantidad"},
             //cantminvta: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Cant. mínima"},
             precio: {TIPO:"TP_STRING",VISIBILIDAD:"TP_VISIBLE",CLASS:"text-right",WIDTH:"100px"},
-            familia_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"familia"},
+            familia_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"familia",WIDTH:"100px"},
             //modelo_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"Modelo",WIDTH: "200px"},
             parte_id: {TIPO:"TP_RELACION",VISIBILIDAD:"TP_VISIBLE",NOMBRE:"parte",WIDTH: "100px"},
             

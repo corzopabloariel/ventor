@@ -56,7 +56,8 @@ body {
     CATEGORIAS / PRODUCTOS HOVER
 ----------------------------------------------------- */
 .categorias a > div,
-.productos a > div {
+.productos a > div,
+.zoom {
     position: relative;
     -webkit-transition: all 800ms ease;
     -moz-transition: all 800ms ease;
@@ -64,13 +65,17 @@ body {
     -o-transition: all 800ms ease;
     transition: all 800ms ease;
 }
+.zoom {
+    cursor: pointer;
+}
 .categorias a > div img,
 .productos a > div img {
     display: block;
     border: 1px solid rgba(74,74,74,.44);
 }
 .categorias a > div::before,
-.productos a > div::before {
+.productos a > div::before,
+.zoom::before {
     content: "";
     position: absolute;
     width: 100%;
@@ -79,7 +84,8 @@ body {
     z-index: 1;
 }
 .categorias a > div::after,
-.productos a > div::after {
+.productos a > div::after,
+.zoom::after {
     content: "\f067";
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
@@ -96,10 +102,18 @@ body {
     justify-content: center;
     align-items: center;
 }
+.zoom::after {
+    left: calc(50% - 33px / 2);
+    top: calc(50% - 33px / 2);
+    width: 33px;
+    height: 33px;
+}
 .categorias a > div::before,
 .categorias a > div::after,
 .productos a > div::before,
-.productos a > div::after {
+.productos a > div::after,
+.zoom::before,
+.zoom::after {
     opacity: 0;
     -webkit-transition: all 800ms ease;
     -moz-transition: all 800ms ease;
@@ -110,8 +124,13 @@ body {
 .categorias a:hover > div::before,
 .categorias a:hover > div::after,
 .productos a:hover > div::before,
-.productos a:hover > div::after {
+.productos a:hover > div::after,
+.zoom:hover::before,
+.zoom:hover::after {
     opacity: 1;
+}
+.zoom:hover::after {
+    opacity: .7;
 }
 .categorias a p,
 .productos a p:last-child {

@@ -1,6 +1,10 @@
 <li class="list-group-item border-0">
     <span class="d-block position-relative  @isset($dato['active']) active @endisset" data-id="{{$dato['id']}}">
+        @if(isset($url))
+        <a class="d-block" href="{{ URL::to('pedido/parte/' . $id . '/subparte/'. $dato['id']) }}">{{$dato["nombre"]}}</a>
+        @else
         <a class="d-block" href="{{ URL::to('productos/'. $dato['id']). '/parte' }}">{{$dato["nombre"]}}</a>
+        @endif
     </span>
     @if(count($dato["hijos"]) > 0)
         <ul class="list-group list-group-flush">

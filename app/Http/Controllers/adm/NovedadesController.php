@@ -36,15 +36,27 @@ class NovedadesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function orden(Request $request, $data = null)
+    {
+        $datosRequest = $request->all();
+        $ids = $datosRequest["ids"];
+        $ids = json_decode($ids, true);
+        for($i = 0; $i < count($ids); $i++) {
+            $aux = Novedad::find($ids[$i]);
+            $aux->fill(["orden" => $i]);
+            $aux->save();
+        }
+        return 1;
+    }
     public function store(Request $request, $data = null)
     {
         $datosRequest = $request->all();
         
         $ARR_data["image"] = null;
         $ARR_data["documento"] = null;
-        $ARR_data["nombre"] = $datosRequest["nombre"];
-        $ARR_data["orden"] = $datosRequest["orden"];
-        $ARR_data["url"] = $datosRequest["url"];
+        $ARR_data["nombre"] = isset($datosRequest["nombre"]) ? $datosRequest["nombre"] : null;
+        //$ARR_data["orden"] = isset($datosRequest["orden"]) ? $datosRequest["orden"] : null;
+        $ARR_data["url"] = isset($datosRequest["url"]) ? $datosRequest["url"] : null;
 
         $image = $request->file("image");
         $documento = $request->file("documento");

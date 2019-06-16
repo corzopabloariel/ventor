@@ -133,7 +133,7 @@
             localStorage.removeItem("carrito");
             localStorage.removeItem("pedido");
             data = request.response;
-            let url = `{{ url('/adm/export') }}`;
+            let url = `{{ url('/export') }}`;
             window.location = url;
         }
         request.send(formData);

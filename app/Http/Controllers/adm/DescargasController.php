@@ -29,7 +29,21 @@ class DescargasController extends Controller
                             ->where("precio",1)
                             ->groupBy('did')
                             ->get();*/
-        $descargasPrecio = Descarga::where("privado",1)->where("otras",0)->groupBy("did")->get();
+        $descargasPrecio = [];
+        $ArrDescargas = Descarga::where("privado",1)->where("otras",0)->get();
+        foreach($ArrDescargas AS $d) {
+            if(!isset($descargasPrecio[$d["precio"]]))
+                $descargasPrecio[$d["precio"]] = [];
+            if(!isset($descargasPrecio[$d["precio"]][$d["did"]])) {
+                $descargasPrecio[$d["precio"]][$d["did"]] = [];
+                $descargasPrecio[$d["precio"]][$d["did"]]["id"] = $d["id"];
+                $descargasPrecio[$d["precio"]][$d["did"]]["orden"] = $d["orden"];
+                $descargasPrecio[$d["precio"]][$d["did"]]["nombre"] = $d["nombre"];
+                $descargasPrecio[$d["precio"]][$d["did"]]["image"] = $d["image"];
+                $descargasPrecio[$d["precio"]][$d["did"]]["documento"] = [];
+            }
+            $descargasPrecio[$d["precio"]][$d["did"]]["documento"][] = $d["documento"];
+        }
         return view('adm.distribuidor',compact('title','view','descargasPrecio'));
     }
     public function otras()
@@ -102,8 +116,10 @@ class DescargasController extends Controller
                 }
             }
         }
+        //dd($datosRequest["nombre_parte"]);
         if(isset($datosRequest["nombre_parte"])) {
             $documento_parte = $request->file("documento_parte");
+            //dd($documento_parte);
             
             for($i = 0; $i < count($datosRequest["nombre_parte"]); $i ++) {
                 $obj = null;
@@ -119,14 +135,15 @@ class DescargasController extends Controller
                     }
                 }
                 $ARR_data["parte"] = strtoupper($datosRequest["nombre_parte"][$i]);
-                if(!is_null($documento_parte[$i])) {
-                    $path = public_path('images/descargas/');
+                
+                if(isset($documento_parte[$i])) {
+                    $path = public_path('archivos/partes/');
                     if (!file_exists($path))
                         mkdir($path, 0777, true);
-                    $imageName = time() . "-{$i}." . $documento_parte[$i]->getClientOriginalExtension();
+                    $imageName = $documento_parte[$i]->getClientOriginalName() . "." . $documento_parte[$i]->getClientOriginalExtension();
                     
                     $documento_parte[$i]->move($path, $imageName);
-                    $ARR_data["documento"] = "images/descargas/{$imageName}";
+                    $ARR_data["documento"] = "archivos/partes/{$imageName}";
                     
                     if(!is_null($data)) {
                         if(!empty($obj["documento"])) {
@@ -139,8 +156,12 @@ class DescargasController extends Controller
                 if(is_null($data))
                     Descarga::create($ARR_data);
                 else {
-                    $obj->fill($ARR_data);
-                    $obj->save();
+                    if(empty($obj))
+                        Descarga::create($ARR_data);
+                    else {
+                        $obj->fill($ARR_data);
+                        $obj->save();
+                    }
                 }
             }
         }
@@ -213,15 +234,15 @@ class DescargasController extends Controller
                         }
                     }
                 }
-                $ARR_data["formato"] = strtoupper($documento_ext[$i]);
                 if(!is_null($documento_ext[$i])) {
-                    $path = public_path('images/descargas/');
+                    $ARR_data["formato"] = strtoupper($documento_ext[$i]->getClientOriginalExtension());
+                    $path = public_path('archivos/');
                     if (!file_exists($path))
                         mkdir($path, 0777, true);
-                    $imageName = time() . "-{($i + 1)}." . $documento_ext[$i]->getClientOriginalExtension();
+                    $imageName = $documento_ext[$i]->getClientOriginalName() . "." . $documento_ext[$i]->getClientOriginalExtension();
                     
                     $documento_ext[$i]->move($path, $imageName);
-                    $ARR_data["documento"] = "images/descargas/{$imageName}";
+                    $ARR_data["documento"] = "archivos/{$imageName}";
                     
                     if(!is_null($data)) {
                         if(!empty($obj["documento"])) {
@@ -353,13 +374,13 @@ class DescargasController extends Controller
             }
         }
         if(!is_null($documento)) {
-            $path = public_path('images/descargas/');
+            $path = public_path('archivos/otras/');
             if (!file_exists($path))
                 mkdir($path, 0777, true);
-            $imageName = "{$nameDOC}.".$documento->getClientOriginalExtension();
+            $imageName = $documento->getClientOriginalName() . "." . $documento->getClientOriginalExtension();
             
             $documento->move($path, $imageName);
-            $ARR_data["documento"] = "images/descargas/{$imageName}";
+            $ARR_data["documento"] = "archivos/otras/{$imageName}";
             
             if(!is_null($data)) {
                 if(!empty($data["documento"])) {

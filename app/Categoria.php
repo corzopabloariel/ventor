@@ -80,4 +80,10 @@ class Categoria extends Model
         else
             return self::recursivo($data->padre) . "<br/>{$data["nombre"]}";
     }
+    
+    /** RELACION */
+    public function partes()
+    {
+        return $this->belongsToMany('App\FamiliaVentor', 'familiaparte', 'categoria_id', 'familia_id')->orderBy('usr_stmati');
+    }
 }

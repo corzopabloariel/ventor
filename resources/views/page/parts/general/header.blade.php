@@ -14,10 +14,26 @@
             <div class="modal-body">
                 <ul class="list-group list-group-flush">
                     @if(auth()->guard('client')->check())
+                    <li class="list-group-item text-uppercase"><a href="{{ route('index') }}">Home</a></li>
+                    <li class="list-group-item text-uppercase"><a href="{{ route('empresa') }}">Empresa</a></li>
                     <li class="list-group-item text-uppercase"><a href="{{ route('pedido') }}">Pedido</a></li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('carrito') }}">Carrito</a></li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('descargas') }}">Descargas</a></li>
-                    
+                    <li class="list-group-item text-uppercase" data-carrito><a href="{{ route('carrito') }}">Carrito</a></li>
+                    <li class="list-group-item text-uppercase position-relative pr-1">
+                        <div data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation"><a href="#">Atención al Cliente</a><i class="fas fa-caret-down position-absolute" style="right: 0; top: 15px"></i></div>
+                        <ul class="collapse list-group list-group-flush" id="navbarToggleExternalContent">
+                            <li class="list-group-item pr-1 position-relative">
+                                <a href="{{ URL::to('atencion/transmision') }}">Análisis de transmisión</a>
+                            </li>
+                            <li class="list-group-item pr-1 position-relative">
+                                <a href="{{ URL::to('atencion/pagos') }}">Información sobre pago</a>
+                            </li>
+                            <li class="list-group-item pr-1 position-relative">
+                                <a href="{{ URL::to('atencion/consulta') }}">Consulta general</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item text-uppercase"><a href="{{ route('calidad') }}">Calidad</a></li>
+                    <li class="list-group-item text-uppercase"><a href="{{ route('contacto') }}">Contacto</a></li>
 					<li class="list-group-item text-uppercase"><a onclick="limpiar()" href="{{ URL::to('salir') }}">cerrar sesión</a></li>					
                     @else
                     <li class="list-group-item text-uppercase"><a href="{{ route('index') }}">Home</a></li>
@@ -68,6 +84,14 @@
             </a>
             <div class="row justify-content-end flex-column w-100">
                 <ul class="list-unstyled d-flex justify-content-end pt-2 mb-1 align-items-center info">
+                    <li class="buscador hidden-tablet">
+                        <form class="position-relative d-flex" action="{{ url('/buscador/body') }}" method="post">
+                            <button type="submit" class="btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <input placeholder="Estoy buscando..." type="text" name="buscar" class="form-control form-control-sm">
+                        </form>
+                    </li>
                     <li class="border-left-0 btnMenuModal">
                         <button class="navbar-toggler btn btn-light rounded-0" type="button" data-toggle="modal" data-target="#menuNav">
                             <i class="fas fa-bars"></i>
@@ -89,21 +113,36 @@
                 </ul>
                 <ul id="ulNavFixed" class="hidden-tablet list-unstyled mb-0 menu d-flex pb-3 justify-content-end align-items-center">
                     <li data-empresa="" class="hidden-tablet">
-                        <a href="{{ route('pedido') }}">Pedido</a>
+                        <a href="{{ route('empresa') }}">Empresa</a>
                     </li>
                     <li data-productos="" class="hidden-tablet">
+                        <a href="{{ URL::to('pedido') }}">Pedido</a>
+                    </li>
+                    <li data-productos="" class="hidden-tablet" data-carrito>
                         <a href="{{ URL::to('carrito') }}">Carrito</a>
                     </li>
                     <li data-descargas="" class="hidden-tablet">
                         <a href="{{ route('descargas') }}">Descargas</a>
                     </li>
-                    <li class="buscador hidden-tablet">
-                        <form class="position-relative d-flex" action="{{ url('/buscador/body') }}" method="post">
-                            <button type="submit" class="btn">
-                                <i class="fas fa-search"></i>
-                            </button>
-                            <input placeholder="Estoy buscando..." type="text" name="buscar" class="form-control form-control-sm">
-                        </form>
+                    <li data-atencion="" class="hidden-tablet">
+                        <a data-href="atencion" href="#">Atención al Cliente</a>
+                        <ul class="submenu list-unstyled shadow-sm">
+                            <li>
+                                <a href="{{ URL::to('atencion/transmision') }}">Análisis de transmisión</a>
+                            </li>
+                            <li>
+                                <a href="{{ URL::to('atencion/pagos') }}">Información sobre pagos</a>
+                            </li>
+                            <li>
+                                <a href="{{ URL::to('atencion/consulta') }}">Consulta general</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li data-calidad="" class="hidden-tablet">
+                        <a href="{{ route('calidad') }}">Calidad</a>
+                    </li>
+                    <li data-contacto="" class="hidden-tablet">
+                        <a href="{{ route('contacto') }}">Contacto</a>
                     </li>
                 </ul>
             </div>

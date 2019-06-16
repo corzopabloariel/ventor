@@ -33,7 +33,7 @@ class AdmController extends Controller
     }
 
 
-    public function export() {
+    public function export($tipo = null) {
         $archivo = Excel::download(new PedidoExport, 'PEDIDO.xls');
         $pedido_id = Cookie::get("pedido");
 
@@ -64,7 +64,7 @@ class AdmController extends Controller
                             'PEDIDO.xls'
                         )->getFile(), ['as' => 'PEDIDO.xls'])
             );
-        Mail::to('pedidos.ventor@gmx.com')
+        /*Mail::to('pedidos.ventor@gmx.com')
             ->send(
                 new PedidoM(
                     $mensaje,
@@ -73,7 +73,10 @@ class AdmController extends Controller
                         new PedidoExport, 
                             'PEDIDO.xls'
                         )->getFile(), ['as' => 'PEDIDO.xls'])
-            );
-        return redirect()->route('indexADM');
+            );*/
+        if(empty($tipo))
+            return redirect()->route('indexADM');
+        else
+            return redirect()->route('pedido');
     }
 }

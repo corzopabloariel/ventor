@@ -70,6 +70,15 @@
             action = `{{ url('/adm/${window.pyrus.entidad}/store') }}`;
         if(data !== null) {
             for(let x in window.pyrus.especificacion) {
+                if(x == "familia_id") {//FAMILIA
+                    data[x] = [];
+                    data.partes.forEach(function(p) {
+                        data[x].push(p.id)
+                    });
+                    console.log(data[x])
+                    $(`#${x}`).val(data[x]).trigger("change");
+                    continue;
+                }
                 if(window.pyrus.especificacion[x].EDITOR !== undefined) {
                     CKEDITOR.instances[`${x}_es`].setData(data[x]);
                     continue;
@@ -122,7 +131,10 @@
                     continue;
                 }
                 if(x == "familia_id") {//FAMILIA
-                    window.familiaID = data[x];
+                    data[x] = [];
+                    data.partes.forEach(function(p) {
+                        data[x].push(p.id)
+                    });
                     continue;
                 }
                 if(window.subcategorias.especificacion[x].EDITOR !== undefined) {
@@ -183,7 +195,7 @@
             }
             if(window.pyrus.especificacion[x].TIPO == "TP_FILE")
                 $(`#src-${x}`).attr("src","");
-            $(`[name="${x}"]`).val("");
+            $(`#${x}`).val("").trigger("change");
         }
     };
     removeModal = function(t) {
@@ -429,8 +441,6 @@
         /** */
         $("#form .container-form").html(window.pyrus.formulario());
         $("#familia_id").select2({
-            tags: "true",
-            allowClear: true,
             placeholder: "Seleccione: FAMILIA",
             width: "resolve"
         });
@@ -449,6 +459,12 @@
                 table.append("<tbody></tbody>");
             columnas.forEach(function(c) {
                 td = data[c.COLUMN] === null ? "" : data[c.COLUMN];
+                if(c.COLUMN == "familia_id") {
+                    td = "";
+                    data.partes.forEach(function(p) {
+                        td += `<p class="mb-0">${p.usr_stmati}</p>`;
+                    });
+                }
                 if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_FILE") {
                     date = new Date();
                     img = `{{ asset('${td}') }}?t=${date.getTime()}`;

@@ -35,7 +35,7 @@
         <h3 class="title text-uppercase text-center mb-4">¡novedades!</h3>
         <div class="row productos">
             @foreach($datos["novedades"] AS $c)
-                <a href="{{ asset($c['documento']) }}" download class="col-12 col-md-4">
+                <a href="{{ asset($c['documento']) }}" target="blank" class="col-12 col-md-4">
                     <div>
                         <img src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" class="w-100" />
                     </div>

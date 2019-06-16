@@ -37,8 +37,11 @@ Route::get('calidad', 'page\GeneralController@calidad')->name('calidad');
 Route::get('descargas', 'page\GeneralController@descargas')->name('descargas');
 Route::get('trabaje', 'page\GeneralController@trabaje')->name('trabaje');
 Route::get('contacto', 'page\GeneralController@contacto')->name('contacto');
-
 Route::match(['get', 'post'], 'pedido',['uses' => 'page\GeneralController@pedido'])->name("pedido");
+Route::group(['prefix' => 'pedido', 'as' => 'pedido'], function() {
+    Route::match(['get', 'post'], 'parte/{id?}',['as' => '.familia','uses' => 'page\GeneralController@pedidoFamilia' ]);
+    Route::match(['get', 'post'], 'parte/{familia_id}/subparte/{id?}',['as' => '.categoria','uses' => 'page\GeneralController@pedidoCategoria' ]);
+});
 Route::post('pedidoCliente', ['uses' => 'page\GeneralController@pedidoCliente', 'as' => 'pedidoCliente']);
 
 Route::get('carrito', 'page\GeneralController@carrito')->name('carrito');
@@ -69,12 +72,13 @@ Route::group(['prefix' => 'cliente', 'as' => 'client.'], function() {
 
 Route::post('form/{seccion}', ['uses' => 'page\FormController@index', 'as' => 'form']);
 
+Route::get('export/{tipo?}', ['uses' => 'adm\AdmController@export' , 'as' => 'export']);
+
 Route::post('login', 'Auth\LoginController@login')->name("login");
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::get('/', 'adm\AdmController@index');
     Route::get('/', 'adm\AdmController@index')->name("indexADM");
     Route::get('logout', ['uses' => 'adm\AdmController@logout' , 'as' => 'adm.logout']);
-    Route::get('export', ['uses' => 'adm\AdmController@export' , 'as' => 'adm.export']);
     /**
      * CONTENIDO
      */
@@ -175,6 +179,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
     Route::group(['prefix' => 'novedades', 'as' => 'novedades'], function() {
         Route::get('index', ['uses' => 'adm\NovedadesController@index', 'as' => '.index']);
         Route::post('store', ['uses' => 'adm\NovedadesController@store', 'as' => '.store']);
+        Route::post('orden', ['uses' => 'adm\NovedadesController@orden', 'as' => '.orden']);
         Route::get('edit/{id}', ['uses' => 'adm\NovedadesController@edit', 'as' => '.edit']);
         Route::get('delete/{id}', ['uses' => 'adm\NovedadesController@destroy', 'as' => '.destroy']);
         Route::post('update/{id}', ['uses' => 'adm\NovedadesController@update', 'as' => 'update']);

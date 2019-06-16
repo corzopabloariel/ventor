@@ -18,7 +18,11 @@
                     <table class="table table-sm mb-0 table-striped table-hover" id="tabla"></table>
                 </div>
                 <div class="mt-2">
+                @if(!empty($buscar))
+                    {{ $productos->appends( [ "buscar" => $buscar ] )->links() }}
+                @else
                     {{ $productos->links() }}
+                @endif
                 </div>
             </div>
         </div>
@@ -64,7 +68,7 @@
                 table.append('<thead class="thead-dark"></thead>');
             table.find("thead").append(`<th class="${e.CLASS}" style="width:${e.WIDTH};min-width:${e.WIDTH}">${e.NAME}</th>`);
         });
-        table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
+        table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px; min-width:150px;">acción</th>`);
 
         window.elementos.data.forEach(function(data) {
             let tr = "";

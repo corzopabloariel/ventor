@@ -2,8 +2,12 @@
 
 <section class="mt-3">
     <div class="container-fluid">
-        <div>
+        <div class="d-flex">
             <button id="btnADD" onclick="add(this)" class="btn btn-primary text-uppercase" type="button">Agregar<i class="fas fa-plus ml-2"></i></button>
+            <button onclick="guardarOrden()" class="btn btn-dark ml-2 text-uppercase">guardar orden</button>
+        </div>
+        <div class="alert alert-primary mt-2" id="mensajeSorteable" role="alert">
+            Arrastre los elementos de la tabla para ordenarlos
         </div>
         <div style="display: none;" id="wrapper-form" class="mt-2">
             <div class="card">
@@ -28,11 +32,37 @@
     </div>
 </section>
 @push('scripts_distribuidor')
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
     const src = "{{ asset('images/general/no-img.png') }}";
     window.pyrus = new Pyrus("novedades", null, src);
     window.elementos = @json($novedades);
     
+    guardarOrden = function() {
+        alertify.confirm("ATENCIÓN","¿Confirma el orden de los elementos?",
+            function() {
+                let arr = [];
+                $("#tabla tbody tr").each(function() {
+                    arr.push($(this).data("id"));
+                });
+                let formData = new FormData();
+                formData.append("_token", "{{csrf_token()}}");
+                formData.append("ids", JSON.stringify(arr));
+
+                let url = `{{ url('/adm/${window.pyrus.entidad}/orden/') }}`;
+                var xmlHttp = new XMLHttpRequest();
+
+                xmlHttp.open( "POST", url, true );
+                xmlHttp.onload = function() {
+                    alertify.success("Orden guardado correctamente");
+                }
+                xmlHttp.send( formData );
+            },
+            function() {}
+        ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
+    }
+
     /** ------------------------------------- */
     add = function(t, id = 0, data = null) {
         let btn = $(t);
@@ -41,8 +71,8 @@
         else
             btn.attr("disabled",true);
         $("#wrapper-form").toggle(800,"swing");
-
-        $("#wrapper-tabla").toggle("fast");
+        
+        $("#wrapper-tabla,#mensajeSorteable").toggle("fast");
 
         if(id != 0)
             action = `{{ url('/adm/${window.pyrus.entidad}/update/${id}') }}`;
@@ -167,10 +197,27 @@
                 tr += `<td class="${c.CLASS}">${td}</td>`;
             });
             tr += `<td class="text-center"><button onclick="edit(this,${data.id})" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id})" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
-            table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
+            table.find("tbody").append(`<tr class="trSortable" data-id="${data.id}">${tr}</tr>`);
         });
     }
     /** */
     init();
+
+    
+    $("#tabla tbody").sortable({
+        axis: "y",
+        revert: true,
+        scroll: false,
+        placeholder: "sortable-placeholder",
+        cursor: "move"
+    }).disableSelection();
+    $("#tabla tbody").draggable({
+        start: function( event, ui ) {
+            $(this).find("tr").addClass('trSortable');
+        },
+        stop: function( event, ui ) {
+            $(this).find("tr").removeClass('trSortable'); 
+        }
+    });
 </script>
 @endpush

@@ -38,8 +38,8 @@ class PedidoExport implements FromCollection, WithHeadings
             ->join('productosventor', 'pedidoproductos.producto_id', '=', 'productosventor.id')
             ->join('clientesventor', 'pedidos.cliente_id', '=', 'clientesventor.id')
             ->join('transportesventor', 'pedidos.transporte_id', '=', 'transportesventor.id')
-            ->leftJoin('vendedoresventor', 'pedidos.vendedor_id', '=', 'vendedoresventor.id')
-            ->leftJoin('users', 'pedidos.usuario_id', '=', 'users.id')
+            //->leftJoin('vendedoresventor', 'pedidos.vendedor_id', '=', 'vendedoresventor.id')
+            //->leftJoin('users', 'pedidos.usuario_id', '=', 'users.id')
             ->select(
                 'pedidos.exp_1',
                 'pedidos.exp_2',

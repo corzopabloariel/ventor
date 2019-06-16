@@ -3,14 +3,48 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <link href="{{ asset('css/alertifyjs/alertify.min.css') }}" rel="stylesheet">
 @endpush
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" id="zoom" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img class="w-100 d-block"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalPedir" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="pedido(this)" class="btn btn-primary">Pedir</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="wrapper-pedido py-5">
-    <div class="container">
+    <div class="container-fluid">
         @if(isset($datos["carrito"]))
             <h2 class="title mb-3 text-uppercase">carrito (<span id="cantProductos">0</span>)</h2>
         @else
         <div class="row justify-content-center mt-2 mb-5">
             <div class="col-12 col-md-6">
-                <form action="{{ url('pedido') }}" method="post" class="buscador position-relative">
+                <form action="" method="post" class="buscador position-relative">
                     @csrf
                     <button type="submit" class="btn btn-link position-absolute"><i class="fas fa-search"></i></button>
                     <input type="text" name="buscar" value="@if(!empty($datos['buscar'])) {{ $datos['buscar'] }} @endif" class="form-control" placeholder="Buscar código, parte, marca, nombre">
@@ -18,55 +52,112 @@
             </div>
         </div>
         @endif
+        @if(isset($datos["carrito"]))
         <div class="table-responsive">
             <table class="table w-100" id="tabla">
                 <thead>
-                    @if(!isset($datos["carrito"]))
                     <th style="width:100px;"></th>
                     <th>Producto</th>
                     <th>Categoría</th>
-                    <th class="text-center">Unidad de Venta</th>
-                    <th class="text-right">Precio unitario</th>
-                    <th>cantidad de productos</th>
-                    <th></th>
-                    @else
-                    <th style="width:100px;"></th>
-                    <th>Producto</th>
-                    <th>Categoría</th>
-                    <th class="text-center">Unidad de Venta</th>
-                    <th class="text-right">Precio unitario</th>
-                    <th class="text-center">cantidad de productos</th>
+                    <th class="text-center">U. Venta</th>
+                    <th class="text-right">P. unitario</th>
+                    <th class="text-center">c. productos</th>
                     <th class="text-right">subtotal</th>
                     <th class="text-center">eliminar</th>
-                    @endif
                 </thead>
                 <tbody>
-                    @foreach($datos["productos"] AS $p)
-                    @if(!isset($datos["carrito"]))
-                    
-                    <tr class="" data-id="{{ $p['id'] }}" data-precio="{{ $p['precio'] }}">
-                        <td style="width:100px;">
-                            @php
-                            $image = asset("IMAGEN/{$p["codigo_ima"][0]}/{$p["codigo_ima"]}.jpg");
-                            @endphp
-                            <img class="border w-100" src="{{ $image }}" onerror="this.src='{{ asset('images/general/no-img.png') }}'"/>
-                        </td>
-                        <td>
-                            <p class="mb-0">{{ $p["stmpdh_art"] }}</p>
-                            <p class="mb-0">{!! $p->parte_id() !!}</p>
-                            <p class="mb-0">{!! $p["stmpdh_tex"] !!}</p>
-                        </td>
-                        <td>{!! $p->parte_id() !!}</td>
-                        <td class="text-center">{{ $p["cantminvta"] }}</td>
-                        <td class="text-right">{{ "$ " . $p->getPrecio() }}</td>
-                        <td data-cantidad style="width:150px"><input pattern="[0-9]+" onchange="cambio(this)" type="number" class="form-control text-center" name="" min="{{ $p['cantminvta'] }}" value="0" step="{{ $p['cantminvta'] }}" id=""></td>
-                        <td class="text-center"><button onclick="pedido(this)" type="button" class="btn btn-secondary text-uppercase">pedir</button></td>
-                    </tr>
-                    @endif
-                    @endforeach
                 </tbody>
             </table>
         </div>
+        @else
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <button class="btn text-uppercase d-block d-sm-none rounded-0 mb-2" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="background: #0099D6">
+                    categorias<i class="fas fa-sort-amount-down ml-2"></i>
+                </button>
+                <div class="sidebar collapse dont-collapse-sm" id="collapseExample">
+                    <div class="sidebar accordion" id="accordionExample">
+                        @foreach($datos["menu"] AS $dato)
+                        <div class="accordion md-accordion border-0" id="accordionEx" role="tablist" aria-multiselectable="true">
+                            <div class="card border-0">
+                                <div class="card-header bg-white p-0 border-bottom" role="tab" id="Hproductos{{$dato['id']}}">
+                                    <h5 style="color:{{$dato['color']}}; cursor: pointer" class="mb-0 parte py-3" data-parent="#accordionEx" data-toggle="collapse" data-target="#productos{{$dato['id']}}" aria-expanded="@if(isset($dato['active'])) true @else false @endif" aria-controls="productos{{$dato['id']}}">
+                                        <a class="" href="{{ URL::to('pedido/parte/' . $dato['id']) }}">
+                                            {{$dato["nombre"]}}
+                                        </a>
+                                        <i class="fas fa-angle-down rotate-icon float-right"></i>
+                                    </h5>
+                                </div>
+                                <div id="productos{{$dato['id']}}" class="collapse @if(isset($dato['active'])) show @endif" role="tabpanel" aria-labelledby="Hproductos{{$dato['id']}}" data-parent="#accordionEx">
+                                    <div class="card-body p-0">
+                                    @if(count($dato["hijos"]) > 0)
+                                        <ul data-nivel="{{$dato['tipo']}}" class="list-group list-group-flush subPartes">
+                                        @foreach ($dato["hijos"] AS ${"dato_". $dato["id"]})
+                                            @include('page.parts.productos._menuItem', ["dato" => ${"dato_". $dato["id"]},"id" => $dato["id"],"url" => "pedido"])
+                                        @endforeach
+                                        </ul>
+                                    @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-9">
+                <div class="table-responsive">
+                    <table class="table w-100" id="tabla">
+                        <thead>
+                            <th style="width:100px;"></th>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th style="width: 100px;" class="text-center">U. Venta</th>
+                            <th style="width: 100px;" class="text-center">Stock</th>
+                            <th style="width: 100px;" class="text-right">P. unitario</th>
+                            {{--<th>c. productos</th>--}}
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            @foreach($datos["productos"] AS $p)
+                            
+                            <tr class="" data-id="{{ $p['id'] }}" data-precio="{{ $p['precio'] }}" data-min="{{ $p['cantminvta'] }}" data-step="{{ $p['cantminvta'] }}">
+                                <td style="width:100px;">
+                                    @php
+                                    $image = asset("IMAGEN/{$p["codigo_ima"][0]}/{$p["codigo_ima"]}.jpg");
+                                    @endphp
+                                    <div class="zoom" onclick="zoom(this)">
+                                        <img class="border w-100" src="{{ $image }}" onerror="this.src='{{ asset('images/general/no-img.png') }}'"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="mb-0">{{ $p["stmpdh_art"] }}</p>
+                                    <p class="mb-0">{!! $p->parte_id() !!}</p>
+                                    <p class="mb-0">{!! $p["stmpdh_tex"] !!}</p>
+                                </td>
+                                <td>{!! $p->parte_id() !!}</td>
+                                <td class="text-center">{{ $p["cantminvta"] }}</td>
+                                <td class="text-center"></td>
+                                <td class="text-right">{{ "$ " . $p->getPrecio() }}</td>
+                                {{--<td data-cantidad style="width:150px"><input pattern="[0-9]+" onchange="cambio(this)" type="number" class="form-control text-center" name="" min="{{ $p['cantminvta'] }}" value="0" step="{{ $p['cantminvta'] }}" id=""></td>--}}
+                                <td data-btn class="text-center">
+                                    <button onclick="addPedido(this)" type="button" class="btn btn-secondary text-uppercase"><i class="fas fa-cart-plus"></i></button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="overflow-auto mt-2 d-flex justify-content-center">
+                    @if(!empty($datos['buscar']))
+                        {{ $datos["productos"]->onEachSide(5)->appends( [ "buscar" => $datos["buscar"] ] )->links() }}
+                    @else
+                        {{ $datos["productos"]->onEachSide(5)->links() }}
+                    @endif
+                </div>
+            </div>
+        </div>
+        @endif
 
         @if(isset($datos["carrito"]))
         <div class="row mt-3">
@@ -95,11 +186,6 @@
             </div>
         </div>
         @else
-        <div class="row col-12 justify-content-center">
-            <div class="overflow-auto">
-                {{ $datos["productos"]->onEachSide(5)->links() }}
-            </div>
-        </div>
         @endif
     </div>
 </div>
@@ -149,28 +235,36 @@
             };
             promiseFunction();
         }
-
         @endif
         for(let x in window.productos) {
             $(`table *[data-id="${x}"]`).removeClass("d-none");
             $(`table *[data-id="${x}"]`).find("*[data-cantidad] input").val(window.productos[x].cantidad).trigger("change");
+            $(`table *[data-id="${x}"]`).find("*[data-btn] button").removeClass("btn-secondary").addClass("btn-warning")
         }
         delete window.normal;
         if(Object.keys(window.productos).length > 0) {
-            if(!$("nav [data-carrito] > a > span").length) 
-                $("nav [data-carrito] > a").append(`<span class="ml-1">(${Object.keys(window.productos).length})</span>`);
+            if(!$("[data-carrito] > a > span").length) 
+                $("[data-carrito] > a").append(`<span class="ml-1">(${Object.keys(window.productos).length})</span>`);
             if($("#cantProductos").length)
                 $("#cantProductos").text(Object.keys(window.productos).length);
         }
     }
     /** ------------------------------------- */
+    zoom = function(t) {
+        img = $(t).find("img").attr("src");
+        $("#zoom").find(".modal-title").text($(t).closest("td").next().find("p:last-child").text());
+        $("#zoom").find("img").attr("src",img);
+        $("#zoom").modal("show");
+    }
     addRow = function(data) {
         
         $("#tabla tbody").append(`<tr data-id="${data.id}" data-precio="${data.precio}">` +
             `<td style="">` +
+                `<div class="zoom" onclick="zoom(this)">` + 
                 `<img class="border w-100" src="${data.image}" onerror="this.src=''"/>` +
+                `</div>` +
             `</td>` +
-            `<td>${data.stmpdh_tex}</td>` +
+            `<td><p class="mb-0">${data.stmpdh_tex}</p></td>` +
             `<td>${data.parte_id}</td>` +
             `<td class="text-center">${data.cantminvta}</td>` +
             `<td class="text-right">$ ${data.precioF}</td>` +
@@ -188,11 +282,49 @@
             });
         }
     };
-
-    pedido = function(t) {
+    addPedido = function(t) {
+        let modal = $("#modalPedir");
         let id = $(t).closest("tr").data("id");
         let precio = $(t).closest("tr").data("precio");
-        let cantidad = $(t).closest("tr").find("*[data-cantidad] input").val();
+        let min = $(t).closest("tr").data("min");
+        let step = $(t).closest("tr").data("step");
+        let titulo = $(t).closest("tr").find("td:nth-child(2) p:last-child").text();
+        let html = "";
+        html += `<table class="table mb-0">`;
+            html += `<thead>`;
+                html += `<th style="width: 100px; color:#0099D8; vertical-align:middle" class="text-right bg-light">PRECIO UNITARIO</th>`;
+                html += `<th class="bg-light" style="color:#0099D8;vertical-align:middle">CANTIDAD DE PRODUCTOS</th>`;
+                html += `<th style="width: 100px; vertical-align:middle; color:#0099D8" class="text-right bg-light">SUBTOTAL</th>`;
+            html += `</thead>`;
+            html += `<tbody>`;
+                html += `<tr data-id="${id}" data-precio="${precio}">`;
+                    html += `<td style="vertical-align:middle" class="text-right">${formatter.format(precio)}</td>`;
+                    html += `<td data-cantidad style="width:150px"><input pattern="[0-9]+" onchange="cambio(this)" type="number" class="form-control text-center" name="" min="${min}" step="${step}" id=""></td>`;
+                    html += `<td data-subtotal style="vertical-align:middle" class="text-right">$ -,--</td>`;
+                html += `</tr>`;
+            html += `</tbody>`;
+        html += `</table>`;
+        modal.find(".modal-body").html(html);
+        modal.find(".modal-title").text(titulo);
+        if(window.productos !== undefined) {
+            if(window.productos[id] !== undefined) 
+                modal.find("input[type='number']").val(window.productos[id].cantidad).trigger("change");
+        }
+
+        modal.find("input[type='number']").inputSpinner({
+            decrementButton: '<i class="fas fa-minus"></i>',
+            incrementButton: '<i class="fas fa-plus"></i>',
+            buttonsClass: "btn-outline-secondary btn-sm",
+            buttonsWidth: "1.5rem",
+        });
+        modal.modal("show");
+    }
+    pedido = function(t) {
+        let modalPedir = $("#modalPedir table tbody tr");
+        let id = modalPedir.data("id");
+        let precio = modalPedir.data("precio");
+        let cantidad = modalPedir.find("*[data-cantidad] input").val();
+        
         if(window.productos === undefined)
             window.productos = {};
         if(window.productos[id] === undefined)
@@ -201,14 +333,15 @@
 
         localStorage.setItem("productos",JSON.stringify(window.productos));
         alertify.success(`${window.productos[id].cantidad} u. seleccionadas`);
-
-        
+                console.log(window.productos)
         if(Object.keys(window.productos).length > 0) {
             if(!$("nav [data-carrito] > a > span").length) 
                 $("nav [data-carrito] > a").append(`<span class="ml-1">(${Object.keys(window.productos).length})</span>`);
             else
                 $("nav [data-carrito] > a > span").text(`(${Object.keys(window.productos).length})`);
         }
+        $("#modalPedir").modal("hide");
+        $(`table *[data-id="${id}"]`).find("*[data-btn] button").removeClass("btn-secondary").addClass("btn-warning")
     }
     eliminar = function(t) {
         let id = $(t).closest("tr").data("id");
@@ -218,11 +351,8 @@
                 let precio = parseFloat($(t).closest("tr").data("precio"));
                 let cantidad = parseInt($(t).closest("tr").find("td[data-cantidad] input").val());
                 window.sumaTotal.TOTAL -= precio * cantidad;
-                if($("#subtotal").length) {
-                    $("#subtotal").text(formatter.format(window.sumaTotal.TOTAL));
-                    $("#bonificacion").text(formatter.format(window.sumaTotal.TOTAL * window.data.descuento * (-1)));
-                    $("#total").text(formatter.format(window.sumaTotal.TOTAL + (window.sumaTotal.TOTAL * window.data.descuento * (-1))));
-                }
+                
+                $("#total").text(formatter.format(window.sumaTotal.TOTAL));
                 $(t).closest("tr").remove();
                 delete window.productos[id];
                 localStorage.setItem("productos",JSON.stringify(window.productos));
@@ -239,43 +369,57 @@
         ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
     }
     function cambio(t) {
-        let id = parseInt($(t).closest("tr").data("id"));
-        if($(t).closest("tr").data("precio") == "") {
-            $(t).closest("tr").find("*[data-subtotal]").text(formatter.format(0));
-            return false;
-        }
-        let precio = parseFloat($(t).closest("tr").data("precio"));
-        let cantidad = parseInt($(t).val());
-        console.log(precio)
-
-        let step = parseInt($(t).attr("step"));
-        if(cantidad % step === 0) {
-            if(window.sumaTotal === undefined) {
-                window.sumaTotal = {};
-                window.sumaTotal.TOTAL = 0.0;
+        if($("#total").length) {
+            id = parseInt($(t).closest("tr").data("id"));
+            if($(t).closest("tr").data("precio") == "") {
+                $(t).closest("tr").find("*[data-subtotal]").text(formatter.format(0));
+                return false;
             }
-            if(window.sumaTotal[id] !== undefined)
-                window.sumaTotal.TOTAL -= precio * window.sumaTotal[id];
-            if(window.sumaTotal[id] === undefined)
-                window.sumaTotal[id] = 0;    
-            window.sumaTotal[id] = cantidad;
-            /*------ RESTO PRIMERO */
-            if(window.normal === undefined)
-            
-            /*------ SUMO EL NUEVO VALOR */
-            window.sumaTotal.TOTAL += precio * cantidad;
-            window.productos[id].cantidad = cantidad;
-            localStorage.setItem("productos",JSON.stringify(window.productos));
+            precio = parseFloat($(t).closest("tr").data("precio"));
+            cantidad = parseInt($(t).val());
 
-            $(t).closest("tr").find("*[data-subtotal]").text(formatter.format(precio * cantidad));
+            step = parseInt($(t).attr("step"));
+            if(cantidad % step === 0) {
+                if(window.sumaTotal === undefined) {
+                    window.sumaTotal = {};
+                    window.sumaTotal.TOTAL = 0.0;
+                }
+                if(window.sumaTotal[id] !== undefined)
+                    window.sumaTotal.TOTAL -= precio * window.sumaTotal[id];
+                if(window.sumaTotal[id] === undefined)
+                    window.sumaTotal[id] = 0;    
+                window.sumaTotal[id] = cantidad;
+                /*------ RESTO PRIMERO */
+                if(window.normal === undefined)
+                
+                /*------ SUMO EL NUEVO VALOR */
+                window.sumaTotal.TOTAL += precio * cantidad;
+                window.productos[id].cantidad = cantidad;
+                localStorage.setItem("productos",JSON.stringify(window.productos));
+
+                $(t).closest("tr").find("*[data-subtotal]").text(formatter.format(precio * cantidad));
+            } else {
+                alertify.notify(`Cantidad no permitida. Solo múltiplos de ${step}`, 'warning');
+                $(t).select();
+            }
+             
+            $("#total").text(formatter.format(window.sumaTotal.TOTAL));
         } else {
-            alertify.notify(`Cantidad no permitida. Solo múltiplos de ${step}`, 'warning');
-            $(t).select();
-        }
-        if($("#subtotal").length) {
-            $("#subtotal").text(formatter.format(window.sumaTotal.TOTAL));
-            $("#bonificacion").text(formatter.format(window.sumaTotal.TOTAL * window.data.descuento * (-1)));
-            $("#total").text(formatter.format(window.sumaTotal.TOTAL + (window.sumaTotal.TOTAL * window.data.descuento * (-1))));
+            id = parseInt($(t).closest("tr").data("id"));
+            if($(t).closest("tr").data("precio") == "") {
+                $(t).closest("tr").find("*[data-subtotal]").text(formatter.format(0));
+                return false;
+            }
+            precio = parseFloat($(t).closest("tr").data("precio"));
+            cantidad = parseInt($(t).val());
+
+            step = parseInt($(t).attr("step"));
+            if(cantidad % step === 0) {
+                $(t).closest("tr").find("*[data-subtotal]").text(formatter.format(precio * cantidad));
+            } else {
+                alertify.notify(`Cantidad no permitida. Solo múltiplos de ${step}`, 'warning');
+                $(t).select();
+            }
         }
     }
     pedir = function(t) {
@@ -297,7 +441,7 @@
                     localStorage.removeItem("productos");
                     
                     //data = request.response;
-                    let url = `{{ route('pedido') }}`;
+                    let url = `{{ URL::to('export/usr') }}`;
                     alertify.success(`Pedido realizado. Espere`);
                     $("body input,body button").attr("disabled",true);
                     setTimeout(() => {

@@ -25,7 +25,7 @@ class CategoriaController extends Controller
         foreach($categorias AS $c) {
             $familia_id = $c->familia;
             $c["familia_id"] = $familia_id["usr_stmati"];
-            $c["subcategorias"] = count($c->hijos);
+            $c["partes"] = $c->partes;
         }
         
         return view('adm.distribuidor',compact('title','view','categorias','seccion','familiasV','partesV'));
@@ -57,7 +57,7 @@ class CategoriaController extends Controller
         $ARR_data["color"] = $datosRequest["color"];
         $ARR_data["hsl"] = $datosRequest["hsl"];
         $ARR_data["padre_id"] = empty($datosRequest["padre_id"]) ? null : $datosRequest["padre_id"];
-        $ARR_data["familia_id"] = empty($datosRequest["familia_id"]) ? null : $datosRequest["familia_id"];
+        //$ARR_data["familia_id"] = empty($datosRequest["familia_id"]) ? null : $datosRequest["familia_id"];
 
         $file = $request->file("image");
         
@@ -80,11 +80,13 @@ class CategoriaController extends Controller
                 }
             }
         }
-        
-        if(is_null($data))
-            Categoria::create($ARR_data);
-        else {
+        //dd($request->get('familia_id'));
+        if(is_null($data)) {
+            $data = Categoria::create($ARR_data);
+            $data->partes()->sync($request->get('familia_id'));
+        } else {
             $data->fill($ARR_data);
+            $data->partes()->sync($request->get('familia_id'));
             $data->save();
         }
         return back();
@@ -103,7 +105,8 @@ class CategoriaController extends Controller
         $data["padre"] = $data->padre;
 
         $familia = $data->familia;
-        $data["partes"] = $familia->hijos->pluck("descrp","id");
+        
+        $data["partes"] = $data->partes;
 
         foreach($data["hijos"] AS $h) {
             $cat = $h->categoria;
@@ -121,7 +124,9 @@ class CategoriaController extends Controller
      */
     public function edit($id)
     {
-        return Categoria::find($id);
+        $c = Categoria::find($id);
+        $c["partes"] = $c->partes;
+        return $c;
     }
 
     /**

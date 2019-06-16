@@ -4,6 +4,7 @@
 </div>
 <div class="position-relative" style="height: calc(100% - 73px); overflow-y:auto; overflow-x: hidden;">
     <div class="w-100 position-absolute">
+    {{--@if(Auth::user()["username"] == "EMP_12661482" || Auth::user()["username"] == "pablo")--}}
         @if(Auth::user()["is_admin"] == 2)
         <ul class="list-unstyled components m-0 p-0">
             <li>
@@ -125,14 +126,12 @@
                         </a>
                     </li>
                     
-                    @if(Auth::user()["username"] == "EMP_12661482" || Auth::user()["username"] == "pablo")
                     <li>
                         <a data-link="u" href="{{ route('productos.carga') }}">
                         <i class="fas fa-file-upload"></i>
                             <span class="nav-label">Carga masiva</span>
                         </a>
                     </li>
-                    @endif
                 </ul>
             </li>
             <li>

@@ -24,6 +24,7 @@ use App\Numero;
 use App\Pedido;
 use App\PedidoProducto;
 use App\Novedad;
+use App\Familiaparte;
 class GeneralController extends Controller
 {
     public $idioma = "es";
@@ -75,8 +76,13 @@ class GeneralController extends Controller
                 "color" => $c["color"],
                 "nombre" => $c["nombre"],
                 "tipo" => $c["tipo"],
-                "hijos" => self::menuRecursivo($c->familia->hijos, $ids)
+                "hijos" => []
             ];
+
+            $partes = $c->partes;
+            foreach($partes AS $p)
+                $aux["hijos"] = array_merge($aux["hijos"],self::menuRecursivo($p->hijos, $ids));
+
             if(in_array($c["id"], $ids))
                 $aux["active"] = 1;
             $ARR[] = $aux;
@@ -203,6 +209,7 @@ class GeneralController extends Controller
             $datos["categoria"] = Categoria::find($id);
             $datos["categorias"] = Categoria::where("padre_id",$id)->orderBy('orden')->get();
             $datos["menu"] = self::menu($datos["categoria"]->padres());
+            //dd($datos["menu"]);
             $datos["nombres"] = $datos["categoria"]->padres(0);
             
             $datos["para"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->orderBy("marca")->pluck("marca","marca_id");
@@ -216,10 +223,20 @@ class GeneralController extends Controller
             $datos["para"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->pluck("marca","marca_id");
             $datos["categoria"] = PartesVentor::find($id);
             $datos["categorias"] = [];
-            $ids = $datos["categoria"]->familia->categoria->padres();
+            $relAUX = $datos["categoria"]->familia;
+            
+            $aux = Familiaparte::where("familia_id",$relAUX["id"])->first();
+            
+            //$ids = $datos["categoria"]->familia->categoria->padres();
+            $ids = [];
+            $ids[] = $aux["categoria_id"];
             $ids[] = $id;
+            //dd($ids);
             $datos["menu"] = self::menu($ids);
-            $datos["nombres"] = $datos["categoria"]->familia->categoria->padres(0);
+            //dd($datos["menu"]);
+            $datos["nombres"] = [];
+            $datos["nombres"][] = ["id" => $aux->categoria["id"], "nombre" => $aux->categoria["nombre"]];
+            //dd();
             
             if(!isset($dataRequest["para"]))
                 $datos["productos"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->paginate(15);
@@ -355,6 +372,7 @@ class GeneralController extends Controller
         $view = "page.parts.pedido";
         $datos = [];
         $buscar = null;
+        $datos["menu"] = self::menu([]);
         $datos["empresa"] = self::general();
         if(!empty($request->all()["buscar"])) {
             $buscar = $request->all()["buscar"];
@@ -363,6 +381,53 @@ class GeneralController extends Controller
         $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
         $datos["buscar"] = $buscar;
         //dd($datos);
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
+
+    public function pedidoFamilia(Request $request, $id) {
+        $title = "PEDIDO";
+        $dataRequest = $request->all();
+        $view = "page.parts.pedido";
+        $datos = [];
+        $buscar = null;
+        $datos["menu"] = self::menu([]);
+        $datos["empresa"] = self::general();
+        if(!empty($dataRequest["buscar"])) {
+            $buscar = $dataRequest["buscar"];
+            $datos["buscar"] = $buscar;
+            $datos["productos"] = ProductoVentor::where("familia_id",$id)->where("stmpdh_tex","LIKE","%{$dataRequest["buscar"]}%")->orderBy("marca")->paginate($this->paginate);
+        } else
+            $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
+        $datos["buscar"] = $buscar;
+        //dd($datos//);
+        $datos["categoria"] = Categoria::find($id);
+        $datos["menu"] = self::menu($datos["categoria"]->padres());
+        //dd($datos["menu"]);
+        
+        
+        $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->paginate($this->paginate);
+        
+        return view('page.distribuidor',compact('title','view','datos'));
+    }
+
+    public function pedidoCategoria(Request $request, $familia_id, $id) {
+        $title = "PEDIDO";
+        $view = "page.parts.pedido";
+        $dataRequest = $request->all();
+        //$ids = $datos["categoria"]->familia->categoria->padres();
+        $ids = [];
+        $ids[] = $familia_id;
+        $ids[] = $id;
+        //dd($ids);
+        $datos["empresa"] = self::general();
+        $datos["menu"] = self::menu($ids);
+        
+        if(!isset($dataRequest["buscar"]))
+            $datos["productos"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->paginate($this->paginate);
+        else {
+            $datos["buscar"] = $dataRequest["buscar"];
+            $datos["productos"] = ProductoVentor::where("parte_id",$id)->where("stmpdh_tex","LIKE","%{$dataRequest["buscar"]}%")->orderBy("marca")->paginate($this->paginate);
+        }
         return view('page.distribuidor',compact('title','view','datos'));
     }
 
@@ -378,9 +443,9 @@ class GeneralController extends Controller
         $Arr_data["is_adm"] = 2;
         
         $Arr_data["usuario_id"] = NULL;
-        $Arr_data["transporte_id"] = NULL;
+        $Arr_data["transporte_id"] = $cliente["transporte_id"];
         $Arr_data["cliente_id"] = $cliente["id"];
-        $Arr_data["estado"] = 0;
+        $Arr_data["estado"] = 1;
         $Arr_data["observaciones"] = $data["observaciones"];
         
         $pedido = Pedido::create($Arr_data);
@@ -396,14 +461,16 @@ class GeneralController extends Controller
             
             PedidoProducto::create($Arr_p);
         }
+        Cookie::queue("pedido", $pedido_id, 100);
         return 1;
     }
     
     public function carrito() {
-        
+        if(!auth()->guard('client')->check()) return redirect()->route('index');
         $title = "CARRITO";
         $view = "page.parts.pedido";
         $datos = [];
+        $datos["menu"] = self::menu([]);
         $datos["empresa"] = self::general();
         $datos["carrito"] = 1;
         $datos["productos"] = [];

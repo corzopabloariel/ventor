@@ -1,5 +1,6 @@
-<div class="wrapper-contacto py-5">
-    <div class="container mb-5">
+<div class="wrapper-contacto pb-5">
+    <iframe class="w-100" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.7871889994603!2d-58.452671484893074!3d-34.609542465313034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcca10618fd26d%3A0x23bee3f8f6507558!2sVentor+-+Comercial+e+Industrial!5e0!3m2!1ses-419!2sar!4v1560358153881!5m2!1ses-419!2sar" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+    <div class="container mt-2 mb-5">
         <h3 class="title text-uppercase" style="font-size: 32px; color: #595959; font-weight: 200">Sede ciudad de buenos aires</h3>
         <div class="row numeros">
             @foreach($datos["numeros"] AS $n)

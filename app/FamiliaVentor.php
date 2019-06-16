@@ -13,7 +13,7 @@ class FamiliaVentor extends Model
 
     public function hijos()
     {
-        return $this->hasMany('App\PartesVentor','familia_id','id')->orderBy('descrp');
+        return $this->hasMany('App\PartesVentor','familia_id','id')->orderBy('cod');
     }
     
     public function productos()
@@ -24,5 +24,11 @@ class FamiliaVentor extends Model
     public function categoria()
     {
         return $this->hasOne('App\Categoria','familia_id','id');
+    }
+
+    /** RELACION */
+    public function categorias()
+    {
+        return $this->hasMany('App\Categoria', 'categoria_id', 'familia_id');
     }
 }

@@ -151,7 +151,7 @@ PyrusCuerpo = function( e = null, dataPYRUS = null , urlFile = null) {
                             });
                             break;
                         case "domicilio":
-                            html += `${dataPYRUS[x]["calle"]} ${dataPYRUS[x]["altura"]} - Ciudad Autónoma de Buenos Aires`;
+                            html += `<a target="blank" href="https://www.google.com/maps/place/Ventor+-+Comercial+e+Industrial/@-34.6095425,-58.4526715,17z/data=!3m1!4b1!4m5!3m4!1s0x95bcca10618fd26d:0x23bee3f8f6507558!8m2!3d-34.6095469!4d-58.4504828">${dataPYRUS[x]["calle"]} ${dataPYRUS[x]["altura"]} - Ciudad Autónoma de Buenos Aires</a>`;
                             break;
                     }
                 html += `</div>`;

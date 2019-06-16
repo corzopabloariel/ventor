@@ -318,52 +318,62 @@
         });
         table2.find("thead").append(`<th class="text-uppercase text-center" style="width:150px">acción</th>`);
 
-        window.elementos.forEach(function(data) {
+        for(let x in window.elementos[1]) {
             let tr = "";
-            if(parseInt(data.precio) == 1) {
-                if(!table.find("tbody").length) 
-                    table.append("<tbody></tbody>");
-                columnas.forEach(function(c) {
-                    td = data[c.COLUMN] === null ? "" : data[c.COLUMN];
-                    if(c.COLUMN == "documento") {
-                        file = `{{ asset('${td}') }}`;
-                        td = `<a class="text-uppercase text-primary" href="${file}" target="blank">documento<i class="fas fa-external-link-alt ml-1"></i></a>`;
-                    } else if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_FILE") {
-                        date = new Date();
-                        img = `{{ asset('${td}') }}?t=${date.getTime()}`;
-                        td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
-                    }
-                    tr += `<td data-${c.COLUMN} class="${c.CLASS}">${td}</td>`;
-                });
-                //tr += `<td class="text-uppercase">${data.precio ? "lista de precios" : "catálogo"}</td>`;
-                tr += `<td class="text-center"><button onclick="edit(this,${data.id},'precio')" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id},'precio')" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
-                table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
-            }
-        });
-        window.elementos.forEach(function(data) {
+            let data = window.elementos[1][x];
+            if(!table.find("tbody").length) 
+                table.append("<tbody></tbody>");
+            columnas.forEach(function(c) {
+                td = data[c.COLUMN] === null ? "" : data[c.COLUMN];
+                if(c.COLUMN == "documento") {
+                    ARR = td;
+                    td = "";
+                    ARR.forEach(function(d) {
+                        if(d !== null) {
+                            file = `{{ asset('${d}') }}`;
+                            td += `<p class="mb-0"><a class="text-uppercase text-primary" href="${file}" target="blank">documento<i class="fas fa-external-link-alt ml-1"></i></a></p>`;
+                        }
+                    });
+                } else if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_FILE") {
+                    date = new Date();
+                    img = `{{ asset('${td}') }}?t=${date.getTime()}`;
+                    td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
+                }
+                tr += `<td data-${c.COLUMN} class="${c.CLASS}">${td}</td>`;
+            });
+            //tr += `<td class="text-uppercase">${data.precio ? "lista de precios" : "catálogo"}</td>`;
+            tr += `<td class="text-center"><button onclick="edit(this,${data.id},'precio')" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id},'precio')" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
+            table.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
+        };
+        for(let x in window.elementos[0]) {
             let tr = "";
-            if(parseInt(data.precio) == 0) {
-                if(!table2.find("tbody").length) 
-                    table2.append("<tbody></tbody>");
-                columnas2.forEach(function(c) {
-                    col = c.COLUMN.replace("2","");
-                    console.log(col)
-                    td = data[col] === null ? "" : data[col];
-                    if(col == "documento") {
-                        file = `{{ asset('${td}') }}`;
-                        td = `<a class="text-uppercase text-primary" href="${file}" target="blank">documento<i class="fas fa-external-link-alt ml-1"></i></a>`;
-                    } else if(window.pyrus2.especificacion[c.COLUMN].TIPO == "TP_FILE") {
-                        date = new Date();
-                        img = `{{ asset('${td}') }}?t=${date.getTime()}`;
-                        td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
-                    }
-                    tr += `<td data-${col} class="${c.CLASS}">${td}</td>`;
-                });
-                //tr += `<td class="text-uppercase">${data.precio ? "lista de precios" : "catálogo"}</td>`;
-                tr += `<td class="text-center"><button onclick="edit(this,${data.id},'catalogo')" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id},'precio')" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
-                table2.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
-            }
-        });
+            let data = window.elementos[0][x];
+            if(!table2.find("tbody").length) 
+                table2.append("<tbody></tbody>");
+            columnas2.forEach(function(c) {
+                col = c.COLUMN.replace("2","");
+                console.log(col)
+                td = data[col] === null ? "" : data[col];
+                if(col == "documento") {
+                    ARR = td;
+                    td = "";
+                    ARR.forEach(function(d) {
+                        if(d !== null) {
+                            file = `{{ asset('${d}') }}`;
+                            td += `<p class="mb-0"><a class="text-uppercase text-primary" href="${file}" target="blank">documento<i class="fas fa-external-link-alt ml-1"></i></a></p>`;
+                        }
+                    });
+                } else if(window.pyrus2.especificacion[c.COLUMN].TIPO == "TP_FILE") {
+                    date = new Date();
+                    img = `{{ asset('${td}') }}?t=${date.getTime()}`;
+                    td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
+                }
+                tr += `<td data-${col} class="${c.CLASS}">${td}</td>`;
+            });
+            //tr += `<td class="text-uppercase">${data.precio ? "lista de precios" : "catálogo"}</td>`;
+            tr += `<td class="text-center"><button onclick="edit(this,${data.id},'catalogo')" class="btn rounded-0 btn-warning"><i class="fas fa-pencil-alt"></i></button><button onclick="erase(this,${data.id},'precio')" class="btn rounded-0 btn-danger"><i class="fas fa-trash-alt"></i></button></td>`;
+            table2.find("tbody").append(`<tr data-id="${data.id}">${tr}</tr>`);
+        };
     };
     init();
 </script>
