@@ -8,6 +8,7 @@ class Pedido extends Model
 {
     protected $table = "pedidos";
     protected $fillable = [
+        "autofecha",
         "cliente_id",
         "vendedor_id",
         "usuario_id",

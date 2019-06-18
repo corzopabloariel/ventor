@@ -64,7 +64,7 @@ class AdmController extends Controller
                             'PEDIDO.xls'
                         )->getFile(), ['as' => 'PEDIDO.xls'])
             );
-        /*Mail::to('pedidos.ventor@gmx.com')
+        Mail::to('pedidos.ventor@gmx.com')
             ->send(
                 new PedidoM(
                     $mensaje,
@@ -73,10 +73,12 @@ class AdmController extends Controller
                         new PedidoExport, 
                             'PEDIDO.xls'
                         )->getFile(), ['as' => 'PEDIDO.xls'])
-            );*/
+            );
         if(empty($tipo))
             return redirect()->route('indexADM');
-        else
-            return redirect()->route('pedido');
+        else {
+            echo 1;
+            //return redirect()->route('pedido');
+        }
     }
 }

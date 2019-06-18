@@ -13,4 +13,8 @@ class PedidoProducto extends Model
         "pedido_id",
         "observ"
     ];
+    public function producto()
+    {
+        return $this->belongsTo('App\ProductoVentor');
+    }
 }

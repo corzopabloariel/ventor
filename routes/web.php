@@ -73,6 +73,7 @@ Route::group(['prefix' => 'cliente', 'as' => 'client.'], function() {
 Route::post('form/{seccion}', ['uses' => 'page\FormController@index', 'as' => 'form']);
 
 Route::get('export/{tipo?}', ['uses' => 'adm\AdmController@export' , 'as' => 'export']);
+Route::post('pdf', ['uses' => 'page\PdfController@getPedido' , 'as' => 'getPedido']);
 
 Route::post('login', 'Auth\LoginController@login')->name("login");
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {

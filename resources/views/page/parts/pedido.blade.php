@@ -37,6 +37,21 @@
         </div>
     </div>
 </div>
+<div class="modal" tabindex="-1" role="dialog" id="descargarPDF">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Regresar al listado de PRODUCTOS</button>
+                <button onclick="generarPDF()" type="button" class="btn btn-primary">Descargar <i class="fas fa-file-pdf"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="wrapper-pedido py-5">
     <div class="container-fluid">
         @if(isset($datos["carrito"]))
@@ -116,7 +131,9 @@
                             <th style="width: 100px;" class="text-center">Stock</th>
                             <th style="width: 100px;" class="text-right">P. unitario</th>
                             {{--<th>c. productos</th>--}}
+                            @if(auth()->guard('client')->user()["username"] != "111")
                             <th></th>
+                            @endif
                         </thead>
                         <tbody>
                             @foreach($datos["productos"] AS $p)
@@ -137,12 +154,18 @@
                                 </td>
                                 <td>{!! $p->parte_id() !!}</td>
                                 <td class="text-center">{{ $p["cantminvta"] }}</td>
-                                <td class="text-center"></td>
+                                <td class="text-center">
+                                    <button class="btn btn-secondary" onclick="verificarStock(this,'{{$p['use']}}',{{ empty($p['stock_mini']) ? 0 : $p['stock_mini'] }});" type="button">
+                                        <i class="fas fa-traffic-light"></i>
+                                    </button>
+                                </td>
                                 <td class="text-right">{{ "$ " . $p->getPrecio() }}</td>
                                 {{--<td data-cantidad style="width:150px"><input pattern="[0-9]+" onchange="cambio(this)" type="number" class="form-control text-center" name="" min="{{ $p['cantminvta'] }}" value="0" step="{{ $p['cantminvta'] }}" id=""></td>--}}
+                                @if(auth()->guard('client')->user()["username"] != "111")
                                 <td data-btn class="text-center">
                                     <button onclick="addPedido(this)" type="button" class="btn btn-secondary text-uppercase"><i class="fas fa-cart-plus"></i></button>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
@@ -194,6 +217,7 @@
 <script src="{{ asset('js/alertify.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap-input-spinner.js') }}"></script>
 <script>
+    const imgDefault = "{{ asset('images/general/no-img.png') }}";
     $(document).ready(function() {
         
         if($("input[type='number']").length) {
@@ -205,6 +229,14 @@
             }
             $( "input[type='number']" ).inputSpinner(config);
         }
+
+        $("#descargarPDF").on('hidden.bs.modal', function (e) {
+            url = `{{ url('pedido') }}`;
+            alertify.warning("Espere. Regresando al listado de PRODUCTOS");
+            setTimeout(() => {
+                window.location = url;
+            }, 3000);
+        });
     });
     formatter = new Intl.NumberFormat('es-AR', {
         style: 'currency',
@@ -261,7 +293,7 @@
         $("#tabla tbody").append(`<tr data-id="${data.id}" data-precio="${data.precio}">` +
             `<td style="">` +
                 `<div class="zoom" onclick="zoom(this)">` + 
-                `<img class="border w-100" src="${data.image}" onerror="this.src=''"/>` +
+                `<img class="border w-100" src="${data.image}" onerror="this.src='${imgDefault}'"/>` +
                 `</div>` +
             `</td>` +
             `<td><p class="mb-0">${data.stmpdh_tex}</p></td>` +
@@ -324,7 +356,14 @@
         let id = modalPedir.data("id");
         let precio = modalPedir.data("precio");
         let cantidad = modalPedir.find("*[data-cantidad] input").val();
-        
+        if(cantidad == "") {
+            alertify.error("Complete la cantidad");
+            return false;
+        }
+        if(parseInt(cantidad) == 0) {
+            alertify.error("La cantidad debe ser mayor a 0");
+            return false;
+        }
         if(window.productos === undefined)
             window.productos = {};
         if(window.productos[id] === undefined)
@@ -343,11 +382,43 @@
         $("#modalPedir").modal("hide");
         $(`table *[data-id="${id}"]`).find("*[data-btn] button").removeClass("btn-secondary").addClass("btn-warning")
     }
+    generarPDF = function() {
+        let url = `{{ url('pdf') }}`;
+        var xmlHttp = new XMLHttpRequest();
+        let formData = new FormData();
+        formData.append("_token","{{ csrf_token() }}");
+        //xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xmlHttp.responseType = 'blob';
+        xmlHttp.open( "POST", url, true );
+        xmlHttp.onload = function() {
+            if(xmlHttp.status === 200) {
+                var disposition = xmlHttp.getResponseHeader('content-disposition');
+                var matches = /"([^"]*)"/.exec(disposition);
+                var filename = (matches != null && matches[1] ? matches[1] : 'file.pdf');
+
+                // The actual download
+                var blob = new Blob([xmlHttp.response], { type: 'application/pdf' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+
+                url = `{{ url('pedido') }}`;
+                window.location = url;
+            }
+        }
+        xmlHttp.send( formData );
+    }
     eliminar = function(t) {
         let id = $(t).closest("tr").data("id");
         
         alertify.confirm("ATENCIÓN","¿Eliminar registro?",
-            function(){
+            function() {
                 let precio = parseFloat($(t).closest("tr").data("precio"));
                 let cantidad = parseInt($(t).closest("tr").find("td[data-cantidad] input").val());
                 window.sumaTotal.TOTAL -= precio * cantidad;
@@ -366,6 +437,59 @@
                 }
             },
             function() {}
+        ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
+    }
+    verificarStock = function(t, use, stock = null) {
+        $(t).attr("disabled",true);
+        nombre = $(t).closest("tr").find("td:nth-child(2) p:last-child").text();
+        alertify.confirm("ATENCIÓN",`¿Verificar stock del producto <strong>${nombre}</strong>?`,
+            function() {
+                let promise = new Promise(function (resolve, reject) {
+                    let url = `{{ url('/soap/${use}') }}`;
+                    var xmlHttp = new XMLHttpRequest();
+                    //xmlHttp.responseType = 'json';
+                    xmlHttp.open( "GET", url, true );
+                    xmlHttp.onload = function() {
+                        /**
+                         * -3 //ERR grande
+                         * -2 //ERR de conexión
+                         * -1 //ERR
+                         */
+                        resolve(xmlHttp.response);
+                    }
+                    xmlHttp.send( null );
+                });
+
+                promiseFunction = () => {
+                    promise
+                        .then(function(data) {
+                            stockData = parseInt(data);
+                            console.log(stockData);
+                            $(t).removeAttr("disabled");
+                            if(stockData < 0) 
+                                alertify.error("Ocurrió un error, intente más tarde");
+                            else {
+                                if(stock !== null) {
+                                    if(stockData > parseInt(stock)) {
+                                        $(t).removeClass("btn-secondary").addClass("btn-success");
+                                        alertify.success("Stock disponible");
+                                    } else if(stockData <= parseInt(stock) && stockData > 0) {
+                                        $(t).removeClass("btn-secondary").addClass("btn-warning");
+                                        alertify.warning("Stock inferior o igual a cantidad crítica");
+                                    } else {
+                                        $(t).removeClass("btn-secondary").addClass("btn-danger");
+                                        alertify.error("Sin Stock");
+                                    }
+                                }
+                            }
+                        })
+                };
+                alertify.notify(`Verificando STOCK de ${nombre}`, '', 5, function(){ });
+                promiseFunction();
+            },
+            function() {
+                $(t).removeAttr("disabled");
+            }
         ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
     }
     function cambio(t) {
@@ -425,30 +549,59 @@
     pedir = function(t) {
         alertify.confirm("ATENCIÓN","Está por procesar el pedido. ¿Confirma acción?",
             function() {
-                let request = new XMLHttpRequest();
-                let formData = new FormData();
-                let url = `{{ url('pedidoCliente') }}`;
+                let promise = new Promise(function (resolve, reject) {
+                    let request = new XMLHttpRequest();
+                    let url = `{{ url('pedidoCliente') }}`;
+                    let formData = new FormData();
 
-                request.responseType = 'json';
-                formData.append("_token","{{ csrf_token() }}");
-                formData.append("idUsuario",window.data.id);
-                formData.append("observaciones",$("#observaciones").val());
-                
-                formData.append("pedido", JSON.stringify(window.productos));
-                
-                request.open("POST", url);
-                request.onload = function() {
-                    localStorage.removeItem("productos");
+                    request.responseType = 'json';
+                    formData.append("_token","{{ csrf_token() }}");
+                    formData.append("idUsuario",window.data.id);
+                    formData.append("observaciones",$("#observaciones").val());
                     
-                    //data = request.response;
-                    let url = `{{ URL::to('export/usr') }}`;
-                    alertify.success(`Pedido realizado. Espere`);
-                    $("body input,body button").attr("disabled",true);
-                    setTimeout(() => {
-                        window.location = url;
-                    }, 5000);
-                }
-                request.send(formData);
+                    formData.append("pedido", JSON.stringify(window.productos));
+                    var xmlHttp = new XMLHttpRequest();
+
+                    xmlHttp.open( "POST", url );
+                    xmlHttp.onload = function() {
+                        localStorage.removeItem("productos");
+                        alertify.success(`Pedido realizado`);
+                        resolve(xmlHttp.response);
+                    }
+                    xmlHttp.send( formData );
+                });
+
+                promiseFunction = () => {
+                    promise
+                        .then(function(data) {
+                            //MANDAMOS el excel
+                            let promise2 = new Promise(function (resolve, reject) {
+                                url = `{{ URL::to('export/usr') }}`;
+                                var xmlHttp = new XMLHttpRequest();
+                                xmlHttp.open( "GET", url, true );
+                                
+                                xmlHttp.send( null );
+                                resolve(xmlHttp.responseText);
+                            });
+
+                            promiseFunction2 = () => {
+                                promise
+                                    .then(function(msg) {
+                                        html = "";
+                                        html += `<p class="mb-0 text-center">¿Descargar pedido en PDF?</p>`
+                                        modal = $("#descargarPDF");
+                                        modal.find(".modal-title").text("Pedido finalizado");
+                                        modal.find(".modal-body").html(html);
+                                        modal.modal({
+                                            backdrop: 'static',
+                                            keyboard: false
+                                        });
+                                    })
+                            };
+                            promiseFunction2();
+                        })
+                };
+                promiseFunction();
             },
             function() {}
         ).set('labels', {ok:'Si', cancel:'No'});

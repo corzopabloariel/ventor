@@ -17,7 +17,9 @@
                     <li class="list-group-item text-uppercase"><a href="{{ route('index') }}">Home</a></li>
                     <li class="list-group-item text-uppercase"><a href="{{ route('empresa') }}">Empresa</a></li>
                     <li class="list-group-item text-uppercase"><a href="{{ route('pedido') }}">Pedido</a></li>
+                    @if(auth()->guard('client')->user()["username"] != "111")
                     <li class="list-group-item text-uppercase" data-carrito><a href="{{ route('carrito') }}">Carrito</a></li>
+                    @endif
                     <li class="list-group-item text-uppercase position-relative pr-1">
                         <div data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation"><a href="#">Atención al Cliente</a><i class="fas fa-caret-down position-absolute" style="right: 0; top: 15px"></i></div>
                         <ul class="collapse list-group list-group-flush" id="navbarToggleExternalContent">
@@ -118,9 +120,11 @@
                     <li data-productos="" class="hidden-tablet">
                         <a href="{{ URL::to('pedido') }}">Pedido</a>
                     </li>
+                    @if(auth()->guard('client')->user()["username"] != "111")
                     <li data-productos="" class="hidden-tablet" data-carrito>
                         <a href="{{ URL::to('carrito') }}">Carrito</a>
                     </li>
+                    @endif
                     <li data-descargas="" class="hidden-tablet">
                         <a href="{{ route('descargas') }}">Descargas</a>
                     </li>
@@ -158,9 +162,9 @@
                         </button>
                     </li>
 
-                    <li class="zonaCliente">
-                        <a href="#"><i class="fas fa-user-circle mr-2"></i>Zona de clientes</a>
-                        <ul class="submenu list-unstyled shadow-sm rounded" id="login">
+                    <li class="zonaCliente dropdown">
+                        <a href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle mr-2"></i>Zona de clientes</a>
+                        <ul class="submenu list-unstyled shadow-sm rounded dropdown-menu" id="login" aria-labelledby="dropdownMenuButton">
                             <li>
                                 <div>
                                     <form action="{{ url('/cliente/acceso') }}" method="post">
@@ -169,7 +173,7 @@
                                         <div class="contenedorForm w-100" id="form_formulario_login">
                                             <div class="row justify-content-center align-items-center">
                                                 <div class="col-12">
-                                                    <input value="" name="username" id="username" class="form-control  texto-text" type="text" placeholder="USUARIO">
+                                                    <input value="" name="username" id="username" class="form-control  texto-text" type="text" placeholder="USUARIO" required>
                                                 </div>
                                             </div>
                                         </div>

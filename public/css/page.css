@@ -176,7 +176,6 @@ nav .menu li {
     position: relative;
 }
 nav .info .submenu {
-    display: none;
     position: absolute;
     background: #FBFBFB;
     color: #7A7A7A;
@@ -230,7 +229,7 @@ nav .menu li:hover ul ul {
 
 nav .menu li:hover ul,
 nav .info li:hover ul {
-    display:block;
+    
 } /* shows sublist on hover */
 
 nav .menu li li ul {

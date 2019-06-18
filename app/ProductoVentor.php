@@ -23,7 +23,8 @@ class ProductoVentor extends Model
         'cantminvta',
         'nro_refere',
         'marca_id',
-        'marca'
+        'marca',
+        'stock_mini'
 
         //'web_marcas',
         //'parte',

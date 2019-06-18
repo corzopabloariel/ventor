@@ -332,29 +332,26 @@ class GeneralController extends Controller
 
         $param = array('$ARTCOD;0019', 'Test', 'c2d*-f', '1');
         $param = array( "pSPName" => "ConsultaStock", "pParamList" => '$ARTCOD;' . $ipC, "pUserId" => "Test", "pPassword" => "c2d*-f",  "pGenLog" => "1");
-
-        //$client = new SoapClient('http://'.$msserver.'/dotWSUtils/WSUtils.asmx?WSDL', $param);
-        $client = new \nusoap_client('http://'.$msserver.'/dotWSUtils/WSUtils.asmx?WSDL', 'wsdl');
-
-        //dd($client);
-        $result = $client->call('EjecutarSP_String', $param, '', '', false, true);
-
-        // Check for a fault
-        if ($client->fault) {
-            echo 'error al conectar';
-        } else {
-
-            // Check for errors
-            $err = $client->getError();
-            if ($err) {
-                // Display the error
-                echo 'error de ejecucion ';
+        try {
+            //$client = new SoapClient('http://'.$msserver.'/dotWSUtils/WSUtils.asmx?WSDL', $param);
+            $client = new \nusoap_client('http://'.$msserver.'/dotWSUtils/WSUtils.asmx?WSDL', 'wsdl');
+            $result = $client->call('EjecutarSP_String', $param, '', '', false, true);
+            if ($client->fault) {
+                echo -1;
             } else {
-                $cadena = explode(",", $result["EjecutarSP_StringResult"]);
-            
-                if ($cadena[2] > 0 )echo "1@".$cadena[2];
-                else echo "3@".$cadena[2];
+                $err = $client->getError();
+                if ($err)
+                    echo -2;
+                else {
+                    $cadena = explode(",", $result["EjecutarSP_StringResult"]);
+                    if ($cadena[2] > 0 )
+                        echo $cadena[2];
+                    else
+                        echo $cadena[2];
+                }
             }
+        } catch (\Throwable $th) {
+            echo -3;
         }
     }
 
@@ -462,11 +459,12 @@ class GeneralController extends Controller
             PedidoProducto::create($Arr_p);
         }
         Cookie::queue("pedido", $pedido_id, 100);
-        return 1;
+        echo $pedido_id;
     }
     
     public function carrito() {
         if(!auth()->guard('client')->check()) return redirect()->route('index');
+        if(auth()->guard('client')->user()["username"] == "111") return redirect()->route('pedido');
         $title = "CARRITO";
         $view = "page.parts.pedido";
         $datos = [];
