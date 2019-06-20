@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\PedidoM;
 
 use Excel;
+use App\Empresa;
 use App\Pedido;
 use App\Transporte;
 use App\Vendedor;
@@ -80,5 +81,32 @@ class AdmController extends Controller
             echo 1;
             //return redirect()->route('pedido');
         }
+    }
+
+    public function programa() {
+        $programa = Empresa::first()["programa"];
+        //$programa = json_decode($programa, true);
+        
+        $title = "Empresa :: Programa";
+        $view = "adm.parts.empresa.edit";
+        $seccion = "programa";
+        return view('adm.distribuidor',compact('title','view','programa','seccion'));
+    }
+    public function programaUpdate(Request $request) {
+        $empresa = Empresa::first();
+        $dataRequest = $request->all();
+
+        $documento = $request->file("documento");
+        $path = public_path('programa');
+        if (!file_exists($path))
+            mkdir($path, 0777, true);
+        $programa = "INSTALADOR_VENTOR.".$documento->getClientOriginalExtension();
+        
+        $documento->move($path, $programa);
+        
+        $empresa->fill(["programa" => "programa/{$programa}"]);
+        $empresa->save();
+
+        return back();
     }
 }

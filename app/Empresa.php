@@ -16,6 +16,7 @@ class Empresa extends Model
         'metadatos',
         'images',
         'pago',
-        'banco'
+        'banco',
+        'programa'
     ];
 }

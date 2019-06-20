@@ -148,6 +148,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('index', ['uses' => 'adm\DescargasController@index', 'as' => '.index']);
         Route::get('private', ['uses' => 'adm\DescargasController@private', 'as' => '.private']);
         Route::get('otras', ['uses' => 'adm\DescargasController@otras', 'as' => '.otras']);
+        Route::get('todas', ['uses' => 'adm\DescargasController@todas', 'as' => '.todas']);
+
         Route::post('store', ['uses' => 'adm\DescargasController@store', 'as' => '.store']);
         Route::post('storeEXT', ['uses' => 'adm\DescargasController@storeEXT', 'as' => '.storeEXT']);
         Route::post('storePARTE', ['uses' => 'adm\DescargasController@storePARTE', 'as' => '.storePARTE']);
@@ -271,6 +273,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('terminos', ['uses' => 'adm\EmpresaController@terminos', 'as' => '.terminos']);
         //Route::get('numeros', ['uses' => 'adm\EmpresaController@numeros', 'as' => '.numeros']);
         Route::post('update', ['uses' => 'adm\EmpresaController@update', 'as' => '.update']);
+
+        Route::group(['prefix' => 'programa', 'as' => '.programa'], function() {
+            Route::get('/', ['uses' => 'adm\AdmController@programa', 'as' => '.index']);
+            Route::post('update', ['uses' => 'adm\AdmController@programaUpdate', 'as' => '.update']);
+        });
 
         Route::group(['prefix' => 'numeros', 'as' => '.numeros'], function() {
             Route::get('/', ['uses' => 'adm\NumerosController@index', 'as' => '.index']);

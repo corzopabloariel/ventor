@@ -116,6 +116,24 @@ const ENTIDADES = {
             image: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
         }
     },
+    programa: {
+        ATRIBUTOS: {
+            image: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Archivo seleccionado",INVALID:"Seleccione archivo - 190x190",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:"image/*",NOMBRE:"imagen",WIDTH:"190px"},
+            documento: {TIPO:"TP_FILE",NECESARIO:1,VALID:"Programa seleccionado",INVALID:"Seleccione programa",BROWSER:"Buscar",VISIBILIDAD:"TP_VISIBLE",ACCEPT:".exe",NOMBRE:"documento",WIDTH:"190px",SIMPLE:1},
+        },
+        FORM: [
+            /*{
+                image: '<div class="col-12 col-md-6 col-lg-3">/image/</div>',
+            },*/
+            {
+                documento: '<div class="col-12 col-md-6">/documento/</div>',
+            }
+        ],
+        FUNCIONES: {
+            image: {onchange:{F:"readURL(this,'/id/')",C:"id"}},
+            documento: {onchange:{F:"readURL(this,'/id/')",C:"id"}}
+        }
+    },
     descargas: {
         ATRIBUTOS: {
             orden: {TIPO:"TP_STRING",MAXLENGTH:3,VISIBILIDAD:"TP_VISIBLE",CLASS:"text-uppercase text-center",WIDTH:"150px"},

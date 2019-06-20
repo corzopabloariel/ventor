@@ -20,6 +20,12 @@
                 </a>
             </li>
             <li>
+                <a data-link="a" href="{{ route('descargas.todas') }}">
+                    <i class="fas fa-download"></i>
+                    <span class="nav-label">Descargas</span>
+                </a>
+            </li>
+            <li>
                 <a data-link="a" href="{{ route('empresa.usuarios.datos') }}">
                     <i class="fas fa-user-cog"></i>
                     <span class="nav-label">Mis datos</span>
@@ -194,7 +200,14 @@
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
                         <a data-link="u" href="{{ route('empresa.datos') }}">
+                            <i class="fas fa-info-circle"></i>
                             <span>Datos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-link="u" href="{{ route('empresa.programa.index') }}">
+                            <i class="fas fa-chalkboard"></i>
+                            <span class="nav-label">Programa EXE</span>
                         </a>
                     </li>
                     <li>

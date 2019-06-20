@@ -61,7 +61,7 @@ class EmpresaController extends Controller
         $ARR_data["images"] = [];
         $ARR_data["images"]["logo"] = $datos["images"]["logo"];
         $ARR_data["images"]["logoFooter"] = $datos["images"]["logoFooter"];
-        $ARR_data["images"]["favicon"] = $datos["images"]["logoFooter"];
+        $ARR_data["images"]["favicon"] = $datos["images"]["favicon"];
 
         if(isset($requestData["telefono_tipo"])) {
             for($i = 0; $i < count($requestData["telefono_tipo"]); $i ++) {

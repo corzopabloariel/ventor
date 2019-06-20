@@ -58,6 +58,14 @@ class DescargasController extends Controller
         $descargas = Descarga::where("privado",1)->where("otras",1)->get();
         return view('adm.distribuidor',compact('title','view','descargas'));
     }
+    public function todas() {
+        $title = "Descargas";
+        $view = "adm.parts.descargas.todas";
+        $data = [];
+        $datos["descargas"] = Descarga::where("privado",1)->orderBy("orden")->get();
+        $datos["descargasO"] = Descarga::where("privado",1)->where("otras",1)->orderBy("orden")->get();
+        return view('adm.distribuidor',compact('title','view','datos'));
+    }
 
     public function cleanURL($string)
     {

@@ -49,7 +49,7 @@ class ProductoVentor extends Model
         return $this->familia["usr_stmati"];
     }
     public function parte_id() {
-        return "<strong>{$this->parte["cod"]}</strong><br/>{$this->parte["descrp"]}";
+        return "{$this->parte["descrp"]}";
     }
     public function modelo_id() {
         if(!empty($this->modelo["marca"]["web_marcas"]))

@@ -6,6 +6,13 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('headTitle', 'VENTOR :: ' . $title)</title>
+        @if(!empty($datos["empresa"]["images"]["favicon"]))
+            @if($datos["empresa"]["images"]["favicon"]["t"] == "png")
+            <link rel="icon" type="image/png" href="{{ $datos['empresa']['images']['favicon']['i'] }}" />
+            @else
+            <link rel="shortcut icon" href="{{ $datos['empresa']['images']['favicon']['i'] }}" />
+            @endif
+        @endif
         <!-- <Fonts> -->
         <link href="https://fonts.googleapis.com/css?family=Exo+2:300,400,400i,500,600,700|Montserrat:300,400,400i,500,600,700" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -39,7 +46,11 @@
         @if($errors->any())
             <div class="position-fixed w-100 text-center" style="z-index:9999;">
                 <div class="alert alert-danger alert-dismissible fade show d-inline-block">
+                    @if(empty($errors->first('mssg')))
+                    Datos incorrectos
+                    @else
                     {!! $errors->first('mssg') !!}
+                    @endif
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

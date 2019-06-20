@@ -85,6 +85,7 @@ class CategoriaController extends Controller
             $data = Categoria::create($ARR_data);
             $data->partes()->sync($request->get('familia_id'));
         } else {
+            unset($data["partes"]);
             $data->fill($ARR_data);
             $data->partes()->sync($request->get('familia_id'));
             $data->save();

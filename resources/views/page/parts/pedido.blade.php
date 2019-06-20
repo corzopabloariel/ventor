@@ -148,8 +148,6 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="mb-0">{{ $p["stmpdh_art"] }}</p>
-                                    <p class="mb-0">{!! $p->parte_id() !!}</p>
                                     <p class="mb-0">{!! $p["stmpdh_tex"] !!}</p>
                                 </td>
                                 <td>{!! $p->parte_id() !!}</td>
@@ -185,7 +183,14 @@
         @if(isset($datos["carrito"]))
         <div class="row mt-3">
             <div class="col-12 col-md-7 obs">
-                <p>Observaciones</p>
+                <p>Transporte</p>
+                <select name="transporteUSER" class="form-control" id="transporteUSER">
+                    @foreach($datos["transportes"] AS $i => $t)
+                    <option value="{{$i}}" @if($i == $datos["cliente"]["transporte_id"]) selected @endif>{{$t}}</option>
+                    @endforeach
+                </select>
+
+                <p class="mt-3">Observaciones</p>
                 <textarea name="observaciones" id="observaciones" rows="3" class="form-control" placeholder="Observaciones"></textarea>
             </div>
             <div class="col-12 col-md-5 valor">
@@ -442,55 +447,48 @@
     verificarStock = function(t, use, stock = null) {
         $(t).attr("disabled",true);
         nombre = $(t).closest("tr").find("td:nth-child(2) p:last-child").text();
-        alertify.confirm("ATENCIÓN",`¿Verificar stock del producto <strong>${nombre}</strong>?`,
-            function() {
-                let promise = new Promise(function (resolve, reject) {
-                    let url = `{{ url('/soap/${use}') }}`;
-                    var xmlHttp = new XMLHttpRequest();
-                    //xmlHttp.responseType = 'json';
-                    xmlHttp.open( "GET", url, true );
-                    xmlHttp.onload = function() {
-                        /**
-                         * -3 //ERR grande
-                         * -2 //ERR de conexión
-                         * -1 //ERR
-                         */
-                        resolve(xmlHttp.response);
-                    }
-                    xmlHttp.send( null );
-                });
-
-                promiseFunction = () => {
-                    promise
-                        .then(function(data) {
-                            stockData = parseInt(data);
-                            console.log(stockData);
-                            $(t).removeAttr("disabled");
-                            if(stockData < 0) 
-                                alertify.error("Ocurrió un error, intente más tarde");
-                            else {
-                                if(stock !== null) {
-                                    if(stockData > parseInt(stock)) {
-                                        $(t).removeClass("btn-secondary").addClass("btn-success");
-                                        alertify.success("Stock disponible");
-                                    } else if(stockData <= parseInt(stock) && stockData > 0) {
-                                        $(t).removeClass("btn-secondary").addClass("btn-warning");
-                                        alertify.warning("Stock inferior o igual a cantidad crítica");
-                                    } else {
-                                        $(t).removeClass("btn-secondary").addClass("btn-danger");
-                                        alertify.error("Sin Stock");
-                                    }
-                                }
-                            }
-                        })
-                };
-                alertify.notify(`Verificando STOCK de ${nombre}`, '', 5, function(){ });
-                promiseFunction();
-            },
-            function() {
-                $(t).removeAttr("disabled");
+        let promise = new Promise(function (resolve, reject) {
+            let url = `{{ url('/soap/${use}') }}`;
+            var xmlHttp = new XMLHttpRequest();
+            //xmlHttp.responseType = 'json';
+            xmlHttp.open( "GET", url, true );
+            xmlHttp.onload = function() {
+                /**
+                    * -3 //ERR grande
+                    * -2 //ERR de conexión
+                    * -1 //ERR
+                    */
+                resolve(xmlHttp.response);
             }
-        ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
+            xmlHttp.send( null );
+        });
+
+        promiseFunction = () => {
+            promise
+                .then(function(data) {
+                    stockData = parseInt(data);
+                    console.log(stockData);
+                    $(t).removeAttr("disabled");
+                    if(stockData < 0) 
+                        alertify.error("Ocurrió un error, intente más tarde");
+                    else {
+                        if(stock !== null) {
+                            if(stockData > parseInt(stock)) {
+                                $(t).removeClass("btn-secondary").addClass("btn-success");
+                                alertify.success("Stock disponible");
+                            } else if(stockData <= parseInt(stock) && stockData > 0) {
+                                $(t).removeClass("btn-secondary").addClass("btn-warning");
+                                alertify.warning("Stock inferior o igual a cantidad crítica");
+                            } else {
+                                $(t).removeClass("btn-secondary").addClass("btn-danger");
+                                alertify.error("Sin Stock");
+                            }
+                        }
+                    }
+                })
+        };
+        alertify.notify(`Verificando STOCK de ${nombre}`, '', 5, function(){ });
+        promiseFunction();
     }
     function cambio(t) {
         if($("#total").length) {
@@ -558,6 +556,7 @@
                     formData.append("_token","{{ csrf_token() }}");
                     formData.append("idUsuario",window.data.id);
                     formData.append("observaciones",$("#observaciones").val());
+                    formData.append("transporteID",$("#transporteUSER").val());
                     
                     formData.append("pedido", JSON.stringify(window.productos));
                     var xmlHttp = new XMLHttpRequest();

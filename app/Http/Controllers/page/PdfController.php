@@ -10,6 +10,7 @@ use App\ProductoVentor;
 use App\PedidoProducto;
 use App\Empresa;
 use App\Cliente;
+use App\Transporte;
 use Cookie;
 
 class PdfController extends Controller
@@ -21,6 +22,8 @@ class PdfController extends Controller
         $empresa = Empresa::first();
         $empresa["images"] = json_decode($empresa["images"], true);
         $data = [];
+        $data["transporte"] = Transporte::find($pedido["transporte_id"]);
+        $data["cliente"] = $pedido->cliente;
         $data["empresa"] = $empresa;
         $data["pedido"] = $pedido;
         $data["productos"] = $productos;

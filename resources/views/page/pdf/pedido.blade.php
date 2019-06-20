@@ -22,7 +22,8 @@
                 @php
                 $fecha = date("d/m/Y H:i:s",strtotime($pedido["autofecha"]));
                 echo "ID Pedido: {$pedido["id"]}<br/>";
-                echo "Fecha: {$fecha}";
+                echo "Fecha: {$fecha}<br/>";
+                echo "Cliente: {$cliente["nombre"]} - Nro. Cuenta: {$cliente["nrocta"]}";
                 @endphp
                 </td>
             </tr>
@@ -42,7 +43,6 @@
             @foreach($productos AS $p)
             <tr>
                 <td style="border-top: 1px solid #dee2e6; padding: .75rem;">
-                    <p style="color: #C01939">{{ $p->producto["stmpdh_art"] }}</p>
                     <p>{!! $p->producto["stmpdh_tex"] !!}</p>
                 </td>
                 <td style="border-top: 1px solid #dee2e6; padding: .75rem;">{!! $p->producto->parte_id() !!}</td>
@@ -74,6 +74,47 @@
                     <small style="color: #C01939">El total no incluye IVA ni impuestos internos</small>
                 </td>
             </tr>
+            
+            @if(!empty($pedido["observaciones"]))
+            <tr style="">
+                <td colspan="5">
+                <p style="color: #C01939; margin-top: 50px; margin-top: 10px;">OBSERVACIONES</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" style="padding: .75rem; border: 1px solid #dedede;">
+                    {{$pedido["observaciones"]}}
+                </td>
+            </tr>
+            @endif
+            @if(!empty($transporte))
+            <tr>
+                <td colspan="3" style="padding-top: 50px;">
+                <p style="color: #C01939;">TRANSPORTE</p>
+                <table width="100%" style="margin-top:15px;">
+                    <tbody>
+                    <tr>
+                        <td style="border-bottom: 2px solid #dee2e6; border-top: 1px solid #dee2e6; color: #0099D8; padding: .75rem; background: #F2F2F2; text-transform: uppercase">código</td>
+                        <td style="border-bottom: 2px solid #dee2e6; border-top: 1px solid #dee2e6; color: #0099D8; padding: .75rem; background: #F2F2F2; text-transform: uppercase">descripción</td>
+                        <td style="border-bottom: 2px solid #dee2e6; border-top: 1px solid #dee2e6; color: #0099D8; padding: .75rem; background: #F2F2F2; text-transform: uppercase">dirección</td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: 1px solid #dee2e6; padding: .75rem;">
+                            {!! $transporte["tracod"] !!}
+                        </td>
+                        <td style="border-top: 1px solid #dee2e6; padding: .75rem;">
+                            {!! $transporte["descrp"] !!}
+                        </td>
+                        <td style="border-top: 1px solid #dee2e6; padding: .75rem;">
+                            {!! $transporte["tradir"] !!}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            @endif
             </tbody>
         </table>
     </body>

@@ -25,10 +25,11 @@ use App\Pedido;
 use App\PedidoProducto;
 use App\Novedad;
 use App\Familiaparte;
+use App\Transporte;
 class GeneralController extends Controller
 {
     public $idioma = "es";
-    public $paginate = 6;
+    public $paginate = 15;
     /** ---------------------------- */
     public function general() {
         $empresa = Empresa::first();
@@ -364,6 +365,7 @@ class GeneralController extends Controller
     }
 
     public function pedido(Request $request) {
+        if(!auth()->guard('client')->check()) return redirect()->route('index');
         
         $title = "PEDIDO";
         $view = "page.parts.pedido";
@@ -436,11 +438,13 @@ class GeneralController extends Controller
         $usuario = Usuario::find($data["idUsuario"]);
         $cliente = Cliente::where("nrodoc",$usuario["username"])->first();
 
+        $cliente->fill(["transporte_id" => $data["transporteID"]]);
+        $cliente->save();
         $Arr_data = [];
         $Arr_data["is_adm"] = 2;
         
         $Arr_data["usuario_id"] = NULL;
-        $Arr_data["transporte_id"] = $cliente["transporte_id"];
+        $Arr_data["transporte_id"] = $data["transporteID"];
         $Arr_data["cliente_id"] = $cliente["id"];
         $Arr_data["estado"] = 1;
         $Arr_data["observaciones"] = $data["observaciones"];
@@ -468,8 +472,11 @@ class GeneralController extends Controller
         $title = "CARRITO";
         $view = "page.parts.pedido";
         $datos = [];
+        
         $datos["menu"] = self::menu([]);
         $datos["empresa"] = self::general();
+        $datos["transportes"] = Transporte::orderBy("descrp")->get()->pluck("descrp","id");
+        $datos["cliente"] = Cliente::where("nrodoc",auth()->guard('client')->user()["username"])->first();
         $datos["carrito"] = 1;
         $datos["productos"] = [];
         return view('page.distribuidor',compact('title','view','datos'));

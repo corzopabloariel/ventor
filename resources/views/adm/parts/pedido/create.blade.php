@@ -68,6 +68,7 @@
                 table.append('<thead class="thead-dark"></thead>');
             table.find("thead").append(`<th class="${e.CLASS}" style="width:${e.WIDTH};min-width:${e.WIDTH}">${e.NAME}</th>`);
         });
+        table.find("thead").append(`<th></th>`);
         table.find("thead").append(`<th class="text-uppercase text-center" style="width:150px; min-width:150px;">acción</th>`);
 
         window.elementos.data.forEach(function(data) {
@@ -93,6 +94,14 @@
                 }
                 tr += `<td data-${c.COLUMN} class="${c.CLASS}" style="width:${c.WIDTH};min-width:${c.WIDTH}">${td}</td>`;
             });
+            htmlSemaforo = "";
+            htmlSemaforo += `<td class="text-center">`
+                htmlSemaforo += `<button class="btn btn-secondary" onclick="verificarStock(this,'${data.use}',${ data.stock_mini === null ? 0 : data.stock_mini });" type="button">`;
+                    htmlSemaforo += `<i class="fas fa-traffic-light"></i>`;
+                htmlSemaforo += `</button>`;
+            htmlSemaforo += `</td>`;
+            tr += htmlSemaforo;
+
             tr += `<td class="text-center">`;
                 tr += `<input onclick="recalcular(this)" type="number" value="0" class="form-control text-center cantidad" name="cantidad[]" min="${data.cantminvta}" step="${data.cantminvta}">`;
                 tr += `<button type="button" onclick="pedir(this)" class="btn btn-warning text-uppercase btn-block mt-1 rounded-0 btn-sm">pedir</button>`
@@ -111,6 +120,52 @@
                     $("#tabla").find(`tbody tr[data-id="${x}"] .cantidad`).val(window.session[x]);
             }
         }
+    }
+    verificarStock = function(t, use, stock = null) {
+        $(t).attr("disabled",true);
+        nombre = $(t).closest("tr").find("td:nth-child(2) p:last-child").text();
+        let promise = new Promise(function (resolve, reject) {
+            let url = `{{ url('/soap/${use}') }}`;
+            var xmlHttp = new XMLHttpRequest();
+            //xmlHttp.responseType = 'json';
+            xmlHttp.open( "GET", url, true );
+            xmlHttp.onload = function() {
+                /**
+                    * -3 //ERR grande
+                    * -2 //ERR de conexión
+                    * -1 //ERR
+                    */
+                resolve(xmlHttp.response);
+            }
+            xmlHttp.send( null );
+        });
+
+        promiseFunction = () => {
+            promise
+                .then(function(data) {
+                    stockData = parseInt(data);
+                    console.log(stockData);
+                    $(t).removeAttr("disabled");
+                    if(stockData < 0) 
+                        alertify.error("Ocurrió un error, intente más tarde");
+                    else {
+                        if(stock !== null) {
+                            if(stockData > parseInt(stock)) {
+                                $(t).removeClass("btn-secondary").addClass("btn-success");
+                                alertify.success("Stock disponible");
+                            } else if(stockData <= parseInt(stock) && stockData > 0) {
+                                $(t).removeClass("btn-secondary").addClass("btn-warning");
+                                alertify.warning("Stock inferior o igual a cantidad crítica");
+                            } else {
+                                $(t).removeClass("btn-secondary").addClass("btn-danger");
+                                alertify.error("Sin Stock");
+                            }
+                        }
+                    }
+                })
+        };
+        alertify.notify(`Verificando STOCK de ${nombre}`, '', 5, function(){ });
+        promiseFunction();
     }
     /** */
     init();
