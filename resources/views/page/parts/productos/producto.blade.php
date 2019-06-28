@@ -58,7 +58,7 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <p class="codigo mb-1">{{ $datos["producto"]["stmpdh_art"] }}</p>
-                        <p class="para text-uppercase mb-1">para {{ $datos["producto"]->modelo->marca["web_marcas"] }}</p>
+                        <p class="para text-uppercase mb-1">{{ $datos["producto"]->modelo->marca["web_marcas"] }}</p>
                         <div class="title">{!! $datos["producto"]["stmpdh_tex"] !!}</div>
                         <div class="table-responsive">
                             <table class="table w-100">

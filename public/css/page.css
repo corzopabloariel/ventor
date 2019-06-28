@@ -974,7 +974,8 @@ footer .marca {
 }
 
 /* hide the placeholder when input has some text typed in */
-.wrapper-trabaje input[required]:not([type="file"]):valid + label{
+.wrapper-trabaje input[required]:not([type="file"]):valid + label,
+.wrapper-trabaje select[required]:valid + label{
     display: none;
 }
 

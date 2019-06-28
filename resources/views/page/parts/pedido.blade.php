@@ -57,15 +57,7 @@
         @if(isset($datos["carrito"]))
             <h2 class="title mb-3 text-uppercase">carrito (<span id="cantProductos">0</span>)</h2>
         @else
-        <div class="row justify-content-center mt-2 mb-5">
-            <div class="col-12 col-md-6">
-                <form action="" method="post" class="buscador position-relative">
-                    @csrf
-                    <button type="submit" class="btn btn-link position-absolute"><i class="fas fa-search"></i></button>
-                    <input type="text" name="buscar" value="@if(!empty($datos['buscar'])) {{ $datos['buscar'] }} @endif" class="form-control" placeholder="Buscar código, parte, marca, nombre">
-                </form>
-            </div>
-        </div>
+        
         @endif
         @if(isset($datos["carrito"]))
         <div class="table-responsive">
@@ -121,6 +113,30 @@
                 </div>
             </div>
             <div class="col-12 col-md-9">
+                <div class="row justify-content-center mb-3">
+                    <div class="col-12 col-md-6">
+                        <form action="" method="post" class="buscador position-relative">
+                            @csrf
+                            <div class="position-relative">
+                                <button type="submit" class="btn btn-link position-absolute"><i class="fas fa-search"></i></button>
+                                <input type="text" name="buscar" value="@if(!empty($datos['buscar'])) {{ $datos['buscar'] }} @endif" class="form-control" placeholder="Buscar código o nombre">
+                            </div>
+                            <div class="d-flex align-items-baseline mt-3">
+                                <select name="para" id="para" class="form-control">
+                                    <option></option>
+                                    @foreach($datos["para"] AS $i => $v)
+                                        @if(isset($datos["paraID"]))
+                                        <option @if($datos["paraID"] == $i) selected @endif value="{{$i}}">{{$v}}</option>
+                                        @else
+                                        <option value="{{$i}}">{{$v}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                                <button type="submit" class="btn text-white btn-sm btn-secondary text-uppercase ml-2">filtrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table w-100" id="tabla">
                         <thead>
@@ -148,7 +164,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="mb-0">{!! $p["stmpdh_tex"] !!}</p>
+                                    <p class="mb-0" style="font-weight:bold">{{ $p["stmpdh_art"] }}</p>
+                                    <p class="mb-0" style="color: #212529">{!! $p["stmpdh_tex"] !!}</p>
                                 </td>
                                 <td>{!! $p->parte_id() !!}</td>
                                 <td class="text-center">{{ $p["cantminvta"] }}</td>
@@ -224,7 +241,10 @@
 <script>
     const imgDefault = "{{ asset('images/general/no-img.png') }}";
     $(document).ready(function() {
-        
+        $("#para").select2({
+            theme: "bootstrap",
+            placeholder: "Marca"
+        });
         if($("input[type='number']").length) {
             let config = {
                 decrementButton: '<i class="fas fa-minus"></i>',
@@ -301,7 +321,7 @@
                 `<img class="border w-100" src="${data.image}" onerror="this.src='${imgDefault}'"/>` +
                 `</div>` +
             `</td>` +
-            `<td><p class="mb-0">${data.stmpdh_tex}</p></td>` +
+            `<td><p class="mb-0" style="font-weight:bold">${data.stmpdh_art}</p><p class="mb-0" style="color:#212529">${data.stmpdh_tex}</p></td>` +
             `<td>${data.parte_id}</td>` +
             `<td class="text-center">${data.cantminvta}</td>` +
             `<td class="text-right">$ ${data.precioF}</td>` +

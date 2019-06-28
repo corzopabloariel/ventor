@@ -415,7 +415,8 @@ class ProductoController extends Controller
                 }
                 ProductoVentor::create($echo);
             }
-		}
+        }
+        //Log::info("Total de registros: {$total}");
         echo $total;
     }
     public function clientes() {
@@ -579,30 +580,53 @@ class ProductoController extends Controller
         $dbf = Table::fromFile('file/USR_EMPLEADOS.DBF');
 		$pass = '$2y$10$ZbqDQTIEWuKiwgFdWUEdvePdjjLlpdLrP0ew7x0n5bcOSu.V20HPS';
 		$property		= [ "nroleg" , "name" , "username" , "direma" ];
-		
+        // -  -  --> Acceden al ADM
+        //Resto a la tabla usuario
 		foreach ($dbf as $record) {
             $arrData = [];
             $nrodoc = $record->NRODO2;
-            $data = User::where('username','LIKE',"EMP_{$nrodoc}")->first();
-            for( $j = 0 ; $j < count($property) ; $j++ ) {
-                $valor = strtoupper( $property[$j] );
-                $key = $property[$j];
-                if($key == "name")
-                    $valor = "NOMBRE";
-                if($key == "username")
-                    $valor = "NRODO2";
-                $valorData = $record->$valor;
-                $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
-                $arrData[$key] = $valorData;
+            if($nrodoc == "12557187" || $nrodoc == "28465591" || $nrodoc == "12661482") {
+                $data = User::where('username','LIKE',"EMP_{$nrodoc}")->first();
+                for( $j = 0 ; $j < count($property) ; $j++ ) {
+                    $valor = strtoupper( $property[$j] );
+                    $key = $property[$j];
+                    if($key == "name")
+                        $valor = "NOMBRE";
+                    if($key == "username")
+                        $valor = "NRODO2";
+                    $valorData = $record->$valor;
+                    $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
+                    $arrData[$key] = $valorData;
+                }
+                $total ++;
+                $arrData["username"] = "EMP_{$arrData["username"]}";
+                if(empty($data))
+                    User::create( ['name' => $arrData["name"], 'username' => $arrData["username"], 'password' => $pass, 'is_admin' => 2, 'direma' => $arrData["direma"]] );
+                else {
+                    $data->fill( ['name' => $arrData["name"], 'direma' => $arrData["direma"]] );
+                    $data->save();
+                }
+            } else {
+                $data = Usuario::where('username','LIKE',"%EMP_{$nrodoc}%")->first();
+                $total ++;
+                for( $j = 0 ; $j < count($property) ; $j++ ) {
+                    $valor = strtoupper( $property[$j] );
+                    $key = $property[$j];
+                    if($key == "name")
+                        $valor = "NOMBRE";
+                    if($key == "username")
+                        $valor = "NRODO2";
+                    $valorData = $record->$valor;
+                    $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
+                    $arrData[$key] = $valorData;
+                }
+                if(empty($data)) {
+                    Usuario::create( ['name' => $arrData["name"], 'username' => "EMP_{$nrodoc}", 'password' => $pass, 'email' => $arrData["direma"], 'vendedor_id' => null, 'is_vendedor' => 1] );
+                } else {
+                    $data->fill( [ 'name' => $arrData["name"],'email' => $arrData["direma"] ] );
+                    $data->save();
+                }
             }
-            $total ++;
-            $arrData["username"] = "EMP_{$arrData["username"]}";
-            if(empty($data))
-                User::create( ['name' => $arrData["name"], 'username' => $arrData["username"], 'password' => $pass, 'is_admin' => 2, 'direma' => $arrData["direma"]] );
-			else {
-                $data->fill( ['name' => $arrData["name"], 'direma' => $arrData["direma"]] );
-				$data->save();
-			}
 		}
         echo $total;
     }

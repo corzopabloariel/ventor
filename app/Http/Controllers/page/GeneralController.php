@@ -267,6 +267,7 @@ class GeneralController extends Controller
         if(auth()->guard('client')->check()) {
             $datos["descargas"] = Descarga::where("privado",1)->orderBy("orden")->get();
             $datos["descargasO"] = Descarga::where("privado",1)->where("otras",1)->orderBy("orden")->get();
+            $datos["descargasP"] = Descarga::where("privado",0)->orderBy("orden")->get();
             $datos["privado"] = 1;
         } else {
             $datos["descargas"] = Descarga::where("privado",0)->orderBy("orden")->get();
@@ -366,20 +367,31 @@ class GeneralController extends Controller
 
     public function pedido(Request $request) {
         if(!auth()->guard('client')->check()) return redirect()->route('index');
-        
+        $dataRequest = $request->all();
         $title = "PEDIDO";
         $view = "page.parts.pedido";
         $datos = [];
         $buscar = null;
+        $para = null;
         $datos["menu"] = self::menu([]);
         $datos["empresa"] = self::general();
-        if(!empty($request->all()["buscar"])) {
-            $buscar = $request->all()["buscar"];
+        if(!empty($dataRequest["buscar"]) && empty($dataRequest["para"])) {
+            $buscar = $dataRequest["buscar"];
             $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate);
+        } else if(empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
+            $para = $dataRequest["para"];
+            $datos["productos"] = ProductoVentor::where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+        } else if(!empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
+            $buscar = $dataRequest["buscar"];
+            $para = $dataRequest["para"];
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
         } else
-        $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
+        $datos["para"] = ProductoVentor::orderBy("marca")->pluck("marca","marca_id");
+        
         $datos["buscar"] = $buscar;
-        //dd($datos);
+        $datos["paraID"] = $para;
+        
         return view('page.distribuidor',compact('title','view','datos'));
     }
 
@@ -388,17 +400,25 @@ class GeneralController extends Controller
         $dataRequest = $request->all();
         $view = "page.parts.pedido";
         $datos = [];
-        $buscar = null;
+        $buscar = $para = null;
         $datos["menu"] = self::menu([]);
         $datos["empresa"] = self::general();
-        if(!empty($dataRequest["buscar"])) {
+        if(!empty($dataRequest["buscar"]) && empty($dataRequest["para"])) {
             $buscar = $dataRequest["buscar"];
-            $datos["buscar"] = $buscar;
-            $datos["productos"] = ProductoVentor::where("familia_id",$id)->where("stmpdh_tex","LIKE","%{$dataRequest["buscar"]}%")->orderBy("marca")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate);
+        } else if(empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
+            $para = $dataRequest["para"];
+            $datos["productos"] = ProductoVentor::where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+        } else if(!empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
+            $buscar = $dataRequest["buscar"];
+            $para = $dataRequest["para"];
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
         } else
             $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
+        $datos["para"] = ProductoVentor::orderBy("marca")->pluck("marca","marca_id");
         $datos["buscar"] = $buscar;
-        //dd($datos//);
+        $datos["paraID"] = $para;
+        //dd($datos);
         $datos["categoria"] = Categoria::find($id);
         $datos["menu"] = self::menu($datos["categoria"]->padres());
         //dd($datos["menu"]);
@@ -420,13 +440,23 @@ class GeneralController extends Controller
         //dd($ids);
         $datos["empresa"] = self::general();
         $datos["menu"] = self::menu($ids);
+        $buscar = $para = null;
         
-        if(!isset($dataRequest["buscar"]))
-            $datos["productos"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->paginate($this->paginate);
-        else {
-            $datos["buscar"] = $dataRequest["buscar"];
-            $datos["productos"] = ProductoVentor::where("parte_id",$id)->where("stmpdh_tex","LIKE","%{$dataRequest["buscar"]}%")->orderBy("marca")->paginate($this->paginate);
-        }
+        if(!empty($dataRequest["buscar"]) && empty($dataRequest["para"])) {
+            $buscar = $dataRequest["buscar"];
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate);
+        } else if(empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
+            $para = $dataRequest["para"];
+            $datos["productos"] = ProductoVentor::where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+        } else if(!empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
+            $buscar = $dataRequest["buscar"];
+            $para = $dataRequest["para"];
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+        } else
+            $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
+        $datos["para"] = ProductoVentor::orderBy("marca")->pluck("marca","marca_id");
+        $datos["buscar"] = $buscar;
+        $datos["paraID"] = $para;
         return view('page.distribuidor',compact('title','view','datos'));
     }
 

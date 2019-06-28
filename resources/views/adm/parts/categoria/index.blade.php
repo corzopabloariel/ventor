@@ -91,7 +91,7 @@
                 }
                 $(`[name="${x}"]`).val(data[x]).trigger("change");
             }
-            $("#src-image").attr("style",`filter:${data.hsl}`);
+            //$("#src-image").attr("style",`filter:${data.hsl}`);
         } else {
             if($("#tabla tbody").length)
                 $("#orden").val($("#tabla tbody").find("tr:last-child() td[data-orden]").text());
@@ -338,7 +338,7 @@
         let result = solver.solve();
         
         $("#hsl").val(result.filter);
-        $("#src-image").attr("style",`filter:${result.filter}`);
+        //$("#src-image").attr("style",`filter:${result.filter}`);
         if(tipo)
             $("#color").val($(t).val());
         else
@@ -468,7 +468,7 @@
                 if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_FILE") {
                     date = new Date();
                     img = `{{ asset('${td}') }}?t=${date.getTime()}`;
-                    td = `<img style="filter:${data.hsl}" class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
+                    td = `<img class="w-100" src="${img}" onerror="this.src='${src}'"/>`;
                 }
                 if(window.pyrus.especificacion[c.COLUMN].TIPO == "TP_COLOR") {
                     td = `${td}<div class="mt-1" style="height:10px; background: ${td}"></div>`;

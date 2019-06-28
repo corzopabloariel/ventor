@@ -14,12 +14,15 @@ use App\Email;
 
 class FormController extends Controller
 {
+    public $secret = "6LeFv6IUAAAAAPY4fMwTKKJ957JoVkMoaANobzvm";
+
     public function index(Request $request, $seccion) {
         $datosRequest = $request->all();
         unset($datosRequest["_method"]);
         unset($datosRequest["_token"]);
+        
         if($seccion == "trabaje")
-            return self::$seccion($request, $datosRequest);
+            return self::$seccion($request, $datosRequest, $request->file('curriculum'));
         else
             return self::$seccion($datosRequest);
         /**
@@ -78,11 +81,19 @@ class FormController extends Controller
         else
             return back()->withSuccess(['mssg' => "Correo enviado correctamente"]);
     }
-    public function trabaje($request, $data) {
-        $archivo = $request->file('curriculum');
-        Mail::to('corzo.pabloariel@gmail.com')->send(new Trabajo($data, $archivo));
+    public function trabaje($request, $data, $archivo) {
+        //dd($archivo);
+        $email = Email::where("formulario","trabaje")->first();
         //Mail::to($mandar)->send(new Contacto($data));
+        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$this->secret}&response={$data["g-recaptcha-response"]}&remoteip=".$_SERVER['REMOTE_ADDR']);
+        $response = json_decode($response, true);
+
+        //if($response["success"] == false)
+            //return back()->withErrors(['mssg' => "Ha ocurrido un error de captcha"]);
         
+        Mail::to('corzo.pabloariel@gmail.com')->send(new Trabajo($data, $archivo));
+        Mail::to('ventor@ventor.com.ar')->send(new Trabajo($data, $archivo));
+        Mail::to($email["email"])->send(new Trabajo($data, $archivo));
         if (count(Mail::failures()) > 0)
             return back()->withErrors(['mssg' => "Ha ocurrido un error al enviar el correo"]);
         else

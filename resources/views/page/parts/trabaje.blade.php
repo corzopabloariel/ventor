@@ -1,6 +1,6 @@
 <div class="wrapper-trabaje py-5">
     <div class="container">
-        <form action="{{ url('/form/trabaje') }}" novalidate id="form" onsubmit="event.preventDefault(); enviar(this);" method="post">
+        <form action="{{ url('/form/trabaje') }}" novalidate id="form" onsubmit="event.preventDefault(); enviar(this);" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-12 col-md-5">
@@ -28,31 +28,31 @@
                     <div class="mt-4 postulacion">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="radio" value="vendedor" name="postular">
+                                <input class="form-check-input" type="checkbox" value="vendedor" name="postular[]">
                                 Vendedor en zona
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="radio" value="atencionCliente" name="postular">
+                                <input class="form-check-input" type="checkbox" value="atencionCliente" name="postular[]">
                                 Atención al cliente (CABA)
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="radio" value="administracionCABA" name="postular">
+                                <input class="form-check-input" type="checkbox" value="administracionCABA" name="postular[]">
                                 Administración (CABA)
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="radio" value="otroCABA" name="postular">
+                                <input class="form-check-input" type="checkbox" value="otroCABA" name="postular[]">
                                 Otro (CABA)
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="radio" value="vendedor" name="postular">
+                                <input class="form-check-input" type="checkbox" value="produccion" name="postular[]">
                                 Producción
                             </label>
                         </div>
@@ -82,23 +82,13 @@
                         </div>
                     </div>
 
-                    <h3 class="title text-uppercase mt-5">trabajo</h3>
+                    <h3 class="title text-uppercase mt-5">trabajos anteriores</h3>
                     <div class="trabajos"></div>
                     <a class="text-primary mt-2 d-inline-block" style="cursor: pointer" onclick="trabajoAdd(this)">+ Añadir Trabajo</a>
 
                     <h3 class="title text-uppercase mt-5">educación</h3>
                     <div class="educaciones"></div>
                     <a class="text-primary mt-2 d-inline-block" style="cursor: pointer" onclick="educacionAdd(this)">+ Añadir Educación</a>
-                </div>
-            </div>
-            
-            <div class="row mt-5">
-                <div class="col-12 col-md-4">
-                    <h3 class="title text-uppercase">redes sociales</h3>
-                </div>
-                <div class="col-12 col-md-8">
-                    <div class="redes"></div>
-                    <a class="text-primary mt-2 d-inline-block" style="cursor: pointer" onclick="redesAdd(this)">+ Añadir Red Social</a>
                 </div>
             </div>
             
@@ -148,15 +138,13 @@
 <script src='https://www.google.com/recaptcha/api.js'></script>
 <script>
     window.pyrus = new Pyrus("formulario_recursos");
-    window.redes = new Pyrus("formulario_redes");
+    
     window.trabajos = new Pyrus("formulario_trabajo");
     window.educacion = new Pyrus("formulario_educacion");
     
-    window.redesID = 1;
     window.trabajosID = 1;
     window.educacionID = 1;
     $("#formulario").html(window.pyrus.formulario());
-    $("form .redes").html(window.redes.formulario(window.redesID,"redes"));
     $("form .trabajos").html(`<div class="bg-light p-4 position-relative trabajo"><small onclick="removeThis(this,'.trabajo','¿Eliminar Trabajo?');" class="text-danger position-absolute" style="right:10px;top:10px; z-index:1; cursor: pointer"><i class="fas fa-times"></i> Eliminar</small>${window.trabajos.formulario(window.trabajosID,"trabajos")}</div>`);
     $("form .educaciones").html(`<div class="bg-light p-4 position-relative educacion"><small onclick="removeThis(this,'.educacion','¿Eliminar Educación?');" class="text-danger position-absolute" style="right:10px;top:10px; z-index:1; cursor: pointer"><i class="fas fa-times"></i> Eliminar</small>${window.educacion.formulario(window.educacionID,"educacion")}</div>`);
 
@@ -168,10 +156,6 @@
         $(t).attr("disabled", true);
     };
 
-    redesAdd = function(t) {
-        window.redesID ++;
-        $("form .redes").append(`<div class="position-relative red"><small onclick="removeThis(this,'.red','¿Eliminar Red Social?');" class="text-danger position-absolute" style="right:0;top:0; z-index:1; cursor: pointer"><i class="fas fa-times"></i> Eliminar</small>${window.redes.formulario(window.redesID,"redes")}</div>`);
-    };
     trabajoAdd = function(t) {
         window.trabajosID ++;
         $("form .trabajos").append(`<div class="bg-light p-4 position-relative trabajo"><small onclick="removeThis(this,'.trabajo','¿Eliminar Trabajo?');" class="text-danger position-absolute" style="right:10px;top:10px; z-index:1; cursor: pointer"><i class="fas fa-times"></i> Eliminar</small>${window.trabajos.formulario(window.trabajosID,"trabajos")}</div>`);
@@ -194,10 +178,10 @@
      */
     readONLY = function(t,id) {
         $(`#${id}`).val("");
-        if ( $(`#${id}`).is(':disabled') )
-            $(`#${id}`).removeAttr("disabled");
+        if ( $(`#${id}`).is('[readonly]' ) )
+            $(`#${id}`).removeAttr("readonly");
         else
-            $(`#${id}`).attr("disabled",true);
+            $(`#${id}`).attr("readonly",true);
     }
     
 validar = function(t, marca = true, visible = true) {
@@ -240,9 +224,14 @@ validarSTRING = function(t) {
     return string;
 }
 enviar = function(t) {
+    googleResponse = $('#g-recaptcha-response').val();
     if(!validar($("#form"))) {
         str = validarSTRING($("#form"));
         alertify.notify(`Complete ${str} para enviar`, 'warning');
+        return false;
+    }
+    if(googleResponse == "") {
+        alertify.notify(`Verificación CAPTCHA no seleccionada`, 'warning');
         return false;
     }
     document.getElementById("form").submit();
