@@ -17,12 +17,19 @@
                     <li class="list-group-item px-0 text-uppercase border-bottom-0 position-relative pr-1">
                         <div data-toggle="collapse" data-target="#sesion" aria-controls="sesion" aria-expanded="false" aria-label="Toggle navigation"><a href="#">Mis datos</a><i class="fas fa-caret-down position-absolute" style="right: 0; top: 15px"></i></div>
                         <ul class="collapse list-group list-group-flush" id="sesion">
+                            @if(auth()->guard('client')->user()["username"] != "111")
                             <li class="list-group-item px-0 pr-1 position-relative">
-                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="{{ URL::to('atencion/transmision') }}"><i class="fas fa-id-card mr-3"></i>Mis datos</a>
+                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="{{ URL::to('cliente/datos') }}"><i class="fas fa-id-card mr-3"></i>Mis datos</a>
                             </li>
+                            @endif
                             <li class="list-group-item px-0 pr-1 position-relative">
-                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="{{ URL::to('atencion/pagos') }}"><i class="fas fa-cog mr-3"></i>Configuración</a>
+                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="#" onclick="confirguracionMarkUP(this)"><i class="fas fa-cog mr-3"></i>Configuración</a>
                             </li>
+                            @if(auth()->guard('client')->user()["is_vendedor"] == 0)
+                            <li class="list-group-item px-0 pr-1 position-relative">
+                                <a style="font-size:inherit; font-weight: normal" class="d-block isDisabled" href="{{ URL::to('cliente/pedidos') }}"><i class="fas fa-cash-register mr-3"></i>Mis pedidos</a>
+                            </li>
+                            @endif
                             <li class="list-group-item px-0 pr-1 position-relative">
                                 <a style="font-size:inherit; font-weight: normal" onclick="limpiar()" class="d-block d-flex justify-content-between align-items-center" href="{{ URL::to('salir') }}">Cerrar sesión<i class="text-danger fas fa-sign-out-alt"></i></a>
                             </li>
@@ -117,12 +124,19 @@
 							<i class="fas fa-user-circle mr-2"></i>Bienvenido, {{auth()->guard('client')->user()["name"]}}
 						</span>
                         <ul class="submenu w-100 list-unstyled shadow-sm" style="font-size: 17px;">
+                            @if(auth()->guard('client')->user()["username"] != "111")
                             <li class="p-0">
                                 <a style="font-size:inherit; font-weight: normal" class="d-block" href="{{ URL::to('cliente/datos') }}"><i class="fas fa-id-card mr-3"></i>Mis datos</a>
                             </li>
+                            @endif
                             <li class="p-0">
                                 <a style="font-size:inherit; font-weight: normal" class="d-block" href="#" onclick="confirguracionMarkUP(this)"><i class="fas fa-cog mr-3"></i>Configuración</a>
                             </li>
+                            @if(auth()->guard('client')->user()["is_vendedor"] == 0)
+                            <li class="p-0">
+                                <a style="font-size:inherit; font-weight: normal" class="d-block isDisabled" href="{{ URL::to('cliente/pedidos') }}"><i class="fas fa-cash-register mr-3"></i>Mis pedidos</a>
+                            </li>
+                            @endif
                             <li class="p-0">
                                 <a style="font-size:inherit; font-weight: normal" onclick="limpiar()" class="d-block d-flex justify-content-between align-items-center" href="{{ URL::to('salir') }}">Cerrar sesión<i class="text-danger fas fa-sign-out-alt"></i></a>
                             </li>
@@ -146,6 +160,20 @@
                     </li>
                     <li data-productos="" class="hidden-tablet" data-carrito>
                         <a href="{{ URL::to('carrito') }}">Carrito</a>
+                    </li>
+                    <li data-atencion="" class="hidden-tablet">
+                        <a data-href="atencion" href="#">@if(auth()->guard('client')->user()["is_vendedor"] == 0) Cuenta @else Cuentas @endif</a>
+                        <ul class="submenu list-unstyled shadow-sm">
+                            <li>
+                                <a href="{{ URL::to('atencion/transmision') }}">Análisis de transmisión</a>
+                            </li>
+                            <li>
+                                <a href="{{ URL::to('atencion/pagos') }}">Información sobre pagos</a>
+                            </li>
+                            <li>
+                                <a href="{{ URL::to('atencion/consulta') }}">Consulta general</a>
+                            </li>
+                        </ul>
                     </li>
                     <li data-descargas="" class="hidden-tablet">
                         <a href="{{ route('descargas') }}">Descargas</a>

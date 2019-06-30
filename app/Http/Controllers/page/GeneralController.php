@@ -383,7 +383,7 @@ class GeneralController extends Controller
             $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->where("username","!=","111")->where("is_vendedor",0)->get();
             $clientes = Cliente::where("vendedor_id",$vendedor["id"])->where("nrodoc","!=","111")->get();
             foreach($clientes AS $c)
-                $c["nombreX"] = "{$c["nrocta"]} {$c["nombre"]}";
+                $c["nombreX"] = "[{$c["nrocta"]}] {$c["nombre"]}";
             $datos["clientes"] = $clientes->pluck("nombreX","id");
         } else if(auth()->guard('client')->user()["is_vendedor"] == 2) {
             $clientes = Cliente::where("nrodoc","!=","111")->get();
@@ -427,7 +427,7 @@ class GeneralController extends Controller
             $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->where("username","!=","111")->where("is_vendedor",0)->get();
             $clientes = Cliente::where("vendedor_id",$vendedor["id"])->where("nrodoc","!=","111")->get();
             foreach($clientes AS $c)
-                $c["nombreX"] = "{$c["nrocta"]} {$c["nombre"]}";
+                $c["nombreX"] = "[{$c["nrocta"]}] {$c["nombre"]}";
             $datos["clientes"] = $clientes->pluck("nombreX","id");
         } else if(auth()->guard('client')->user()["is_vendedor"] == 2) {
             $clientes = Cliente::where("nrodoc","!=","111")->get();
@@ -481,7 +481,7 @@ class GeneralController extends Controller
             $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->where("username","!=","111")->where("is_vendedor",0)->get();
             $clientes = Cliente::where("vendedor_id",$vendedor["id"])->where("nrodoc","!=","111")->get();
             foreach($clientes AS $c)
-                $c["nombreX"] = "{$c["nrocta"]} {$c["nombre"]}";
+                $c["nombreX"] = "[{$c["nrocta"]}] {$c["nombre"]}";
             $datos["clientes"] = $clientes->pluck("nombreX","id");
         } else if(auth()->guard('client')->user()["is_vendedor"] == 2) {
             $clientes = Cliente::where("nrodoc","!=","111")->get();
@@ -531,7 +531,7 @@ class GeneralController extends Controller
         $Arr_data["estado"] = 1;
         $Arr_data["observaciones"] = $data["observaciones"];
         $pedido = Pedido::create($Arr_data);
-        ($pedido);
+        //($pedido);
         $pedido_id = $pedido["id"];
         //dd($pedido_id);
         foreach($data["pedido"] AS $id => $val) {

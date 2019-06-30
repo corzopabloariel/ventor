@@ -52,12 +52,6 @@
                 </a>
             </li>
             <li>
-                <a data-link="a" href="{{ route('vendedor.index') }}">
-                    <i class="fas fa-portrait"></i>
-                    <span class="nav-label">Vendedores</span>
-                </a>
-            </li>
-            <li>
                 <a href="#productoSubmenu" data-toggle="collapse" aria-expanded="false">
                     <i class="fas fa-industry"></i>
                     <span class="nav-label">Productos</span>
@@ -150,6 +144,18 @@
                 <a data-link="a" href="{{ route('clientes.index') }}">
                     <i class="fas fa-id-card-alt"></i>
                     <span class="nav-label">Clientes</span>
+                </a>
+            </li>
+            <li>
+                <a data-link="a" href="{{ route('vendedor.index') }}">
+                    <i class="fas fa-portrait"></i>
+                    <span class="nav-label">Vendedores</span>
+                </a>
+            </li>
+            <li>
+                <a data-link="a" href="{{ route('empleados.index') }}">
+                    <i class="fas fa-address-card"></i>
+                    <span class="nav-label">Empleados</span>
                 </a>
             </li>
             <li><hr/></li>

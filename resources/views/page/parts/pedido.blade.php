@@ -134,31 +134,33 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-12 col-md-6">
-                        <div class="d-flex align-items-end justify-content-end" style="height: 39.5px;">
-                            <div class="form-check">
-                                <input class="form-check-input" onchange="changeMarkUp(this);" type="radio" name="markup" id="costo" value="costo" checked>
-                                <label class="form-check-label" for="costo">
-                                    COSTO
-                                </label>
+                    <div class="col-12 col-md-6 d-flex align-items-end">
+                        <div class="w-100">
+                            <div class="d-flex align-items-end justify-content-end" style="height: 39.5px;">
+                                <div class="form-check">
+                                    <input class="form-check-input" onchange="changeMarkUp(this);" type="radio" name="markup" id="costo" value="costo" checked>
+                                    <label class="form-check-label" for="costo">
+                                        COSTO
+                                    </label>
+                                </div>
+                                <div class="form-check ml-3">
+                                    <input class="form-check-input" onchange="changeMarkUp(this);" type="radio" name="markup" id="venta" value="venta">
+                                    <label class="form-check-label" for="venta">
+                                        VENTA
+                                    </label>
+                                </div>
                             </div>
-                            <div class="form-check ml-3">
-                                <input class="form-check-input" onchange="changeMarkUp(this);" type="radio" name="markup" id="venta" value="venta">
-                                <label class="form-check-label" for="venta">
-                                    VENTA
-                                </label>
+                            @if(auth()->guard('client')->user()["is_vendedor"] > 0)
+                            <div class="mt-3">
+                                <select onchange="selectClient(this);" name="clientesSELECT" id="clientesSELECT" class="form-control">
+                                    <option value=""></option>
+                                    @foreach($datos["clientes"] AS $i => $c)
+                                    <option value="{{$i}}">{{$c}}</option>
+                                    @endforeach
+                                </select>
                             </div>
+                            @endif
                         </div>
-                        @if(auth()->guard('client')->user()["is_vendedor"] > 0)
-                        <div class="mt-3">
-                            <select onchange="selectClient(this);" name="clientesSELECT" id="clientesSELECT" class="form-control">
-                                <option value=""></option>
-                                @foreach($datos["clientes"] AS $i => $c)
-                                <option value="{{$i}}">{{$c}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @endif
                     </div>
                 </div>
                 <div class="table-responsive">

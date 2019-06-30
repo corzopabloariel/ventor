@@ -24,4 +24,9 @@ class Cliente extends Model
         'transporte_id',//TRANSPORTE
         'descr_002'
     ];
+
+    public function localidad()
+    {
+        return $this->belongsTo('App\Localidad');
+    }
 }

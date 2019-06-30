@@ -125,6 +125,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('delete/{id}', ['uses' => 'adm\ClientesController@destroy', 'as' => '.destroy']);
         Route::post('update/{id}', ['uses' => 'adm\ClientesController@update', 'as' => 'update']);
     });
+    /**
+     * CLIENTES
+     */
+    Route::group(['prefix' => 'empleados', 'as' => 'empleados'], function() {
+        Route::get('index', ['uses' => 'adm\ClientesController@empleados', 'as' => '.index']);
+    });
 
     /**
      * MARCAS

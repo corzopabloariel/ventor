@@ -22,9 +22,9 @@
         }
     });
     confirguracionMarkUP = function(t) {
-        let modal = $("#markupConf");
-
-        modal.modal("show");
+        if($("#menuNav").is(":visible"))
+            $("#menuNav").modal("hide");
+        $("#markupConf").modal("show");
     };
     
     edifConfiguracion = function(t) {
@@ -44,6 +44,11 @@
         xmlHttp.onload = function() {
             $("#markupConf").modal("hide");
             alertify.success("Porcentaje de utilidad modificados");
+
+            if(localStorage.utilidadON !== undefined) {
+                $('input:radio[name="markup"][value="costo"]').prop('checked',true)
+                $("input:radio[name='markup'][value='costo']").trigger("change");
+            }
             console.log(xmlHttp.response);
         }
         xmlHttp.send( formData );
