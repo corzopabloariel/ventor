@@ -65,16 +65,18 @@ class AdmController extends Controller
                             'PEDIDO.xls'
                         )->getFile(), ['as' => 'PEDIDO.xls'])
             );
-        Mail::to('pedidos.ventor@gmx.com')
-            ->send(
-                new PedidoM(
-                    $mensaje,
-                    $title,
-                    Excel::download(
-                        new PedidoExport, 
-                            'PEDIDO.xls'
-                        )->getFile(), ['as' => 'PEDIDO.xls'])
-            );
+        if($cliente["nrodoc"] != "111") {
+            /*Mail::to('pedidos.ventor@gmx.com')
+                ->send(
+                    new PedidoM(
+                        $mensaje,
+                        $title,
+                        Excel::download(
+                            new PedidoExport, 
+                                'PEDIDO.xls'
+                            )->getFile(), ['as' => 'PEDIDO.xls'])
+                );*/
+        }
         if(empty($tipo))
             return redirect()->route('indexADM');
         else {

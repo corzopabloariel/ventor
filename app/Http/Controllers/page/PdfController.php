@@ -11,6 +11,7 @@ use App\PedidoProducto;
 use App\Empresa;
 use App\Cliente;
 use App\Transporte;
+use App\Vendedor;
 use Cookie;
 
 class PdfController extends Controller

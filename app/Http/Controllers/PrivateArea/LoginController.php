@@ -65,6 +65,26 @@ class LoginController extends Controller
         }
     }
 
+    public function login(Request $request) {
+        $this->validateLogin($request);
+        //dd(Auth::guard('client'));
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+            return $this->sendLockoutResponse($request);
+        }
+        if($this->guard()->validate($this->credentials($request))) {
+            if(Auth::guard('client')->attempt(['username' => $request->username, 'password' => $request->password])) {
+                return redirect('pedido');
+            }  else {
+                $this->incrementLoginAttempts($request);
+                return back()->withErrors(['mssg' => "Datos incorrectos"]);
+            }
+        } else {
+            // dd('ok');
+            $this->incrementLoginAttempts($request);
+            return back()->withErrors(['mssg' => "Cliente no encontrado"]);
+        }
+    }
     public function guard()
     {
         return Auth::guard('client');

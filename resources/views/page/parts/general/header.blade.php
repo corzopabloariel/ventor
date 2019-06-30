@@ -14,50 +14,61 @@
             <div class="modal-body">
                 <ul class="list-group list-group-flush">
                     @if(auth()->guard('client')->check())
-                    <li class="list-group-item text-uppercase"><a href="{{ route('index') }}">Home</a></li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('empresa') }}">Empresa</a></li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('pedido') }}">Pedido</a></li>
-                    @if(auth()->guard('client')->user()["username"] != "111")
-                    <li class="list-group-item text-uppercase" data-carrito><a href="{{ route('carrito') }}">Carrito</a></li>
-                    @endif
-                    <li class="list-group-item text-uppercase position-relative pr-1">
+                    <li class="list-group-item px-0 text-uppercase border-bottom-0 position-relative pr-1">
+                        <div data-toggle="collapse" data-target="#sesion" aria-controls="sesion" aria-expanded="false" aria-label="Toggle navigation"><a href="#">Mis datos</a><i class="fas fa-caret-down position-absolute" style="right: 0; top: 15px"></i></div>
+                        <ul class="collapse list-group list-group-flush" id="sesion">
+                            <li class="list-group-item px-0 pr-1 position-relative">
+                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="{{ URL::to('atencion/transmision') }}"><i class="fas fa-id-card mr-3"></i>Mis datos</a>
+                            </li>
+                            <li class="list-group-item px-0 pr-1 position-relative">
+                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="{{ URL::to('atencion/pagos') }}"><i class="fas fa-cog mr-3"></i>Configuración</a>
+                            </li>
+                            <li class="list-group-item px-0 pr-1 position-relative">
+                                <a style="font-size:inherit; font-weight: normal" onclick="limpiar()" class="d-block d-flex justify-content-between align-items-center" href="{{ URL::to('salir') }}">Cerrar sesión<i class="text-danger fas fa-sign-out-alt"></i></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item border-dark px-0 text-uppercase"><a href="{{ route('index') }}">Home</a></li>
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('empresa') }}">Empresa</a></li>
+                    <li class="list-group-item px-0 text-uppercase" data-pedido><a href="{{ route('pedido') }}">Pedido</a></li>
+                    <li class="list-group-item px-0 text-uppercase" data-carrito><a href="{{ route('carrito') }}">Carrito</a></li>
+                    <li class="list-group-item px-0 text-uppercase position-relative pr-1">
                         <div data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation"><a href="#">Atención al Cliente</a><i class="fas fa-caret-down position-absolute" style="right: 0; top: 15px"></i></div>
                         <ul class="collapse list-group list-group-flush" id="navbarToggleExternalContent">
-                            <li class="list-group-item pr-1 position-relative">
+                            <li class="list-group-item px-0 pr-1 position-relative">
                                 <a href="{{ URL::to('atencion/transmision') }}">Análisis de transmisión</a>
                             </li>
-                            <li class="list-group-item pr-1 position-relative">
+                            <li class="list-group-item px-0 pr-1 position-relative">
                                 <a href="{{ URL::to('atencion/pagos') }}">Información sobre pago</a>
                             </li>
-                            <li class="list-group-item pr-1 position-relative">
+                            <li class="list-group-item px-0 pr-1 position-relative">
                                 <a href="{{ URL::to('atencion/consulta') }}">Consulta general</a>
                             </li>
                         </ul>
                     </li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('calidad') }}">Calidad</a></li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('contacto') }}">Contacto</a></li>
-					<li class="list-group-item text-uppercase"><a onclick="limpiar()" href="{{ URL::to('salir') }}">cerrar sesión</a></li>					
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('calidad') }}">Calidad</a></li>
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('contacto') }}">Contacto</a></li>
                     @else
-                    <li class="list-group-item text-uppercase"><a href="{{ route('index') }}">Home</a></li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('empresa') }}">Empresa</a></li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('productos.productos') }}">Productos</a></li>
-                    <li class="list-group-item text-uppercase position-relative pr-1">
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('index') }}">Home</a></li>
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('empresa') }}">Empresa</a></li>
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('productos.productos') }}">Productos</a></li>
+                    <li class="list-group-item px-0 text-uppercase position-relative pr-1">
                         <div data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation"><a href="#">Atención al Cliente</a><i class="fas fa-caret-down position-absolute" style="right: 0; top: 15px"></i></div>
                         <ul class="collapse list-group list-group-flush" id="navbarToggleExternalContent">
-                            <li class="list-group-item pr-1 position-relative">
+                            <li class="list-group-item px-0 pr-1 position-relative">
                                 <a href="{{ URL::to('atencion/transmision') }}">Análisis de transmisión</a>
                             </li>
-                            <li class="list-group-item pr-1 position-relative">
+                            <li class="list-group-item px-0 pr-1 position-relative">
                                 <a href="{{ URL::to('atencion/pagos') }}">Información sobre pago</a>
                             </li>
-                            <li class="list-group-item pr-1 position-relative">
+                            <li class="list-group-item px-0 pr-1 position-relative">
                                 <a href="{{ URL::to('atencion/consulta') }}">Consulta general</a>
                             </li>
                         </ul>
                     </li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('calidad') }}">Calidad</a></li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('trabaje') }}">Trabaje con nosotros</a></li>
-                    <li class="list-group-item text-uppercase"><a href="{{ route('contacto') }}">Contacto</a></li>
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('calidad') }}">Calidad</a></li>
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('trabaje') }}">Trabaje con nosotros</a></li>
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('contacto') }}">Contacto</a></li>
                     @endif
                 </ul>
                 <p class="my-3 text-dark text-center">
@@ -71,7 +82,7 @@
                 <form method="post" action="{{ url('/buscador/body') }}" class="position-relative w-100">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                     <input type="text" class="form-control" name="buscar" placeholder="Buscar..." id="">
-                    <i class="fas fa-search position-absolute"></i>
+                    <i class="fas fa-search position-absolute" style="right:10px; top:10px;"></i>
                 </form>
             </div>
         </div>
@@ -85,7 +96,7 @@
                 <img onerror="this.src='{{ asset('images/general/no-img.png') }}'" src="{{ asset($datos['empresa']['images']['logo']) }}@php echo '?t=' . time() @endphp" style="width: 257px;height: 65px;">
             </a>
             <div class="row justify-content-end flex-column w-100">
-                <ul class="list-unstyled d-flex justify-content-end pt-2 mb-1 align-items-center info">
+                <ul class="list-unstyled menu d-flex justify-content-end pt-2 mb-1 align-items-center info">
                     <li class="buscador hidden-tablet">
                         <form class="position-relative d-flex" action="{{ url('/buscador/body') }}" method="post">
                             <button type="submit" class="btn">
@@ -100,10 +111,23 @@
                         </button>
                     </li>
 					<li class="hidden-tablet">
-						<span style="color:#0099D6;">
-							<i class="fas fa-user-circle mr-2"></i>Bienvenido, {{auth()->guard('client')->user()["name"]}} (<a onclick="limpiar()" href="{{ URL::to('salir') }}">cerrar sesión</a>)
-						</span>
 					</li>
+                    <li class="hidden-tablet" style="width:200px;">
+						<span style="color:#0099D6;" class="text-truncate d-block">
+							<i class="fas fa-user-circle mr-2"></i>Bienvenido, {{auth()->guard('client')->user()["name"]}}
+						</span>
+                        <ul class="submenu w-100 list-unstyled shadow-sm" style="font-size: 17px;">
+                            <li class="p-0">
+                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="{{ URL::to('cliente/datos') }}"><i class="fas fa-id-card mr-3"></i>Mis datos</a>
+                            </li>
+                            <li class="p-0">
+                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="#" onclick="confirguracionMarkUP(this)"><i class="fas fa-cog mr-3"></i>Configuración</a>
+                            </li>
+                            <li class="p-0">
+                                <a style="font-size:inherit; font-weight: normal" onclick="limpiar()" class="d-block d-flex justify-content-between align-items-center" href="{{ URL::to('salir') }}">Cerrar sesión<i class="text-danger fas fa-sign-out-alt"></i></a>
+                            </li>
+                        </ul>
+                    </li>
 					<li class="redes">
                         @php
                         $Arr_redes = ["facebook" => '<i class="fab fa-facebook-square"></i>',"instagram" => '<i class="fab fa-instagram"></i>'];
@@ -117,14 +141,12 @@
                     <li data-empresa="" class="hidden-tablet">
                         <a href="{{ route('empresa') }}">Empresa</a>
                     </li>
-                    <li data-productos="" class="hidden-tablet">
+                    <li data-productos="" class="hidden-tablet" data-pedido>
                         <a href="{{ URL::to('pedido') }}">Pedido</a>
                     </li>
-                    @if(auth()->guard('client')->user()["username"] != "111")
                     <li data-productos="" class="hidden-tablet" data-carrito>
                         <a href="{{ URL::to('carrito') }}">Carrito</a>
                     </li>
-                    @endif
                     <li data-descargas="" class="hidden-tablet">
                         <a href="{{ route('descargas') }}">Descargas</a>
                     </li>

@@ -54,6 +54,10 @@ Route::get('salir', 'PrivateArea\LoginController@salir')->name('salir');
 
 Route::group(['prefix' => 'cliente', 'as' => 'client.'], function() {
     // Authentication Routes...
+    Route::get('transporteCliente/{id}', ['uses' => 'PrivateArea\UsuarioController@transporteCliente' , 'as' => 'transporteCliente']);
+
+    Route::get('datos', 'PrivateArea\UsuarioController@datos')->name('datos');
+    Route::post('mark', 'PrivateArea\UsuarioController@mark')->name("mark");
     //Route::get('login', 'PrivateArea\LoginController@showLoginForm')->name('login');
     Route::post('acceso', 'PrivateArea\LoginController@login')->name("acceso");
     

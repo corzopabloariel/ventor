@@ -16,4 +16,38 @@ readURL = function(input, target) {
 /** ------------------------------------- */
 hexcolorChange = function(t,id) {
     $(`#${id}`).val($(t).val());
-}
+};
+formatter = new Intl.NumberFormat('es-AR', {
+    style: 'currency',
+    currency: 'ARS',
+});
+changeMarkUp = function(t) {
+    if(t === null) {
+        $("[data-precio]").each(function() {
+            let precio = parseFloat($(this).data("precio"));
+            let utilidadValor = parseFloat(localStorage.utilidad);
+            $(this).find("[data-precio]").text(formatter.format( precio + ( precio * (utilidadValor / 100) ) ));
+        });
+        return false;
+    }
+    if(t.value == "venta") {
+        $(".addpedido").attr("disabled", true);
+        $("[data-carrito] > a").addClass("isDisabled");
+        $("[data-carrito] > a").attr("disabled", true);
+        localStorage.setItem("utilidadON",1);
+        $("[data-precio]").each(function() {
+            let precio = parseFloat($(this).data("precio"));
+            let utilidadValor = parseFloat(localStorage.utilidad);
+            $(this).find("[data-precio]").text(formatter.format( precio + ( precio * (utilidadValor / 100) ) ));
+        });
+    } else {
+        localStorage.removeItem("utilidadON");
+        $(".addpedido").removeAttr("disabled");
+        $("[data-carrito] > a").removeClass("isDisabled");
+        $("[data-carrito] > a").removeAttr("disabled");
+        $("[data-precio]").each(function() {
+            let precio = parseFloat($(this).data("precio"));
+            $(this).find("[data-precio]").text(formatter.format( precio ));
+        });
+    }
+};

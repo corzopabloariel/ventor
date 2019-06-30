@@ -352,7 +352,9 @@ class ProductoController extends Controller
                         //${$property[$j]} = mb_convert_encoding($valor, "CP850", mb_detect_encoding($valor, "UTF-8, CP850, ISO-8859-15", true));
                         continue;
                     }
-                    if( strtolower( $property[$j] ) == "precio" || strtolower( $property[$j] ) == "cantminvta" || strtolower( $property[$j] ) == "usr_stmpdh" )
+                    if( strtolower( $property[$j] ) == "precio" )
+                        $valor = floatval( $valor );
+                    if( strtolower( $property[$j] ) == "cantminvta" || strtolower( $property[$j] ) == "usr_stmpdh" ) 
                         $valor = floatval( $valor );
                     if( strtolower( $property[$j] ) == "fecha_ingr" ) {
                         if ( strpos( $valor, ".m." ) == false )
@@ -376,24 +378,29 @@ class ProductoController extends Controller
                 }
                 $echo["stmpdh_tex"] = $stmpdh_tex;
                 if(empty($modelo_y_a))
-                    $modelo_y_a = "Sin especificar";
+                    $modelo_y_a = "PARA GENÉRICO";
                 $data_marca = MarcaVentor::where('web_marcas','LIKE',$web_marcas)->first();
                 if(empty($data_marca)) {
                     $aux = MarcaVentor::create(["web_marcas" => $web_marcas]);
                     $echo["marca_id"] = $aux["id"];
                     $echo["marca"] = $web_marcas;
-                    $aux = ModeloVentor::create(["modelo_y_a" => $modelo_y_a, "marca_id" => $aux["id"]]);
-                    $echo["modelo_id"] = $aux["id"];
+                    $echo["modelo_id"] = null;
+                    if(!empty($modelo_y_a)) {
+                        $aux = ModeloVentor::create(["modelo_y_a" => $modelo_y_a, "marca_id" => $aux["id"]]);
+                        $echo["modelo_id"] = $aux["id"];
+                    }
                 } else {
                     $echo["marca_id"] = $data_marca["id"];
                     $echo["marca"] = $web_marcas;
-
-                    $data_modelo = ModeloVentor::where('modelo_y_a','LIKE',$modelo_y_a)->where('marca_id',$data_marca["id"])->first();
-                    if(empty($data_modelo)) {
-                        $aux = ModeloVentor::create( [ "modelo_y_a" => $modelo_y_a, "marca_id" => $data_marca["id"] ] );
-                        $echo["modelo_id"] = $aux["id"];
-                    } else
-                        $echo["modelo_id"] = $data_modelo["id"];
+                    $echo["modelo_id"] = null;
+                    if(!empty($modelo_y_a)) {
+                        $data_modelo = ModeloVentor::where('modelo_y_a','LIKE',$modelo_y_a)->where('marca_id',$data_marca["id"])->first();
+                        if(empty($data_modelo)) {
+                            $aux = ModeloVentor::create( [ "modelo_y_a" => $modelo_y_a, "marca_id" => $data_marca["id"] ] );
+                            $echo["modelo_id"] = $aux["id"];
+                        } else
+                            $echo["modelo_id"] = $data_modelo["id"];
+                    }
                 }
                 $data_familia = FamiliaVentor::where('usr_stmati','LIKE',$usr_stmati)->first();
                 if(empty($data_familia)) {
@@ -415,6 +422,8 @@ class ProductoController extends Controller
                 }
                 ProductoVentor::create($echo);
             }
+            if($total == 1000)
+                echo $total;
         }
         //Log::info("Total de registros: {$total}");
         echo $total;
@@ -460,7 +469,9 @@ class ProductoController extends Controller
             'usrvt_018',
             'usrvt_019',
             'usrvt_020',
-            'usrvt_021'
+            'usrvt_021',
+            //'whatsapp',
+            //'instagram'
         ];
         
         $dbf = Table::fromFile('file/cnv_clientes.DBF');
@@ -480,6 +491,7 @@ class ProductoController extends Controller
                 if( $property[$j] == "localidad_id" || $property[$j] == "vendedor_id" ) continue;
                 $valorData = $record->$valor;
                 $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
+                $valorData = trim($valorData);
                 if( $property[$j] == "codpos" || 
                     $property[$j] == "descrp" || 
                     $property[$j] == "descr_001" || 
@@ -509,6 +521,7 @@ class ProductoController extends Controller
             $arrDataP["vendedor_id"] = $aux;
             $aux = null;
             $data = Transporte::where('tracod','LIKE',$usrvt_021)->first();
+            
             if(!empty($data))
                 $aux = $data["id"];
             $arrDataP["transporte_id"] = $aux;
@@ -557,7 +570,7 @@ class ProductoController extends Controller
                 continue;
             $total ++;
             $vnddor = $record->VNDDOR;
-            $data = Vendedor::where('vnddor','LIKE',$vnddor)->first();
+            $data = Vendedor::where('vnddor','LIKE',"%{$vnddor}%")->first();
             if(empty($data)) {
                 $arrData = [];
                 for( $j = 0 ; $j < count($property) ; $j++ ) {
@@ -567,9 +580,21 @@ class ProductoController extends Controller
                     $arrData[$property[$j]] = $valorData;
                 }
                 $aux = Vendedor::create($arrData);
-                $data = User::where('username','LIKE','VND_{$arrData["natmer"]}')->first();
-                if(empty($data))
-                    User::create( [ 'name' => $arrData["descrp"], 'username' => 'VND_{$arrData["natmer"]}', 'password' => $pass, 'is_admin' => 2 ] );
+                $data = Usuario::where('username','LIKE',"%VND_{$arrData["natmer"]}%")->first();
+                if(empty($data)) {
+                    Usuario::create( ['name' => $arrData["descrp"], 'username' => "VND_{$arrData["natmer"]}", 'password' => $pass, 'email' => $arrData["mail"], 'vendedor_id' => $aux["id"], 'is_vendedor' => 1] );
+                } else {
+                    $data->fill( [ 'name' => $arrData["descrp"],'email' => $arrData["mail"], 'is_vendedor' => 1, 'vendedor_id' => $aux["id"] ] );
+                    $data->save();
+                }
+            } else {
+                $data = Usuario::where('username','LIKE',"%VND_{$arrData["natmer"]}%")->first();
+                if(empty($data)) {
+                    Usuario::create( ['name' => $arrData["descrp"], 'username' => "VND_{$arrData["natmer"]}", 'password' => $pass, 'email' => $arrData["mail"], 'vendedor_id' => $aux["id"], 'is_vendedor' => 1] );
+                } else {
+                    $data->fill( [ 'name' => $arrData["descrp"],'email' => $arrData["mail"], 'is_vendedor' => 1, 'vendedor_id' => $aux["id"] ] );
+                    $data->save();
+                }
             }
         }
         echo $total;
@@ -608,6 +633,7 @@ class ProductoController extends Controller
                 }
             } else {
                 $data = Usuario::where('username','LIKE',"%EMP_{$nrodoc}%")->first();
+                
                 $total ++;
                 for( $j = 0 ; $j < count($property) ; $j++ ) {
                     $valor = strtoupper( $property[$j] );
@@ -620,12 +646,14 @@ class ProductoController extends Controller
                     $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
                     $arrData[$key] = $valorData;
                 }
+                
                 if(empty($data)) {
-                    Usuario::create( ['name' => $arrData["name"], 'username' => "EMP_{$nrodoc}", 'password' => $pass, 'email' => $arrData["direma"], 'vendedor_id' => null, 'is_vendedor' => 1] );
+                    $data = Usuario::create( ['name' => $arrData["name"], 'username' => "EMP_{$nrodoc}", 'password' => $pass, 'email' => $arrData["direma"], 'vendedor_id' => null, 'is_vendedor' => 2] );
                 } else {
-                    $data->fill( [ 'name' => $arrData["name"],'email' => $arrData["direma"] ] );
+                    $data->fill( [ 'name' => $arrData["name"],'email' => $arrData["direma"], 'is_vendedor' => 2 ] );
                     $data->save();
                 }
+                //dd($data);
             }
 		}
         echo $total;
@@ -650,6 +678,7 @@ class ProductoController extends Controller
             for( $j = 0 ; $j < count($property) ; $j++ ) {
                 $valor = strtoupper( $property[$j] );
                 $valorData = $record->$valor;
+                
                 $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
                 $arrData[$property[$j]] = $valorData;
             }

@@ -22,19 +22,19 @@ class ClientesController extends Controller
     {
         $title = "Clientes";
         $view = "adm.parts.clientes";
-        if(Auth::user()["is_admin"] == 2) {
-            $natmer = Auth::user()["username"];
-            $natmer = str_replace("VND_","",$natmer);
-            $vendedor = Vendedor::where("natmer",$natmer)->first();
-            $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->paginate(15);
-        } else
+        ///if(Auth::user()["is_admin"] == 2) {
+            //$natmer = Auth::user()["username"];
+            //$natmer = str_replace("VND_","",$natmer);
+            //$vendedor = Vendedor::where("natmer",$natmer)->first();
+            //$usuarios = Usuario::where("vendedor_id",$vendedor["id"])->where("is_vendedor",0)->paginate(15);
+        //} else
             $usuarios = Usuario::orderBy('username')->paginate(15);
 
         foreach($usuarios AS $u) {
             $u["nombre"] = $u->nombre();
             $u["descuento"] = $u->descuento();
-            
         }
+        //dd($usuarios);
         
         return view('adm.distribuidor',compact('title','view','usuarios'));
     }

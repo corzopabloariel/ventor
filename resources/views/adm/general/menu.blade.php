@@ -4,42 +4,6 @@
 </div>
 <div class="position-relative" style="height: calc(100% - 73px); overflow-y:auto; overflow-x: hidden;">
     <div class="w-100 position-absolute">
-    {{--@if(Auth::user()["username"] == "EMP_12661482" || Auth::user()["username"] == "pablo")--}}
-        @if(Auth::user()["is_admin"] == 2)
-        <ul class="list-unstyled components m-0 p-0">
-            <li>
-                <a data-link="a" href="{{ route('clientes.index') }}">
-                    <i class="fas fa-id-card-alt"></i>
-                    <span class="nav-label">Clientes</span>
-                </a>
-            </li>
-            <li>
-                <a data-link="a" href="{{ route('pedido.index') }}">
-                    <i class="fas fa-cash-register"></i>
-                    <span class="nav-label">Pedidos</span>
-                </a>
-            </li>
-            <li>
-                <a data-link="a" href="{{ route('descargas.todas') }}">
-                    <i class="fas fa-download"></i>
-                    <span class="nav-label">Descargas</span>
-                </a>
-            </li>
-            <li>
-                <a data-link="a" href="{{ route('empresa.usuarios.datos') }}">
-                    <i class="fas fa-user-cog"></i>
-                    <span class="nav-label">Mis datos</span>
-                </a>
-            </li>
-            <li><hr/></li>
-            <li>
-                <a class="bg-danger text-white" href="{{ route('adm.logout') }}">
-                    <i class="fas fa-power-off text-white"></i>
-                    <span class="nav-label">Salir</span>
-                </a>
-            </li>
-        </ul>
-        @else
         <ul class="list-unstyled components m-0 p-0">
             <li class="">
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">
@@ -53,14 +17,12 @@
                             <span class="nav-label">Slider</span>
                         </a>
                     </li>
-                    @if(Auth::user()["username"] == "publicidad" || Auth::user()["username"] == "pablo")
                     <li>
                         <a data-link="u" href="{{ route('novedades.index') }}">
                             <i class="fas fa-star"></i>
                             <span class="nav-label">Novedades</span>
                         </a>
                     </li>
-                    @endif
                 </ul>
             </li>
             <li>
@@ -131,14 +93,13 @@
                             <span class="nav-label">Todos los productos</span>
                         </a>
                     </li>
-                    
-                    <li>
-                        <a data-link="u" href="{{ route('productos.carga') }}">
-                        <i class="fas fa-file-upload"></i>
-                            <span class="nav-label">Carga masiva</span>
-                        </a>
-                    </li>
                 </ul>
+            </li>
+            <li>
+                <a data-link="a" href="{{ route('productos.carga') }}">
+                <i class="fas fa-file-upload"></i>
+                    <span class="nav-label">Carga masiva</span>
+                </a>
             </li>
             <li>
                 <a href="#descargaSubmenu" data-toggle="collapse" aria-expanded="false">
@@ -270,6 +231,5 @@
                 </a>
             </li>
         </ul>
-        @endif
     </div>
 </div>

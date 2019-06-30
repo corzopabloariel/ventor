@@ -710,14 +710,11 @@ const ENTIDADES = {
             username: {TIPO:"TP_STRING",MAXLENGTH:30,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"usuario"},
             name: {TIPO:"TP_STRING",MAXLENGTH:100,NECESARIO:1,VISIBILIDAD:"TP_VISIBLE",NOMBRE:"nombre"},
             password: {TIPO:"TP_PASSWORD",VISIBILIDAD:"TP_VISIBLE_FORM",NOMBRE:"contraseña"},
-            is_admin: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",ENUM:{1:"Administrador",0:"Cliente",2:"Vended0or",11:"ADM Ventor"},NOMBRE:"Tipo",CLASS:"text-uppercase"},
+            //is_admin: {TIPO:"TP_ENUM",VISIBILIDAD:"TP_VISIBLE",ENUM:{1:"Administrador",0:"Cliente",2:"Vended0or",11:"ADM Ventor"},NOMBRE:"Tipo",CLASS:"text-uppercase"},
         },
         FORM: [
             {
                 BTN: '<div class="col-3 col-md-2">/BTN/</div>'
-            },
-            {
-                is_admin: '<div class="col-12 col-md-6">/is_admin/</div>',
             },
             {
                 name: '<div class="col-12 col-md-6">/name/</div>',

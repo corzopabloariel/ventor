@@ -152,6 +152,13 @@ body {
 /* ---------------------------------------------------
     NAV
 ----------------------------------------------------- */
+.isDisabled {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+    text-decoration: none;
+}
 nav {
     min-height: 75px;
     color: #7C7C7C;
@@ -226,11 +233,6 @@ nav .menu .submenu li:hover {
 nav .menu li:hover ul ul {
     display:none;
 } /* hides sub-sublists */
-
-nav .menu li:hover ul,
-nav .info li:hover ul {
-    
-} /* shows sublist on hover */
 
 nav .menu li li ul {
     margin-left:100%;

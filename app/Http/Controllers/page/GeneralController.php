@@ -26,6 +26,7 @@ use App\PedidoProducto;
 use App\Novedad;
 use App\Familiaparte;
 use App\Transporte;
+use App\Vendedor;
 class GeneralController extends Controller
 {
     public $idioma = "es";
@@ -114,7 +115,7 @@ class GeneralController extends Controller
                                 ->where("marcas.nombre", "LIKE", "%{$buscar}%");
                         })
                         ->select("productos.*")
-                        ->orderBy("productos.nombre")->paginate($this->paginate);
+                        ->orderBy("productos.nombre")->paginate($this->paginate)->onEachSide(5);
             
             return self::pedido($data, ["buscar" => $buscar]);
             break;
@@ -129,7 +130,7 @@ class GeneralController extends Controller
             $datos["productos"] = ProductoVentor::
                                 where("stmpdh_art","LIKE","%{$buscar}%")->
                                 orWhere("stmpdh_tex","LIKE","%{$buscar}%")->
-                                    orderBy("marca")->paginate(15);
+                                    orderBy("marca")->paginate($this->paginate)->onEachSide(5);
 
             return view('page.distribuidor',compact('title','view','datos'));
             break;
@@ -215,10 +216,10 @@ class GeneralController extends Controller
             
             $datos["para"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->orderBy("marca")->pluck("marca","marca_id");
             if(!isset($dataRequest["para"]))
-                $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->paginate(15);
+                $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->paginate($this->paginate)->onEachSide(5);
             else {
                 $datos["paraID"] = $dataRequest["para"];
-                $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->where("marca_id",$dataRequest["para"])->paginate(15);
+                $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->where("marca_id",$dataRequest["para"])->paginate($this->paginate)->onEachSide(5);
             }
         } else {
             $datos["para"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->pluck("marca","marca_id");
@@ -240,10 +241,10 @@ class GeneralController extends Controller
             //dd();
             
             if(!isset($dataRequest["para"]))
-                $datos["productos"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->paginate(15);
+                $datos["productos"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->paginate($this->paginate)->onEachSide(5);
             else {
                 $datos["paraID"] = $dataRequest["para"];
-                $datos["productos"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->where("marca_id",$dataRequest["para"])->paginate(15);
+                $datos["productos"] = ProductoVentor::where("parte_id",$id)->orderBy("marca")->where("marca_id",$dataRequest["para"])->paginate($this->paginate)->onEachSide(5);
             }
         }
         return view('page.distribuidor',compact('title','view','datos'));
@@ -375,18 +376,33 @@ class GeneralController extends Controller
         $para = null;
         $datos["menu"] = self::menu([]);
         $datos["empresa"] = self::general();
+        if(auth()->guard('client')->user()["is_vendedor"] == 1) {
+            $natmer = Auth::user()["username"];
+            $natmer = str_replace("VND_","",$natmer);
+            $vendedor = Vendedor::where("natmer",$natmer)->first();
+            $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->where("username","!=","111")->where("is_vendedor",0)->get();
+            $clientes = Cliente::where("vendedor_id",$vendedor["id"])->where("nrodoc","!=","111")->get();
+            foreach($clientes AS $c)
+                $c["nombreX"] = "{$c["nrocta"]} {$c["nombre"]}";
+            $datos["clientes"] = $clientes->pluck("nombreX","id");
+        } else if(auth()->guard('client')->user()["is_vendedor"] == 2) {
+            $clientes = Cliente::where("nrodoc","!=","111")->get();
+            foreach($clientes AS $c)
+                $c["nombreX"] = "[{$c["nrocta"]}] {$c["nombre"]}";
+            $datos["clientes"] = $clientes->pluck("nombreX","id");
+        }
         if(!empty($dataRequest["buscar"]) && empty($dataRequest["para"])) {
             $buscar = $dataRequest["buscar"];
-            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         } else if(empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
             $para = $dataRequest["para"];
-            $datos["productos"] = ProductoVentor::where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         } else if(!empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
             $buscar = $dataRequest["buscar"];
             $para = $dataRequest["para"];
-            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         } else
-            $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         $datos["para"] = ProductoVentor::orderBy("marca")->pluck("marca","marca_id");
         
         $datos["buscar"] = $buscar;
@@ -396,6 +412,7 @@ class GeneralController extends Controller
     }
 
     public function pedidoFamilia(Request $request, $id) {
+        if(!auth()->guard('client')->check()) return redirect()->route('index');
         $title = "PEDIDO";
         $dataRequest = $request->all();
         $view = "page.parts.pedido";
@@ -403,18 +420,33 @@ class GeneralController extends Controller
         $buscar = $para = null;
         $datos["menu"] = self::menu([]);
         $datos["empresa"] = self::general();
+        if(auth()->guard('client')->user()["is_vendedor"] == 1) {
+            $natmer = Auth::user()["username"];
+            $natmer = str_replace("VND_","",$natmer);
+            $vendedor = Vendedor::where("natmer",$natmer)->first();
+            $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->where("username","!=","111")->where("is_vendedor",0)->get();
+            $clientes = Cliente::where("vendedor_id",$vendedor["id"])->where("nrodoc","!=","111")->get();
+            foreach($clientes AS $c)
+                $c["nombreX"] = "{$c["nrocta"]} {$c["nombre"]}";
+            $datos["clientes"] = $clientes->pluck("nombreX","id");
+        } else if(auth()->guard('client')->user()["is_vendedor"] == 2) {
+            $clientes = Cliente::where("nrodoc","!=","111")->get();
+            foreach($clientes AS $c)
+                $c["nombreX"] = "[{$c["nrocta"]}] {$c["nombre"]}";
+            $datos["clientes"] = $clientes->pluck("nombreX","id");
+        }
         if(!empty($dataRequest["buscar"]) && empty($dataRequest["para"])) {
             $buscar = $dataRequest["buscar"];
-            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         } else if(empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
             $para = $dataRequest["para"];
-            $datos["productos"] = ProductoVentor::where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         } else if(!empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
             $buscar = $dataRequest["buscar"];
             $para = $dataRequest["para"];
-            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         } else
-            $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         $datos["para"] = ProductoVentor::orderBy("marca")->pluck("marca","marca_id");
         $datos["buscar"] = $buscar;
         $datos["paraID"] = $para;
@@ -424,12 +456,13 @@ class GeneralController extends Controller
         //dd($datos["menu"]);
         
         
-        $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->paginate($this->paginate);
+        $datos["productos"] = ProductoVentor::where("familia_id",$datos["categoria"]->familia["id"])->paginate($this->paginate)->onEachSide(5);
         
         return view('page.distribuidor',compact('title','view','datos'));
     }
 
     public function pedidoCategoria(Request $request, $familia_id, $id) {
+        if(!auth()->guard('client')->check()) return redirect()->route('index');
         $title = "PEDIDO";
         $view = "page.parts.pedido";
         $dataRequest = $request->all();
@@ -441,19 +474,33 @@ class GeneralController extends Controller
         $datos["empresa"] = self::general();
         $datos["menu"] = self::menu($ids);
         $buscar = $para = null;
-        
+        if(auth()->guard('client')->user()["is_vendedor"] == 1) {
+            $natmer = Auth::user()["username"];
+            $natmer = str_replace("VND_","",$natmer);
+            $vendedor = Vendedor::where("natmer",$natmer)->first();
+            $usuarios = Usuario::where("vendedor_id",$vendedor["id"])->where("username","!=","111")->where("is_vendedor",0)->get();
+            $clientes = Cliente::where("vendedor_id",$vendedor["id"])->where("nrodoc","!=","111")->get();
+            foreach($clientes AS $c)
+                $c["nombreX"] = "{$c["nrocta"]} {$c["nombre"]}";
+            $datos["clientes"] = $clientes->pluck("nombreX","id");
+        } else if(auth()->guard('client')->user()["is_vendedor"] == 2) {
+            $clientes = Cliente::where("nrodoc","!=","111")->get();
+            foreach($clientes AS $c)
+                $c["nombreX"] = "[{$c["nrocta"]}] {$c["nombre"]}";
+            $datos["clientes"] = $clientes->pluck("nombreX","id");
+        }
         if(!empty($dataRequest["buscar"]) && empty($dataRequest["para"])) {
             $buscar = $dataRequest["buscar"];
-            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         } else if(empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
             $para = $dataRequest["para"];
-            $datos["productos"] = ProductoVentor::where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         } else if(!empty($dataRequest["buscar"]) && !empty($dataRequest["para"])) {
             $buscar = $dataRequest["buscar"];
             $para = $dataRequest["para"];
-            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::where("stmpdh_art","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orWhere("stmpdh_tex","LIKE","%{$buscar}%")->where("parte_id",$dataRequest["para"])->orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         } else
-            $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate);
+            $datos["productos"] = ProductoVentor::orderBy("stmpdh_art")->paginate($this->paginate)->onEachSide(5);
         $datos["para"] = ProductoVentor::orderBy("marca")->pluck("marca","marca_id");
         $datos["buscar"] = $buscar;
         $datos["paraID"] = $para;
@@ -461,25 +508,30 @@ class GeneralController extends Controller
     }
 
     public function pedidoCliente(Request $request) {
+        if(!auth()->guard('client')->check()) return redirect()->route('index');
         $data = $request->all();
         
         $data["pedido"] = json_decode($data["pedido"], true);
         
-        $usuario = Usuario::find($data["idUsuario"]);
-        $cliente = Cliente::where("nrodoc",$usuario["username"])->first();
-
-        $cliente->fill(["transporte_id" => $data["transporteID"]]);
-        $cliente->save();
         $Arr_data = [];
         $Arr_data["is_adm"] = 2;
-        
         $Arr_data["usuario_id"] = NULL;
+        $usuario = Usuario::find($data["idUsuario"]);
+        if(isset($data["idCliente"])) {
+            $cliente = Cliente::find($data["idCliente"]);
+            $Arr_data["usuario_id"] = $data["idUsuario"];
+            $Arr_data["vendedor_id"] = $data["idVendedor"];
+        } else
+            $cliente = Cliente::where("nrodoc",$usuario["username"])->first();
+        $cliente->fill(["transporte_id" => $data["transporteID"]]);
+        $cliente->save();
+        
         $Arr_data["transporte_id"] = $data["transporteID"];
         $Arr_data["cliente_id"] = $cliente["id"];
         $Arr_data["estado"] = 1;
         $Arr_data["observaciones"] = $data["observaciones"];
-        
         $pedido = Pedido::create($Arr_data);
+        ($pedido);
         $pedido_id = $pedido["id"];
         //dd($pedido_id);
         foreach($data["pedido"] AS $id => $val) {
@@ -498,7 +550,7 @@ class GeneralController extends Controller
     
     public function carrito() {
         if(!auth()->guard('client')->check()) return redirect()->route('index');
-        if(auth()->guard('client')->user()["username"] == "111") return redirect()->route('pedido');
+        //if(auth()->guard('client')->user()["username"] == "111") return redirect()->route('pedido');
         $title = "CARRITO";
         $view = "page.parts.pedido";
         $datos = [];

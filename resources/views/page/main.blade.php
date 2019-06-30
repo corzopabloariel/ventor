@@ -8,9 +8,9 @@
         <title>@yield('headTitle', 'VENTOR :: ' . $title)</title>
         @if(!empty($datos["empresa"]["images"]["favicon"]))
             @if($datos["empresa"]["images"]["favicon"]["t"] == "png")
-            <link rel="icon" type="image/png" href="{{ $datos['empresa']['images']['favicon']['i'] }}" />
+            <link rel="icon" type="image/png" href="{{ asset($datos['empresa']['images']['favicon']['i']) }}" />
             @else
-            <link rel="shortcut icon" href="{{ $datos['empresa']['images']['favicon']['i'] }}" />
+            <link rel="shortcut icon" href="{{ asset($datos['empresa']['images']['favicon']['i']) }}" />
             @endif
         @endif
         <!-- <Fonts> -->
@@ -34,6 +34,41 @@
         <!-- </Styles> -->
     </head>
     <body>
+        @if(auth()->guard('client')->check())
+        @php
+            $mark = auth()->guard('client')->user()['descuento'];
+            $mark = number_format($mark , 2 , "," , ".");
+        @endphp
+        <div class="modal fade bd-example-modal-sm" role="dialog" id="markupConf">
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title">Configuración</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form onsubmit="event.preventDefault(); edifConfiguracion(this);" action="{{ url('/cliente/mark') }}" method="post" id="formMark">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12 d-flex align-items-center">
+                                    <label for="utilidad" class="mb-0 d-block w-100 text-uppercase">% de utilidad</label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" name="utilidad" id="utilidad" class="form-control text-right" value="{{ $mark }}" placeholder="Mark Up">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
         @if(session('success'))
             <div class="position-fixed w-100 text-center" style="z-index:9999;">
                 <div class="alert alert-success" style="display: inline-block;">
@@ -78,6 +113,7 @@
         <script src="{{ asset('js/alertify.min.js') }}"></script>
         <script src="{{ asset('js/select2.full.js') }}"></script>
         <script src="{{ asset('js/adm.js') }}"></script>
+        <script src="{{ asset('js/jquery.maskMoney.js') }}"></script>
         <script src="{{ asset('js/page/declaration.js') }}"></script>
         <script src="{{ asset('js/page/prueba.js') }}"></script>
         <script src="{{ asset('js/declaration.js') }}"></script>
@@ -90,29 +126,8 @@
             const URLBASE = `{{ URL::to("/") }}`;
             const logo = `{{ asset('${datos.empresa.images.logo}') }}`;
             const logoFooter = `{{ asset('${datos.empresa.images.logoFooter}') }}`;
-            //header = new PyrusCuerpo("header", {imgDEFAULT: imgDEFAULT, logo: logo, URLBASE: URLBASE, BUSCADOR: {PLACEHOLDER: "Estoy buscando...", NAME: "input", ACTION: "{{ url('/buscador/home') }}"}, REDES: datos.empresa.redes});
-            @if(auth()->guard('client')->check())
-                window.data = @json(auth()->guard('client')->user());
-                const URLLOGOUT = `{{ route("salir") }}`;
-                header = new PyrusCuerpo("headerLog", {imgDEFAULT: imgDEFAULT,URLLOGOUT: URLLOGOUT,BUSCADOR: {PLACEHOLDER: "Estoy buscando...", NAME: "buscar", ACTION: "{{ url('/buscador/pedido') }}"}, datos: window.data, logo: logo, URLBASE: URLBASE, REDES: datos.empresa.redes});
-                //$("#wrapper-header").html(header.html());
-            @endif
-            
             footer = new PyrusCuerpo("footer", {imgDEFAULT: imgDEFAULT, logo: logoFooter, domicilio: datos.empresa.domicilio, telefono: datos.empresa.telefono, email: datos.empresa.email, URLBASE:URLBASE});
-            form = new Pyrus("formulario_login");
-            //$("#wrapper-header").html(header.html());
             $("#wrapper-footer").html(footer.html());
-
-            let formHTML = "";
-            let formACTION = "{{ route('client.acceso') }}";
-            let token = "{{ csrf_token() }}";
-            formHTML += `<form action="${formACTION}" method="post">`;
-                formHTML += `<input type="hidden" name="_token" value="${token}"/>`;
-                formHTML += `<input type="hidden" name="password" value="pablopablo"/>`;
-                formHTML += form.formulario();
-                formHTML += `<button class="btn mx-auto px-5 text-white d-block mx-auto mt-3 text-uppercase" type="submit">ingresar</button>`;
-            formHTML += `</form>`;
-            //$("#login > li:first-child > div").html(formHTML);
 
             if($("nav .menu").find(`a[href="${window.url}"]`).length) {
                 $("nav .menu").find(`a[href="${window.url}"]`).addClass("active");
@@ -122,9 +137,10 @@
             }
 
             limpiar = function() {
-                if(localStorage.productos !== undefined)
-                    localStorage.removeItem("productos");
-            }
+                //if(localStorage.productos !== undefined)
+                localStorage.clear()
+                
+            };
         </script>
         @stack('scripts')
     </body>

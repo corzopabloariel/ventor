@@ -56,8 +56,6 @@
     <div class="container-fluid">
         @if(isset($datos["carrito"]))
             <h2 class="title mb-3 text-uppercase">carrito (<span id="cantProductos">0</span>)</h2>
-        @else
-        
         @endif
         @if(isset($datos["carrito"]))
         <div class="table-responsive">
@@ -79,7 +77,7 @@
         @else
         <div class="row">
             <div class="col-12 col-md-3">
-                <button class="btn text-uppercase d-block d-sm-none rounded-0 mb-2" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="background: #0099D6">
+                <button class="btn text-white text-uppercase d-block d-sm-none rounded-0 mb-2" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="background: #0099D6">
                     categorias<i class="fas fa-sort-amount-down ml-2"></i>
                 </button>
                 <div class="sidebar collapse dont-collapse-sm" id="collapseExample">
@@ -136,6 +134,32 @@
                             </div>
                         </form>
                     </div>
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex align-items-end justify-content-end" style="height: 39.5px;">
+                            <div class="form-check">
+                                <input class="form-check-input" onchange="changeMarkUp(this);" type="radio" name="markup" id="costo" value="costo" checked>
+                                <label class="form-check-label" for="costo">
+                                    COSTO
+                                </label>
+                            </div>
+                            <div class="form-check ml-3">
+                                <input class="form-check-input" onchange="changeMarkUp(this);" type="radio" name="markup" id="venta" value="venta">
+                                <label class="form-check-label" for="venta">
+                                    VENTA
+                                </label>
+                            </div>
+                        </div>
+                        @if(auth()->guard('client')->user()["is_vendedor"] > 0)
+                        <div class="mt-3">
+                            <select onchange="selectClient(this);" name="clientesSELECT" id="clientesSELECT" class="form-control">
+                                <option value=""></option>
+                                @foreach($datos["clientes"] AS $i => $c)
+                                <option value="{{$i}}">{{$c}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @endif
+                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table w-100" id="tabla">
@@ -147,9 +171,7 @@
                             <th style="width: 100px;" class="text-center">Stock</th>
                             <th style="width: 100px;" class="text-right">P. unitario</th>
                             {{--<th>c. productos</th>--}}
-                            @if(auth()->guard('client')->user()["username"] != "111")
                             <th></th>
-                            @endif
                         </thead>
                         <tbody>
                             @foreach($datos["productos"] AS $p)
@@ -174,24 +196,23 @@
                                         <i class="fas fa-traffic-light"></i>
                                     </button>
                                 </td>
-                                <td class="text-right">{{ "$ " . $p->getPrecio() }}</td>
-                                {{--<td data-cantidad style="width:150px"><input pattern="[0-9]+" onchange="cambio(this)" type="number" class="form-control text-center" name="" min="{{ $p['cantminvta'] }}" value="0" step="{{ $p['cantminvta'] }}" id=""></td>--}}
-                                @if(auth()->guard('client')->user()["username"] != "111")
+                                <td class="text-right" data-precio="{{ $p['precio'] }}">{{ "$ " . $p->getPrecio() }}</td>
                                 <td data-btn class="text-center">
-                                    <button onclick="addPedido(this)" type="button" class="btn btn-secondary text-uppercase"><i class="fas fa-cart-plus"></i></button>
+                                    <button onclick="addPedido(this)" type="button" class="btn btn-secondary text-uppercase addpedido"><i class="fas fa-cart-plus"></i></button>
                                 </td>
-                                @endif
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="overflow-auto mt-2 d-flex justify-content-center">
+                <div class="mt-2 d-flex justify-content-center">
+                    <div class="overflow-auto">
                     @if(!empty($datos['buscar']))
-                        {{ $datos["productos"]->onEachSide(5)->appends( [ "buscar" => $datos["buscar"] ] )->links() }}
+                        {{ $datos["productos"]->appends( [ "buscar" => $datos["buscar"] ] )->links() }}
                     @else
-                        {{ $datos["productos"]->onEachSide(5)->links() }}
+                        {{ $datos["productos"]->links() }}
                     @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -202,6 +223,7 @@
             <div class="col-12 col-md-7 obs">
                 <p>Transporte</p>
                 <select name="transporteUSER" class="form-control" id="transporteUSER">
+                    <option value=""></option>
                     @foreach($datos["transportes"] AS $i => $t)
                     <option value="{{$i}}" @if($i == $datos["cliente"]["transporte_id"]) selected @endif>{{$t}}</option>
                     @endforeach
@@ -240,10 +262,38 @@
 <script src="{{ asset('js/bootstrap-input-spinner.js') }}"></script>
 <script>
     const imgDefault = "{{ asset('images/general/no-img.png') }}";
+    if(localStorage.utilidadON !== undefined) {
+        $('input:radio[name="markup"][value="venta"]').prop('checked',true)
+        $("input:radio[name='markup'][value='venta']").trigger("change");
+    }
     $(document).ready(function() {
+        if($("#transporteUSER").length) {
+            if(localStorage.transporteID !== undefined)
+                $("#transporteUSER").val(localStorage.transporteID).trigger("change");
+        }
+        if(localStorage.clienteNAME)//background-color: #0099D8;
+            $("h2.title").append(`<div class="mt-2" style="font-size: 17px; font-weight: 400"><strong class="mr-2">Cliente:</strong>${localStorage.clienteNAME}</small></div>`);
+        if($("#clientesSELECT").length) {
+            if(localStorage.clienteID !== undefined)
+                $("#clientesSELECT").val(localStorage.clienteID).trigger("change");
+            $("#clientesSELECT").select2({
+                theme: "bootstrap",
+                placeholder: "Clientes",
+                allowClear: true,
+                width: "resolve"
+            });    
+        }
+        if($("#transporteUSER").length) {
+            $("#transporteUSER").select2({
+                theme: "bootstrap",
+                placeholder: "Seleccione Transporte",
+                width: "resolve"
+            });
+        }
         $("#para").select2({
             theme: "bootstrap",
-            placeholder: "Marca"
+            placeholder: "Marca",
+            width: "resolve"
         });
         if($("input[type='number']").length) {
             let config = {
@@ -304,6 +354,40 @@
                 $("[data-carrito] > a").append(`<span class="ml-1">(${Object.keys(window.productos).length})</span>`);
             if($("#cantProductos").length)
                 $("#cantProductos").text(Object.keys(window.productos).length);
+        }
+    }
+
+    selectClient = function(t) {
+        let val = $(t).val();
+        if(val == "") {
+            if(localStorage.clienteID !== undefined) {
+                localStorage.removeItem("clienteID");
+                localStorage.removeItem("clienteNAME");
+                
+                if(localStorage.transporteID !== undefined)
+                    localStorage.removeItem("transporteID");
+            }
+        } else {
+            localStorage.setItem("clienteID",val);
+            localStorage.setItem("clienteNAME",$(t).find(`option[value="${val}"]`).text());
+            let promise = new Promise(function (resolve, reject) {
+                let url = `{{ url('cliente/transporteCliente/${val}') }}`;
+                var xmlHttp = new XMLHttpRequest();
+                //xmlHttp.responseType = 'json';
+                xmlHttp.open( "GET", url, true );
+                xmlHttp.onload = function() {
+                    resolve(xmlHttp.response);
+                }
+                xmlHttp.send( null );
+            });
+
+            promiseFunction = () => {
+                promise
+                    .then(function(data) {
+                        localStorage.setItem("transporteID",data);
+                    })
+            };
+            promiseFunction();
         }
     }
     /** ------------------------------------- */
@@ -571,10 +655,15 @@
                     let request = new XMLHttpRequest();
                     let url = `{{ url('pedidoCliente') }}`;
                     let formData = new FormData();
-
+                    let data = @json(auth()->guard('client')->user());
+                    console.log(data)
                     request.responseType = 'json';
                     formData.append("_token","{{ csrf_token() }}");
-                    formData.append("idUsuario",window.data.id);
+                    if(localStorage.clienteID !== undefined)
+                        formData.append("idCliente",localStorage.clienteID);
+                    
+                    formData.append("idUsuario",data.id);
+                    formData.append("idVendedor",data.vendedor_id);
                     formData.append("observaciones",$("#observaciones").val());
                     formData.append("transporteID",$("#transporteUSER").val());
                     
@@ -583,7 +672,7 @@
 
                     xmlHttp.open( "POST", url );
                     xmlHttp.onload = function() {
-                        localStorage.removeItem("productos");
+                        localStorage.clear();
                         alertify.success(`Pedido realizado`);
                         resolve(xmlHttp.response);
                     }
