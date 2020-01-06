@@ -27,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/pedido';
+    protected $redirectTo = '/index';
 
     /**
      * Check either username or email.
@@ -61,7 +61,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Authentication passed...
-            return redirect()->intended('pedido');
+            return redirect()->intended('index');
         }
     }
 
@@ -74,7 +74,7 @@ class LoginController extends Controller
         }
         if($this->guard()->validate($this->credentials($request))) {
             if(Auth::guard('client')->attempt(['username' => $request->username, 'password' => $request->password])) {
-                return redirect('pedido');
+                return redirect()->route('index');
             }  else {
                 $this->incrementLoginAttempts($request);
                 return back()->withErrors(['mssg' => "Datos incorrectos"]);

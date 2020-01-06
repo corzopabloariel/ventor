@@ -16,18 +16,9 @@ class NovedadesController extends Controller
     {
         $title = "Novedades";
         $view = "adm.parts.novedades.index";
+        $novedades = [];
         $novedades = Novedad::orderBy('orden')->get();
         return view('adm.distribuidor',compact('title','view','novedades'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -51,7 +42,7 @@ class NovedadesController extends Controller
     public function store(Request $request, $data = null)
     {
         $datosRequest = $request->all();
-        
+
         $ARR_data["image"] = null;
         $ARR_data["documento"] = null;
         $ARR_data["nombre"] = isset($datosRequest["nombre"]) ? $datosRequest["nombre"] : null;
@@ -60,7 +51,7 @@ class NovedadesController extends Controller
 
         $image = $request->file("image");
         $documento = $request->file("documento");
-        
+
         if(!is_null($data)) {
             $ARR_data["image"] = $data["image"];
             $ARR_data["documento"] = $data["documento"];
@@ -69,11 +60,11 @@ class NovedadesController extends Controller
             $path = public_path('images/novedades/');
             if (!file_exists($path))
                 mkdir($path, 0777, true);
-            $imageName = time() . "." .$image->getClientOriginalExtension();
-            
+            $imageName = $image->getClientOriginalName() . "." .$image->getClientOriginalExtension();
+
             $image->move($path, $imageName);
             $ARR_data["image"] = "images/novedades/{$imageName}";
-            
+
             if(!is_null($data)) {
                 if(!empty($data["image"])) {
                     $filename = public_path() . "/" . $data["image"];
@@ -83,14 +74,14 @@ class NovedadesController extends Controller
             }
         }
         if(!is_null($documento)) {
-            $path = public_path('images/novedades/');
+            $path = public_path('archivos/novedades/');
             if (!file_exists($path))
                 mkdir($path, 0777, true);
-            $imageName = time() . "-doc." .$documento->getClientOriginalExtension();
-            
+            $imageName = $documento->getClientOriginalName() . "." .$documento->getClientOriginalExtension();
+
             $documento->move($path, $imageName);
-            $ARR_data["documento"] = "images/novedades/{$imageName}";
-            
+            $ARR_data["documento"] = "archivos/novedades/{$imageName}";
+
             if(!is_null($data)) {
                 if(!empty($data["documento"])) {
                     $filename = public_path() . "/" . $data["documento"];
@@ -99,7 +90,7 @@ class NovedadesController extends Controller
                 }
             }
         }
-        
+
         if(is_null($data))
             Novedad::create($ARR_data);
         else {

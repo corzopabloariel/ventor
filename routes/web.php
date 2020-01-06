@@ -48,6 +48,8 @@ Route::get('carrito', 'page\GeneralController@carrito')->name('carrito');
 Route::get('registro', 'page\GeneralController@registro')->name('registro');
 Route::post('registro', 'page\GeneralController@registroUSER')->name('registroUSER');
 
+Route::match(['get', 'post'], 'olvide',['as' => 'olvide','uses' => 'PrivateArea\ForgotPasswordController@olvide' ]);
+
 Auth::routes();
 
 Route::get('salir', 'PrivateArea\LoginController@salir')->name('salir');
@@ -56,7 +58,8 @@ Route::group(['prefix' => 'cliente', 'as' => 'client.'], function() {
     // Authentication Routes...
     Route::get('transporteCliente/{id}', ['uses' => 'PrivateArea\UsuarioController@transporteCliente' , 'as' => 'transporteCliente']);
 
-    Route::get('datos', 'PrivateArea\UsuarioController@datos')->name('datos');
+    Route::match(['get', 'post'], 'datos',['as' => 'datos','uses' => 'PrivateArea\UsuarioController@datos' ]);
+    Route::post('changepass','PrivateArea\UsuarioController@changepass')->name("changepass");
     Route::post('mark', 'PrivateArea\UsuarioController@mark')->name("mark");
     //Route::get('login', 'PrivateArea\LoginController@showLoginForm')->name('login');
     Route::post('acceso', 'PrivateArea\LoginController@login')->name("acceso");
@@ -267,7 +270,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function() {
         Route::get('carga', ['uses' => 'adm\ProductoController@carga', 'as' => '.carga']);
         Route::match(['get', 'post'], 'carga', ['uses' => 'adm\ProductoController@carga', 'as' => '.carga']);
         Route::post('actualizar/{id}', ['uses' => 'adm\ProductoController@actualizar', 'as' => '.actualizar']);
-
+        Route::get('count', ['uses' => 'adm\ProductoController@count', 'as' => '.count']);
         Route::get('show/{id}', ['uses' => 'adm\ProductoController@show', 'as' => '.show']);
         Route::post('store', ['uses' => 'adm\ProductoController@store', 'as' => '.store']);
         Route::get('edit/{id}', ['uses' => 'adm\ProductoController@edit', 'as' => '.edit']);

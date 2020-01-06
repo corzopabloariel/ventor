@@ -209,8 +209,12 @@
                 </div>
                 <div class="mt-2 d-flex justify-content-center">
                     <div class="overflow-auto">
-                    @if(!empty($datos['buscar']))
+                    @if(!empty($datos['buscar']) && isset($datos["paraID"]))
+                        {{ $datos["productos"]->appends( [ "buscar" => $datos["buscar"] , "para" => $datos["paraID"] ] )->links() }}
+                    @elseif(!empty($datos['buscar']) && !isset($datos["paraID"]))
                         {{ $datos["productos"]->appends( [ "buscar" => $datos["buscar"] ] )->links() }}
+                    @elseif(empty($datos['buscar']) && isset($datos["paraID"]))
+                        {{ $datos["productos"]->appends( [ "para" => $datos["paraID"] ] )->links() }}
                     @else
                         {{ $datos["productos"]->links() }}
                     @endif
@@ -321,7 +325,6 @@
     });
 
     if(localStorage.productos !== undefined) {
-        window.productos = JSON.parse(localStorage.productos);
         window.normal = 1;
         @if(isset($datos["carrito"]))
         for(let id in window.productos) {
@@ -351,12 +354,6 @@
             $(`table *[data-id="${x}"]`).find("*[data-btn] button").removeClass("btn-secondary").addClass("btn-warning")
         }
         delete window.normal;
-        if(Object.keys(window.productos).length > 0) {
-            if(!$("[data-carrito] > a > span").length) 
-                $("[data-carrito] > a").append(`<span class="ml-1">(${Object.keys(window.productos).length})</span>`);
-            if($("#cantProductos").length)
-                $("#cantProductos").text(Object.keys(window.productos).length);
-        }
     }
 
     selectClient = function(t) {

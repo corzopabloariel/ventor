@@ -35,7 +35,7 @@
         <h3 class="title text-uppercase text-center mb-4">¡novedades!</h3>
         <div class="row productos">
             @foreach($datos["novedades"] AS $c)
-                <a href="{{ asset($c['documento']) }}" target="blank" class="col-12 col-md-4">
+                <a id="nov_{{$c['id']}}" onclick="event.preventDefault(); descargar(this);" data-tipo="privado"  @if($datos["logueado"]) href="{{ asset($c['documento']) }}" target="blank" @else href="" @endif class="col-12 col-md-4">
                     <div>
                         <img src="{{ asset($c['image']) }}" onError="this.src='{{ asset('images/general/no-img.png') }}'" class="w-100" />
                     </div>
@@ -75,3 +75,46 @@
         </div>
     </div>
 </div>
+
+@push("scripts_distribuidor")
+<script>
+    const logueado = parseInt(@json($datos["logueado"]));
+    descargar = function(t) {
+        console.log($(t).attr("href"))
+        if($(t).data("tipo") == "privado" && !logueado) {
+            if(window.alertt === undefined) {
+                window.alertt = 1;
+                alertify.notify('Por favor, ingrese a su cuenta para poder acceder a este archivo', 'error', 30, function() {
+                    delete window.alertt;
+                });
+            }
+        }
+        if($(t).attr("href") == "" || $(t).attr("href") == "http://ventor.com.ar/descargas" || $(t).next().attr("href") == "http://www.ventor.com.ar/descargas" || t.href == "https://ventor.com.ar" || t.href == "https://www.ventor.com.ar")
+          return false;
+
+        $(t).removeAttr("onclick");
+
+        setTimeout(() => {
+            document.getElementById(t.id).click();
+            $(t).attr("onclick","event.preventDefault(); descargar(this);");
+        }, 500);
+        
+    };
+    
+    linkActive = function(t) {
+        if(logueado) {
+            let doc = $(t).val();
+            $(t).removeAttr("disabled");
+            $(t).attr("href",doc);
+            $(t).click();
+        } else {
+            if(window.alertt === undefined) {
+                window.alertt = 1;
+                alertify.notify('Por favor, ingrese a su cuenta para poder acceder a este archivo', 'error', 30, function() {
+                    delete window.alertt;
+                });
+            }
+        }
+    }
+</script>
+@endpush

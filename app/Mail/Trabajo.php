@@ -33,7 +33,7 @@ class Trabajo extends Mailable
         $this->postular = $data["postular"];//OBJ
         //ARRAY
         $this->puesto_trabajos = $data["puesto_trabajos"];
-        $this->trabajos_seniority = $data["trabajos_seniority"];
+        //$this->trabajos_seniority = $data["trabajos_seniority"];
         $this->empresa_trabajos = $data["empresa_trabajos"];
         $this->trabajos_pais = $data["trabajos_pais"];
         $this->industria_trabajos = $data["industria_trabajos"];
@@ -47,7 +47,6 @@ class Trabajo extends Mailable
         $this->educacion_area = $data["educacion_area"];
         $this->educacion_nivel = $data["educacion_nivel"];
         $this->educacion_estado = $data["educacion_estado"];
-        $this->actual_educacion = isset($data["actual_educacion"]) ? $data["actual_educacion"] : [];
         $this->desde_educacion = $data["desde_educacion"];
         $this->hasta_educacion = isset($data["hasta_educacion"]) ? $data["hasta_educacion"] : [];
         $this->descripcion_educacion = $data["descripcion_educacion"];

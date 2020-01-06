@@ -108,6 +108,7 @@
         <script src="{{ asset('css/fontawesome/js/brands.js') }}"></script>
         <script src="{{ asset('css/fontawesome/js/solid.js') }}"></script>
         
+        <script src="{{ asset('js/bootstrap-notify.js') }}"></script>
         <script src="{{ asset('js/WOW.js') }}"></script>
         <script src="{{ asset('js/mdb.js') }}"></script>
         <script src="{{ asset('js/alertify.min.js') }}"></script>
@@ -135,11 +136,31 @@
                     $("nav .menu").find(`a[data-href="atencion"]`).addClass("active");
                 }
             }
+            if(localStorage.productos !== undefined) {
+                window.productos = JSON.parse(localStorage.productos);
+                if(Object.keys(window.productos).length > 0) {
+                    if(!$("[data-carrito] > a > span").length) 
+                        $("[data-carrito] > a").append(`<span class="ml-1">(${Object.keys(window.productos).length})</span>`);
+                    if($("#cantProductos").length)
+                        $("#cantProductos").text(Object.keys(window.productos).length);
+                }
+            }
 
-            limpiar = function() {
+            limpiar = function(t) {
                 //if(localStorage.productos !== undefined)
-                localStorage.clear()
-                
+                let url = $(t).attr("href");
+                if(localStorage.productos !== undefined) {
+                    alertify.confirm("ATENCIÓN","Hay elementos agregados en el carrito de pedidos. ¿Vaciar los productos?",
+                        function() {
+                            localStorage.clear();
+                            window.location = url;
+                        },
+                        function() {
+                            window.location = url;
+                        }
+                    ).set('labels', {ok:'Si, limpiar y salir', cancel:'No, solo salir'});
+                } else
+                    window.location = url;
             };
         </script>
         @stack('scripts')

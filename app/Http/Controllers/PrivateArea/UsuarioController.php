@@ -5,11 +5,15 @@ namespace App\Http\Controllers\PrivateArea;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 use App\Usuario;
 use App\Cliente;
 use App\Vendedor;
 use App\Empresa;
+use App\Mail\Editar;
+use App\Mail\Mandar;
 class UsuarioController extends Controller
 {
     /** ---------------------------- */
@@ -23,11 +27,47 @@ class UsuarioController extends Controller
         $empresa["redes"] = json_decode($empresa["redes"], true);
         return $empresa;
     }
+    public function changepass(Request $request) {
+        $dataRequest = $request->all();
+        $usuario = auth()->guard('client')->user();
+        if(!Hash::check($usuario["password"], $dataRequest["pass"]))
+            return ["estado" => 0,"mssg" => "Contraseña incorrecta"];
+        
+        if($dataRequest["pass_1"] != $dataRequest["pass_2"])
+            return ["estado" => 0,"mssg" => "Las contraseñas no coinciden"];
 
-    public function datos() {
+        if(!Hash::check($usuario["password"], Hash::make($dataRequest["pass_1"])))
+            return ["estado" => 2,"mssg" => "La contraseña nueva es igual a la actual"];
+        $data = [];
+        $data["usuario"] = $usuario;
+        $usuario->fill([
+            "password"  => Hash::make($dataRequest["pass_1"])
+        ]);
+        $usuario->save();
+        
+        Mail::to('corzo.pabloariel@gmail.com')->send(new Mandar($data));
+
+        if (count(Mail::failures()) > 0)
+            return ["estado" => 0,"mssg" => "Ocurrió un error"];
+        return ["estado" => 1];
+    }
+    public function datos(Request $request) {
         //$dataRequest = $request->all();
-        if(auth()->guard('client')->user()["username"] == "111")
+        if(!auth()->guard('client')->check()) return redirect()->route('index');
+        if(auth()->guard('client')->user()["username"] == "0")
             return redirect("/");
+        $dataRequest = $request->all();
+        if(!empty($dataRequest)) {
+            $data = [];
+            unset($dataRequest["token"]);
+            $data["cliente"] = auth()->guard('client')->user()->cliente;
+            $data["datos"] = $dataRequest;
+            Mail::to('corzo.pabloariel@gmail.com')->send(new Editar($data));
+
+            if (count(Mail::failures()) > 0)
+                return ["estado" => 0];
+            return ["estado" => 1];
+        }
         $title = "MIS DATOS";
         $view = "page.parts.datos";
         $datos = [];

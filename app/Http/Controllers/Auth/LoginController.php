@@ -36,7 +36,7 @@ class LoginController extends Controller
     {
         return 'username';
     }
-    
+
     /**
      * Create a new controller instance.
      *
@@ -47,9 +47,18 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function handle($request, Closure $next)
+    {
+         if (Auth::user() &&  Auth::user()->is_admin == 1) {
+                return $next($request);
+         }
+
+        return redirect('adm');
+    }
+
     public function login(Request $request) {
         $this->validateLogin($request);
-        
+
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
@@ -59,16 +68,12 @@ class LoginController extends Controller
                 return redirect('adm');
             }  else {
                 $this->incrementLoginAttempts($request);
-                return response()->json([
-                    'error' => 'This account is not activated.'
-                ], 401);
+                return back()->withErrors(['mssg' => "Datos de {$request->username} no encontrados"]);
             }
         } else {
             // dd('ok');
             $this->incrementLoginAttempts($request);
-            return response()->json([
-                'error' => 'Credentials do not match our database.'
-            ], 401);
+            return back()->withErrors(['mssg' => "Datos de {$request->username} no encontrados"]);
         }
     }
 /*
@@ -76,7 +81,7 @@ class LoginController extends Controller
     {
         if(strpos($request->get('username'), "VND_") !== false)
             return ['username'=>"VND_{$request->get('username')}",'password'=>$request->get('password')];
-        
+
         return ['username' => $request->get('username'), 'password'=>$request->get('password')];
     }*/
 }

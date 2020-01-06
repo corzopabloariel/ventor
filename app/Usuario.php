@@ -16,8 +16,14 @@ class Usuario extends Authenticatable
         'username',
         'descuento',
         'vendedor_id',
-        'is_vendedor'
+        'is_vendedor',
+        'cliente_id'
     ];
+
+    public function cliente()
+    {
+        return $this->belongsTo('App\Cliente');
+    }
 
     public function nombre() {
         return "{$this->name} {$this->lastname}";

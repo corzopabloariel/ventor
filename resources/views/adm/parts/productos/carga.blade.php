@@ -34,7 +34,7 @@
         <hr>
         <h1>Actualizar información</h1>
         <ul>
-            <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'producto']) }}">Productos</a> (cnv_precios) - Producto, Modelo, Marca, Familia y Parte</li>
+            <li><a onclick="event.preventDefault(); actualizar(this, 'ojo');" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'producto']) }}">Productos</a> (cnv_precios) - Producto, Modelo, Marca, Familia y Parte</li>
             <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'transporte']) }}">Transportes</a> (TRALST)</li>
             <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'vendedores']) }}">Vendedores</a> (cnv_Vendedores)</li>
             <li><a onclick="event.preventDefault(); actualizar(this);" class="text-primary" href="{{ route('productos.actualizar', ['id' => 'clientes']) }}">Clientes</a> (cnv_clientes)</li>
@@ -64,7 +64,7 @@ actualizarArchivos = function(t) {
         }
     ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
 }
-actualizar = function(t) {
+actualizar = function(t, ojo = null) {
     let url = $(t).attr("href");
     alertify.confirm("ATENCIÓN","¿Seguro de actualizar la información?<br>Una vez que comience el proceso no debe ser detenido o cerrado el navegador.",
         function() {
@@ -76,7 +76,6 @@ actualizar = function(t) {
 
                 xmlHttp.open( "POST", url, true );
                 xmlHttp.onload = function() {
-                    console.log(xmlHttp)
                     resolve(xmlHttp.response);
                 }
                 xmlHttp.send( formData );
@@ -85,9 +84,23 @@ actualizar = function(t) {
             promiseFunction = () => {
                 promise
                     .then(function(data) {
-                        console.log(data);
-                        alertify.success(`Registros totales: ${data}`);
-                        $("#mascara").removeClass("d-flex").addClass("d-none");
+                        if( ojo !== null ) {
+                            timeout = 1000 * 60 * 8;
+                            setTimeout(() => {
+                                url = `{{ url('/adm/productos/count') }}`;
+                                xmlHttp = new XMLHttpRequest();
+                                xmlHttp.open( "GET", url, true );
+                                xmlHttp.onload = function() {
+                                    console.log(xmlHttp)
+                                    alertify.success(`Registros totales: ${xmlHttp.response}`);
+                                    $("#mascara").removeClass("d-flex").addClass("d-none");
+                                }
+                                xmlHttp.send( null );
+                            }, timeout);
+                        } else {
+                            alertify.success(`Registros totales: ${data}`);
+                            $("#mascara").removeClass("d-flex").addClass("d-none");
+                        }
                     })
             };
             promiseFunction();

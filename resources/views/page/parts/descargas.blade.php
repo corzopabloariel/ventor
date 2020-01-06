@@ -1,234 +1,138 @@
 <div class="wrapper-descargas py-5">
     <div class="container">
-        @if(isset($datos["privado"]))
-            <h4>Descargas e instructivos</h4>
-            <div class="row mt-3">
-                @foreach($datos["descargasP"] AS $d)
-                    <div class="col-12 col-md-3 mt-2 descarga d-flex justify-content-center">
-                        <div class="d-inline-block">
-                            <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
-                            <p class="w-75 mx-auto mb-1 mt-2 text-center">{{ $d["nombre"] }}</p>
-                            <div class="row">
-                                <div class="col-6 text-right eye">
-                                    <a href="{{ asset($d['documento']) }}" target="blank"><i class="fas fa-eye"></i></a>
-                                </div>
-                                <div class="col-6 text-left download">
-                                    <a href="{{ asset($d['documento']) }}" download><i class="fas fa-download"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            <h2 class="title mt-4" style="color: #0099D6;">Listas de Precios</h2>
-            @php
-            $Arr = [];
-            $Arr2 = [];
-            for($i = 0; $i < count($datos["descargas"]) ; $i++) {
-                if($datos["descargas"][$i]["precio"] == 0) {
-                    if(!isset($Arr2[$datos["descargas"][$i]["did"]])) {
-                        $Arr2[$datos["descargas"][$i]["did"]] = [];
-                        $Arr2[$datos["descargas"][$i]["did"]]["nombre"] = $datos["descargas"][$i]["nombre"];
-                        $Arr2[$datos["descargas"][$i]["did"]]["image"] = $datos["descargas"][$i]["image"];
-                        $Arr2[$datos["descargas"][$i]["did"]]["partes"] = [];
-                    }
-
-                    $Arr2[$datos["descargas"][$i]["did"]]["partes"][] = ["parte" => $datos["descargas"][$i]["parte"], "documento" => $datos["descargas"][$i]["documento"]];
-                    continue;
-                }
-                if(!isset($Arr[$datos["descargas"][$i]["did"]])) {
-                    $Arr[$datos["descargas"][$i]["did"]] = [];
-                    $Arr[$datos["descargas"][$i]["did"]]["nombre"] = $datos["descargas"][$i]["nombre"];
-                    $Arr[$datos["descargas"][$i]["did"]]["image"] = $datos["descargas"][$i]["image"];
-                    $Arr[$datos["descargas"][$i]["did"]]["formatos"] = [];
-                }
-                $Arr[$datos["descargas"][$i]["did"]]["formatos"][] = ["ext" => $datos["descargas"][$i]["formato"], "documento" => $datos["descargas"][$i]["documento"]];
-            }
-            @endphp
-            <div class="row mt-3">
-            @foreach($Arr AS $did => $d)
-                <div class="col-12 col-md-3 descarga d-flex mt-2 justify-content-center">
-                    <div class="d-inline-block">
-                        <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
-                        <select onchange="linkActive(this)" style="width: 192px" class="mx-auto d-block bg-light p-2 border">
-                            <option value="" hidden>Seleccione un archivo</option>
-                            @foreach($d["formatos"] AS $f)
-                                <option value="{{ asset($f['documento']) }}">Ventor Lista de precios - formato {{ $f["ext"] }} {{ $d["nombre"] }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2">
-                            <div class="mx-auto text-center download" style="width: 192px;">
-                                <a disabled class="link" download><i class="fas fa-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-            </div>
-            <h2 class="title mt-5" style="color: #0099D6;">Catálogos</h2>
-            <div class="row mt-3">
-            @foreach($Arr2 AS $did => $d)
+        <div class="mb-4 text-center">
+            <a download href="http://pedidos.ventor.com.ar/pedidos/actualizacion_cd/instalador_ventor.exe" class="btn btn-inline-block btn-info rounded-pill px-5 mx-auto"><strong>Descargar:</strong> VENTOR Catálogo y Pedidos</a>
+        </div>
+        
+        <h2 class="title mt-5" style="color: #0099D6;">Descargas e instructivos</h2>
+        <div class="row mt-3">
+            @foreach($datos["descargasPublicas"] AS $d)
                 <div class="col-12 col-md-3 mt-2 descarga d-flex justify-content-center">
                     <div class="d-inline-block">
-                        <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
-                        <select onchange="linkActive(this)" style="width: 192px" class="mx-auto d-block bg-light p-2 border">
-                            <option value="" hidden>Seleccione un archivo</option>
-                            @foreach($d["partes"] AS $f)
-                                <option value="{{ asset($f['documento']) }}">{{ $f["parte"] }}</option>
-                            @endforeach
-                        </select>
-                        <div class="row mt-2">
-                            <div class="col-6 text-right eye">
-                                <a disabled target="blank" class="btn btn-link"><i class="fas fa-eye"></i></a>
-                            </div>
-                            <div class="col-6 text-left download">
-                                <a disabled class="link btn btn-link" download><i class="fas fa-download"></i></a>
-                            </div>
-                        </div>
+                        <a onclick="event.preventDefault(); descargar(this);" data-tipo="publico" href="{{ asset($d['documento']) }}" download>
+                            <img style="width: 100%;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
+                            <p class="w-75 mx-auto mb-1 mt-2 text-center">{{ $d["nombre"] }}</p>
+                        </a>
                     </div>
                 </div>
             @endforeach
-            </div>
-
-            <h2 class="title mt-5" style="color: #0099D6;">Otros catálogos</h2>
-            <div class="row mt-3">
-                @foreach($datos["descargasO"] AS $d)
-                    <div class="col-12 col-md-3 mt-2 descarga d-flex justify-content-center">
-                        <div class="d-inline-block">
-                            <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
-                            <p class="w-75 mx-auto mb-1 mt-2 text-center">{{ $d["nombre"] }}</p>
-                            <div class="row">
-                                <div class="col-6 text-right eye">
-                                    <a href="{{ asset($d['documento']) }}" target="blank"><i class="fas fa-eye"></i></a>
-                                </div>
-                                <div class="col-6 text-left download">
-                                    <a href="{{ asset($d['documento']) }}" download><i class="fas fa-download"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <h2 class="title mt-5 text-uppercase">información adicional</h2>
-            <h4>Descargas e instructivos</h4>
-
-            <div class="row mt-3">
-                @foreach($datos["descargas"] AS $d)
-                    <div class="col-12 col-md-3 mt-2 descarga d-flex justify-content-center">
-                        <div class="d-inline-block">
-                            <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
-                            <p class="w-75 mx-auto mb-1 mt-2 text-center">{{ $d["nombre"] }}</p>
-                            <div class="row">
-                                <div class="col-6 text-right eye">
-                                    <a href="{{ asset($d['documento']) }}" target="blank"><i class="fas fa-eye"></i></a>
-                                </div>
-                                <div class="col-6 text-left download">
-                                    <a href="{{ asset($d['documento']) }}" download><i class="fas fa-download"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            @php
-            $Arr = [];
-            $Arr2 = [];
-            $Arr3 = [];
-            for($i = 0; $i < count($datos["descargasP"]) ; $i++) {
-                if($datos["descargasP"][$i]["precio"] == 0) {
-                    if(!isset($Arr2[$datos["descargasP"][$i]["did"]])) {
-                        $Arr2[$datos["descargasP"][$i]["did"]] = [];
-                        $Arr2[$datos["descargasP"][$i]["did"]]["nombre"] = $datos["descargasP"][$i]["nombre"];
-                        $Arr2[$datos["descargasP"][$i]["did"]]["image"] = $datos["descargasP"][$i]["image"];
-                        $Arr2[$datos["descargasP"][$i]["did"]]["partes"] = [];
-                    }
-
-                    $Arr2[$datos["descargasP"][$i]["did"]]["partes"][] = ["parte" => $datos["descargasP"][$i]["parte"], "documento" => $datos["descargasP"][$i]["documento"]];
-                    continue;
+        </div>
+        <h2 class="title mt-4" style="color: #0099D6;">Listas de Precios</h2>
+        @php
+        $Arr = [];
+        $Arr2 = [];
+        //dd($datos["descargasPrivadas"]);
+        for($i = 0; $i < count($datos["descargasPrivadas"]) ; $i++) {
+            if($datos["descargasPrivadas"][$i]["precio"] == 0) {
+                if(!isset($Arr2[$datos["descargasPrivadas"][$i]["did"]])) {
+                    $Arr2[$datos["descargasPrivadas"][$i]["did"]] = [];
+                    $Arr2[$datos["descargasPrivadas"][$i]["did"]]["nombre"] = $datos["descargasPrivadas"][$i]["nombre"];
+                    $Arr2[$datos["descargasPrivadas"][$i]["did"]]["image"] = $datos["descargasPrivadas"][$i]["image"];
+                    $Arr2[$datos["descargasPrivadas"][$i]["did"]]["partes"] = [];
                 }
-                if(!isset($Arr[$datos["descargasP"][$i]["did"]])) {
-                    $Arr[$datos["descargasP"][$i]["did"]] = [];
-                    $Arr[$datos["descargasP"][$i]["did"]]["nombre"] = $datos["descargasP"][$i]["nombre"];
-                    $Arr[$datos["descargasP"][$i]["did"]]["image"] = $datos["descargasP"][$i]["image"];
-                    $Arr[$datos["descargasP"][$i]["did"]]["formatos"] = [];
-                }
-                $Arr[$datos["descargasP"][$i]["did"]]["formatos"][] = ["ext" => $datos["descargasP"][$i]["formato"], "documento" => $datos["descargasP"][$i]["documento"]];
+
+                $Arr2[$datos["descargasPrivadas"][$i]["did"]]["partes"][] = ["parte" => $datos["descargasPrivadas"][$i]["parte"], "documento" => $datos["descargasPrivadas"][$i]["documento"]];
+                continue;
             }
-            @endphp
-            <h2 class="title mt-5" style="color: #0099D6;">Listas de Precios</h2>
-            <div class="row mt-3">
-            @foreach($Arr AS $did => $d)
-                <div class="col-12 col-md-3 descarga d-flex justify-content-center">
-                    <div class="d-inline-block">
-                        <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
-                        <select onchange="linkActive(this)" style="width: 192px" class="mx-auto d-block bg-light p-2 border">
-                            <option value="" hidden>Seleccione un archivo</option>
-                            @foreach($d["formatos"] AS $f)
-                                <option value="{{ asset($f['documento']) }}">Ventor Lista de precios - formato {{ $f["ext"] }} {{ $d["nombre"] }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2">
-                            <div class="mx-auto text-center download" style="width: 192px;">
-                                <a disabled class="link" download><i class="fas fa-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
+            if(!isset($Arr[$datos["descargasPrivadas"][$i]["did"]])) {
+                $Arr[$datos["descargasPrivadas"][$i]["did"]] = [];
+                $Arr[$datos["descargasPrivadas"][$i]["did"]]["nombre"] = $datos["descargasPrivadas"][$i]["nombre"];
+                $Arr[$datos["descargasPrivadas"][$i]["did"]]["image"] = $datos["descargasPrivadas"][$i]["image"];
+                $Arr[$datos["descargasPrivadas"][$i]["did"]]["formatos"] = [];
+            }
+            $Arr[$datos["descargasPrivadas"][$i]["did"]]["formatos"][] = ["ext" => $datos["descargasPrivadas"][$i]["formato"], "documento" => $datos["descargasPrivadas"][$i]["documento"]];
+        }
+
+        @endphp
+        <div class="row mt-3">
+        @foreach($Arr AS $did => $d)
+            <div class="col-12 col-md-3 descarga mt-2">
+                <a id="link-{{ $did }}" onclick="event.preventDefault(); descargar(this);" data-tipo="privado" class="link w-100" download style="cursor:pointer;">
+                    <img style="width: 100%;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
+                </a>
+                <select onchange="linkActive(this)" class="w-100 d-block bg-light p-2 border" style="margin-top:-1px;">
+                    <option value="" hidden>Seleccione un archivo</option>
+                    @foreach($d["formatos"] AS $f)
+                        <option value="{{ asset($f['documento']) }}">Ventor Lista de precios - formato {{ $f["ext"] }} {{ $d["nombre"] }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endforeach
+        </div>
+        <h2 class="title mt-5" style="color: #0099D6;">Catálogos</h2>
+        <div class="row mt-3">
+        @foreach($Arr2 AS $did => $d)
+            <div class="col-12 col-md-3 mt-2 descarga">
+                <a id="link-{{ $did }}" onclick="event.preventDefault(); descargar(this);" data-tipo="privado" disabled class="link d-block w-100" download style="cursor:pointer;">
+                    <img style="width: 100%;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block" />
+                </a>
+                <select onchange="linkActive(this)" style="width: 100%" class="d-block bg-light p-2 border" style="margin-top:-1px;">
+                    <option value="" hidden>Seleccione un archivo</option>
+                    @foreach($d["partes"] AS $f)
+                        <option class="text-uppercase" value="{{ asset($f['documento']) }}">{{ $f["parte"] }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endforeach
+        </div>
+
+        <h2 class="title mt-5" style="color: #0099D6;">Otros Catálogos</h2>
+
+        <div class="row mt-3">
+            @foreach($datos["descargasOtras"] AS $d)
+                <div class="col-12 col-md-3 mt-4 descarga d-flex justify-content-center">
+                    <a style="cursor:pointer;" class="w-100" onclick="event.preventDefault(); descargar(this);" data-tipo="privado" @if($datos["logueado"]) href="{{ asset($d['documento']) }}" @endif download>
+                        <img style="width: 100%;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block" />
+                        <p class="w-75 mx-auto mb-1 mt-2 text-center">{{ $d["nombre"] }}</p>
+                    </a>
                 </div>
             @endforeach
-            </div>
-            <h2 class="title mt-5" style="color: #0099D6;">Catálogos</h2>
-            <div class="row mt-3">
-            @foreach($Arr2 AS $did => $d)
-                <div class="col-12 mt-2 col-md-3 descarga d-flex justify-content-center">
-                    <div class="d-inline-block">
-                        <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
-                        <select onchange="linkActive(this)" style="width: 192px" class="mx-auto d-block bg-light p-2 border">
-                            <option value="" hidden>Seleccione un archivo</option>
-                            @foreach($d["partes"] AS $f)
-                                <option value="{{ asset($f['documento']) }}">{{ $f["parte"] }}</option>
-                            @endforeach
-                        </select>
-                        <div class="mt-2">
-                            <div class="mx-auto text-center download" style="width: 192px;">
-                                <a disabled class="link" download><i class="fas fa-download"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-            </div>
-            <h2 class="title mt-5" style="color: #0099D6;">Otros catálogos</h2>
-            <div class="row mt-3">
-                @foreach($datos["descargasO"] AS $d)
-                    <div class="col-12 mt-2 col-md-3 descarga d-flex justify-content-center">
-                        <div class="d-inline-block">
-                            <img style="width: 192px;" src="{{ asset($d['image']) }}" onError="this.src='{{ asset('images/general/no-descarga.fw.png') }}'" class="border d-block mx-auto" />
-                            <p class="w-75 mx-auto mb-1 mt-2 text-center">{{ $d["nombre"] }}</p>
-                            
-                            <div class="mt-2">
-                                <div class="mx-auto text-center download" style="width: 192px;">
-                                    <a style="cursor:pointer" onclick="linkActive(this)"><i class="fas fa-download"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
+        </div>
     </div>
 </div>
 
 @push("scripts_distribuidor")
 <script>
+    const logueado = parseInt(@json($datos["logueado"]));
+    descargar = function(t) {
+        if($(t).data("tipo") == "privado" && !logueado) {
+            if(window.alertt === undefined) {
+                window.alertt = 1;
+                alertify.notify('Por favor, ingrese a su cuenta para poder acceder a este archivo', 'error', 30, function() {
+                    delete window.alertt;
+                });
+            }
+        }
+        if($(t).next().attr("href") == "" || $(t).next().attr("href") == "http://ventor.com.ar/descargas" || $(t).next().attr("href") == "http://www.ventor.com.ar/descargas" || t.href == "https://ventor.com.ar/descargas" || t.href == "https://www.ventor.com.ar/descargas")
+          return false;
+
+        alertify.confirm("ATENCIÓN","¿Descargar archivo?",
+            function() {
+                $(t).removeAttr("onclick");
+
+                setTimeout(() => {
+                  document.getElementById(t.id).click();
+                  $(t).attr("onclick","event.preventDefault(); descargar(this);");
+                }, 500);
+            },
+            function() {}
+        ).set('labels', {ok:'Confirmar', cancel:'Cancelar'});
+    };
+
     linkActive = function(t) {
-        @if(auth()->guard('client')->check())
-        let doc = $(t).val();
-        $(t).closest(".descarga").find(".link").removeAttr("disabled");
-        $(t).closest(".descarga").find(".link").attr("href",doc);
-        @else
-        alertify.error('Por favor, ingrese a su cuenta para poder acceder a este archivo');
-        @endif
+        if(logueado) {
+            let doc = $(t).val();
+            $(t).prev().removeAttr("disabled");
+            $(t).prev().attr("href",doc);
+            $(t).prev().click();
+        } else {
+            if(window.alertt === undefined) {
+                window.alertt = 1;
+                alertify.notify('Por favor, ingrese a su cuenta para poder acceder a este archivo', 'error', 30, function() {
+                    delete window.alertt;
+                });
+            }
+        }
     }
 </script>
 @endpush

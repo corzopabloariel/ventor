@@ -4,6 +4,7 @@ namespace App\Http\Controllers\adm;
 use org\majkel\dbase\Table;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use DB;
 use App\Origen;
 use App\Categoria;
@@ -38,7 +39,7 @@ class ProductoController extends Controller
             $data["hijos"] = $data->hijos;
         else
             $data["hijos"] = $data->modelos;
-        
+
         if(empty($data["hijos"]))
             return $data;
         else {
@@ -64,7 +65,7 @@ class ProductoController extends Controller
         $url = str_replace('%20', ' ', $url);
         $url = preg_replace('~[^\\pL0-9_]+~u', '-', $url);
         $url = trim($url, "-");
-        $url = iconv("utf-8", "us-ascii//TRANSLIT", $url); 
+        $url = iconv("utf-8", "us-ascii//TRANSLIT", $url);
         $url = strtolower($url);
         $url = preg_replace('~[^-a-z0-9_]+~', '', $url);
         return $url;
@@ -108,7 +109,7 @@ class ProductoController extends Controller
         foreach($productos2 AS $p) {
             $p["modelo_id"] = $p->modelo_id();
             $p["familia_id"] = $p->familia_id();
-            
+
             $p["parte_id"] = $p->parte_id();
             $p["precio"] = "$ " . $p->getPrecio();
             //$p["marcaTexto"] = $p->marca->getNombreEnteroAttribute();
@@ -132,18 +133,18 @@ class ProductoController extends Controller
 
         if($flagReturn)
             return back()->withErrors(['mssg' => "Categoría, origen, modelo, nombre y código son necesarios"])->withInput($datosRequest);
-        
+
         $ARR_data = [];
         $ARR_data["catalogo"] = null;
         $ARR_data["image"] = null;
         $ARR_data["codigo"] = $datosRequest["codigo"];
         $ARR_data["nombre"] = $datosRequest["nombre"];
         $ARR_data["orden"] = $datosRequest["orden"];
-        
+
         $ARR_data["mercadolibre"] = $datosRequest["mercadolibre"];
         $ARR_data["cantidad"] = $datosRequest["cantidad"];
         $ARR_data["link"] = self::cleanURL(strip_tags($datosRequest["nombre"]));
-        
+
         $ARR_data["familia_id"] = $datosRequest["familia_id"];
         $ARR_data["categoria_id"] = $datosRequest["categoria_id"];
         $ARR_data["origen_id"] = $datosRequest["origen_id"];
@@ -159,7 +160,7 @@ class ProductoController extends Controller
             $precio = trim($precio);
         }
         $ARR_data["precio"] = $precio;
-        
+
         $file = $request->file("image");
         $catalogo = $request->file("catalogo");
         if(!is_null($data)) {
@@ -171,10 +172,10 @@ class ProductoController extends Controller
             if (!file_exists($path))
                 mkdir($path, 0777, true);
             $imageName = "{$ARR_data["link"]}.".$file->getClientOriginalExtension();
-            
+
             $file->move($path, $imageName);
             $ARR_data["image"] = "images/productos/{$imageName}";
-            
+
             if(!is_null($data)) {
                 if(!empty($data["image"])) {
                     $filename = public_path() . "/" . $data["image"];
@@ -188,10 +189,10 @@ class ProductoController extends Controller
             if (!file_exists($path))
                 mkdir($path, 0777, true);
             $imageName = "{$ARR_data["link"]}.".$file->getClientOriginalExtension();
-            
+
             $file->move($path, $imageName);
             $ARR_data["catalogo"] = "images/catalogos/{$imageName}";
-            
+
             if(!is_null($data)) {
                 if(!empty($data["catalogo"])) {
                     $filename = public_path() . "/" . $data["catalogo"];
@@ -200,7 +201,7 @@ class ProductoController extends Controller
                 }
             }
         }
-        
+
         if(is_null($data))
             Producto::create($ARR_data);
         else {
@@ -222,7 +223,7 @@ class ProductoController extends Controller
 
         $prod["modelo_id"] = $prod->modelo_id();
         $prod["familia_id"] = $prod->familia_id();
-        
+
         $prod["parte_id"] = $prod->parte_id();
         $prod["precioSin"] = $prod["precio"];
         $prod["precio"] = "$ " . $prod->getPrecio();
@@ -271,7 +272,7 @@ class ProductoController extends Controller
                     if(strcmp($actual,$data["nombre"][$i]) === 0) {
                         $total ++;
                         $aux = explode(".",$data["nombre"][$i]);
-                        
+
                         $doc = "{$aux[0]}." .$file->getClientOriginalExtension();
                         $archivos .= $doc;
                         $file->move($path, $doc);
@@ -289,6 +290,9 @@ class ProductoController extends Controller
     }
     public function actualizar($id) {
         self::$id();
+    }
+    public function count() {
+        echo ProductoVentor::count();
     }
     public function producto() {
         set_time_limit(0);
@@ -313,12 +317,12 @@ class ProductoController extends Controller
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('productosventor')->truncate();
 
-        
+
 		//$fichero_dbf = asset('file/cnv_precios.DBF');
         //print_r($fichero_dbf);die();
         //$conex       = dbase_open($fichero_dbf, 0);
         //dd($conex);
-        $dbf = Table::fromFile('file/cnv_precios.DBF');
+        $dbf = Table::fromFile('file/cnv_preciosW.DBF');
         $asd = 0;
 		foreach ($dbf as $record) {
             //dd($record);
@@ -354,7 +358,7 @@ class ProductoController extends Controller
                     }
                     if( strtolower( $property[$j] ) == "precio" )
                         $valor = floatval( $valor );
-                    if( strtolower( $property[$j] ) == "cantminvta" || strtolower( $property[$j] ) == "usr_stmpdh" ) 
+                    if( strtolower( $property[$j] ) == "cantminvta" || strtolower( $property[$j] ) == "usr_stmpdh" )
                         $valor = floatval( $valor );
                     if( strtolower( $property[$j] ) == "fecha_ingr" ) {
                         if ( strpos( $valor, ".m." ) == false )
@@ -422,11 +426,9 @@ class ProductoController extends Controller
                 }
                 ProductoVentor::create($echo);
             }
-            if($total == 1000)
-                echo $total;
         }
         //Log::info("Total de registros: {$total}");
-        echo $total;
+        echo 0;
     }
     public function clientes() {
         set_time_limit(0);
@@ -473,80 +475,90 @@ class ProductoController extends Controller
             //'whatsapp',
             //'instagram'
         ];
-        
+
         $dbf = Table::fromFile('file/cnv_clientes.DBF');
 		$pass = '$2y$10$ZbqDQTIEWuKiwgFdWUEdvePdjjLlpdLrP0ew7x0n5bcOSu.V20HPS';
-        
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        DB::table('clientesventor')->truncate();
-		
-		foreach ($dbf as $record) {
-            $arrData = [];
-            $nrodoc = $record->NRODOC;
-            $dataC = Cliente::where('nrodoc','LIKE',$nrodoc)->first();
-            $codpos = $descrp = $descr_001 = $usrvt_003 = $vnddor = $descr_003 = $nrotel = $camail = null;
-            $usrvt_004 = $usrvt_005 = $usrvt_006 = $usrvt_007 = $usrvt_008 = $usrvt_009 = $usrvt_010 = $usrvt_011 = $usrvt_012 = $usrvt_013 = $usrvt_014 = $usrvt_015 = $usrvt_016 = $usrvt_017 = $usrvt_018 = $usrvt_019 = $usrvt_020 = $usrvt_021 = null;
-            for( $j = 0 ; $j < count($property) ; $j++ ) {
-                $valor = strtoupper( $property[$j] );
-                if( $property[$j] == "localidad_id" || $property[$j] == "vendedor_id" ) continue;
-                $valorData = $record->$valor;
-                $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
-                $valorData = trim($valorData);
-                if( $property[$j] == "codpos" || 
-                    $property[$j] == "descrp" || 
-                    $property[$j] == "descr_001" || 
-                    $property[$j] == "usrvt_003" || 
-                    $property[$j] == "vnddor" || 
-                    $property[$j] == "descr_003" || 
-                    $property[$j] == "nrotel" || 
-                    $property[$j] == "camail" || 
-                    $property[$j] == "usrvt_004" || $property[$j] == "usrvt_005" || $property[$j] == "usrvt_006" || $property[$j] == "usrvt_007" || $property[$j] == "usrvt_008" || $property[$j] == "usrvt_009" || $property[$j] == "usrvt_010" || $property[$j] == "usrvt_011" || $property[$j] == "usrvt_012" || $property[$j] == "usrvt_013" || $property[$j] == "usrvt_014" || $property[$j] == "usrvt_015" || $property[$j] == "usrvt_016" || $property[$j] == "usrvt_017" || $property[$j] == "usrvt_018" || $property[$j] == "usrvt_019" || $property[$j] == "usrvt_020" || $property[$j] == "usrvt_021" ) {
-                    ${$property[$j]} = $valorData;
-                    continue;
-                }
-                $arrData[$property[$j]] = $valorData;
-            }
-            $total ++;
-            $data = Vendedor::where('vnddor','LIKE',$vnddor)->first();
-            if(!empty($data))
-                $arrData["vendedor_id"] = $data["id"];
-            $data = Localidad::where('codpos','LIKE',$codpos)->first();
-            if(empty($data)) $aux = Localidad::create(["codpos" => $codpos,"descrp" => $descrp,"descr_001" => $descr_001]);
-            else $aux = $data;
-            $arrData["localidad_id"] = $aux["id"];
-            $data = Vendedor::where('vnddor','LIKE',$vnddor)->first();
-            $aux = null;
-            if(!empty($data))
-                $aux = $data["id"];
-            $arrDataP["vendedor_id"] = $aux;
-            $aux = null;
-            $data = Transporte::where('tracod','LIKE',$usrvt_021)->first();
-            
-            if(!empty($data))
-                $aux = $data["id"];
-            $arrDataP["transporte_id"] = $aux;
-            $arrData["transporte_id"] = $aux;
-            if(empty($dataC)) {
-                $aux = Cliente::create($arrData);
-                $data = Usuario::where('username','LIKE',$arrData["nrodoc"])->first();
-                if(empty($data))
-                    Usuario::create( ['name' => $arrData["nombre"], 'username' => $arrData["nrodoc"], 'password' => $pass, 'email' => $arrData["direml"], 'vendedor_id' => $arrDataP["vendedor_id"]] );
-                else {
-                    $data->fill( [ 'name' => $arrData["nombre"],'email' => $arrData["direml"], 'vendedor_id' => $arrDataP["vendedor_id"] ] );
-                    $data->save();
-                }
-            } else {
-                $aux = $dataC["id"];
-                $data = Usuario::where('username','LIKE',$arrData["nrodoc"])->first();
-                if(empty($data))
-                    Usuario::create( ['name' => $arrData["nombre"], 'username' => $arrData["nrodoc"], 'password' => $pass, 'email' => $arrData["direml"], 'vendedor_id' => $arrDataP["vendedor_id"]] );
-                else {
-                    $data->fill( [ 'name' => $arrData["nombre"],'email' => $arrData["direml"], 'vendedor_id' => $arrDataP["vendedor_id"] ] );
-                    $data->save();
-                }
-			}
 
-        }
+        //DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        //DB::table('clientesventor')->truncate();
+
+        foreach ($dbf as $record) {
+                $arrData = [];
+                $nrodoc = $record->NRODOC;
+                $dataC = Cliente::where('nrodoc','LIKE',$nrodoc)->first();
+
+                $codpos = $descrp = $descr_001 = $usrvt_003 = $vnddor = $descr_003 = $nrotel = $camail = null;
+                $usrvt_004 = $usrvt_005 = $usrvt_006 = $usrvt_007 = $usrvt_008 = $usrvt_009 = $usrvt_010 = $usrvt_011 = $usrvt_012 = $usrvt_013 = $usrvt_014 = $usrvt_015 = $usrvt_016 = $usrvt_017 = $usrvt_018 = $usrvt_019 = $usrvt_020 = $usrvt_021 = $whatsapp = $instagram = null;
+                for( $j = 0 ; $j < count($property) ; $j++ ) {
+                    $valor = strtoupper( $property[$j] );
+                    if( $property[$j] == "localidad_id" || $property[$j] == "vendedor_id" ) continue;
+                    $valorData = $record->$valor;
+                    $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
+                    $valorData = trim($valorData);
+                    if( $property[$j] == "codpos" ||
+                        $property[$j] == "descrp" ||
+                        $property[$j] == "descr_001" ||
+                        $property[$j] == "usrvt_003" ||
+                        $property[$j] == "vnddor" ||
+                        $property[$j] == "descr_003" ||
+                        $property[$j] == "nrotel" ||
+                        $property[$j] == "camail" ||
+                        $property[$j] == "usrvt_004" || $property[$j] == "usrvt_005" || $property[$j] == "usrvt_006" || $property[$j] == "usrvt_007" || $property[$j] == "usrvt_008" || $property[$j] == "usrvt_009" || $property[$j] == "usrvt_010" || $property[$j] == "usrvt_011" || $property[$j] == "usrvt_012" || $property[$j] == "usrvt_013" || $property[$j] == "usrvt_014" || $property[$j] == "usrvt_015" || $property[$j] == "usrvt_016" || $property[$j] == "usrvt_017" || $property[$j] == "usrvt_018" || $property[$j] == "usrvt_019" || $property[$j] == "usrvt_020" || $property[$j] == "usrvt_021" ) {
+                        ${$property[$j]} = $valorData;
+                        continue;
+                    }
+                    $arrData[$property[$j]] = $valorData;
+                }
+                $total ++;
+                $data = Vendedor::where('vnddor','=',"{$vnddor}")->first();
+                if(!empty($data)) {
+                    $arrData["vendedor_id"] = $data["id"];
+                    $arrDataP["vendedor_id"] = $data["id"];
+                }
+                $data = Localidad::where('codpos','=',"{$codpos}")->first();
+                if(empty($data)) $aux = Localidad::create(["codpos" => $codpos,"descrp" => $descrp,"descr_001" => $descr_001]);
+                else $aux = $data;
+                $arrData["localidad_id"] = $aux["id"];
+                
+                $data = Transporte::where('tracod','=',"{$usrvt_021}")->first();
+                if(!empty($data)) {
+                    $arrDataP["transporte_id"] = $data["id"];
+                    $arrData["transporte_id"] = $data["id"];
+                }
+                $pass = Hash::make($arrData["nrodoc"]);
+                if(empty($dataC)) {
+                    $aux = Cliente::create($arrData);
+                    $data = Usuario::where('username','=',$arrData["nrodoc"])->first();
+                    if(empty($data))
+                        Usuario::create( ['name' => $arrData["nombre"], 'username' => $arrData["nrodoc"], 'password' => $pass, 'email' => $arrData["direml"], 'vendedor_id' => $arrDataP["vendedor_id"], 'cliente_id' => $aux["id"]] );
+                    else {
+                        $data->fill( [
+                          'name' => $arrData["nombre"],
+                          'email' => $arrData["direml"],
+                          'vendedor_id' => $arrDataP["vendedor_id"],
+                          'cliente_id' => $aux["id"],
+                          'password' => $pass ] );
+                        $data->save();
+                    }
+                } else {
+                    $dataC->fill($arrData);
+                    $dataC->save();
+                    $cliente_id = $dataC["id"];
+                    $data = Usuario::where('username','=',$arrData["nrodoc"])->first();
+                    if(empty($data))
+                        Usuario::create( ['name' => $arrData["nombre"], 'username' => $arrData["nrodoc"], 'password' => $pass, 'email' => $arrData["direml"], 'vendedor_id' => $arrDataP["vendedor_id"], 'cliente_id' => $cliente_id] );
+                    else {
+                        $data->fill( [
+                            'name' => $arrData["nombre"],
+                            'email' => $arrData["direml"],
+                            'vendedor_id' => $arrDataP["vendedor_id"],
+                            'cliente_id' => $cliente_id,
+                            'password' => $pass ] );
+                        $data->save();
+                    }
+    			}
+
+            }
         echo $total;
     }
     public function vendedores() {
@@ -554,7 +566,7 @@ class ProductoController extends Controller
         $total = 0;
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('vendedoresventor')->truncate();
-        
+
 		$property = [
             'vnddor',
             'descrp',
@@ -563,7 +575,7 @@ class ProductoController extends Controller
             'mail'
         ];
         $dbf = Table::fromFile('file/cnv_Vendedores.DBF');
-        
+
         $pass = '$2y$10$ZbqDQTIEWuKiwgFdWUEdvePdjjLlpdLrP0ew7x0n5bcOSu.V20HPS';
         foreach ($dbf as $record) {
             if(empty($record->NATMER) && empty($record->MAIL))
@@ -631,30 +643,30 @@ class ProductoController extends Controller
                     $data->fill( ['name' => $arrData["name"], 'direma' => $arrData["direma"]] );
                     $data->save();
                 }
-            } else {
-                $data = Usuario::where('username','LIKE',"%EMP_{$nrodoc}%")->first();
-                
-                $total ++;
-                for( $j = 0 ; $j < count($property) ; $j++ ) {
-                    $valor = strtoupper( $property[$j] );
-                    $key = $property[$j];
-                    if($key == "name")
-                        $valor = "NOMBRE";
-                    if($key == "username")
-                        $valor = "NRODO2";
-                    $valorData = $record->$valor;
-                    $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
-                    $arrData[$key] = $valorData;
-                }
-                
-                if(empty($data)) {
-                    $data = Usuario::create( ['name' => $arrData["name"], 'username' => "EMP_{$nrodoc}", 'password' => $pass, 'email' => $arrData["direma"], 'vendedor_id' => null, 'is_vendedor' => 2] );
-                } else {
-                    $data->fill( [ 'name' => $arrData["name"],'email' => $arrData["direma"], 'is_vendedor' => 2 ] );
-                    $data->save();
-                }
-                //dd($data);
+                $arrData = [];
             }
+            $data = Usuario::where('username','LIKE',"%EMP_{$nrodoc}%")->first();
+
+            $total ++;
+            for( $j = 0 ; $j < count($property) ; $j++ ) {
+                $valor = strtoupper( $property[$j] );
+                $key = $property[$j];
+                if($key == "name")
+                    $valor = "NOMBRE";
+                if($key == "username")
+                    $valor = "NRODO2";
+                $valorData = $record->$valor;
+                $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
+                $arrData[$key] = $valorData;
+            }
+
+            if(empty($data)) {
+                $data = Usuario::create( ['name' => $arrData["name"], 'username' => "EMP_{$nrodoc}", 'password' => $pass, 'email' => $arrData["direma"], 'vendedor_id' => null, 'is_vendedor' => 2] );
+            } else {
+                $data->fill( [ 'name' => $arrData["name"],'email' => $arrData["direma"], 'is_vendedor' => 2 ] );
+                $data->save();
+            }
+            //dd($data);
 		}
         echo $total;
     }
@@ -678,7 +690,7 @@ class ProductoController extends Controller
             for( $j = 0 ; $j < count($property) ; $j++ ) {
                 $valor = strtoupper( $property[$j] );
                 $valorData = $record->$valor;
-                
+
                 $valorData = iconv("IBM850", "UTF-8//TRANSLIT", $valorData);
                 $arrData[$property[$j]] = $valorData;
             }

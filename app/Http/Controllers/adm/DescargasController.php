@@ -226,56 +226,50 @@ class DescargasController extends Controller
                 }
             }
         }
-        if(isset($datosRequest["ext_formato"])) {
+        if(isset($datosRequest["idEXT"])) {
             $documento_ext = $request->file("documento_ext");
-            for($i = 0; $i < count($datosRequest["ext_formato"]); $i ++) {
+            //dd($documento_ext);
+            
+            for($i = 0; $i < count($datosRequest["idEXT"]); $i ++) {
                 $obj = null;
                 $ARR_data["documento"] = null;
                 if(!empty($data)) {
-                    for( $j = 0; $j < count($data) ; $j++) {
-                        if($data[$j]["id"] == $datosRequest["idEXT"][$i]) {
-                            $obj = $data[$j];
-                            unset($obj["sigue"]);
-                            $ARR_data["documento"] = $obj["documento"];
-
-                            break;
-                        }
+                    if(!empty($datosRequest["idEXT"][$i])) {
+                        $obj = Descarga::find($datosRequest["idEXT"][$i]);
+                        $ARR_data["documento"] = $obj["documento"];
+                        $ARR_data["formato"] = $obj["formato"];
                     }
                 }
-                if(!is_null($documento_ext[$i])) {
-                    $ARR_data["formato"] = strtoupper($documento_ext[$i]->getClientOriginalExtension());
-                    $path = public_path('archivos/');
-                    if (!file_exists($path))
-                        mkdir($path, 0777, true);
-                    $imageName = $documento_ext[$i]->getClientOriginalName() . "." . $documento_ext[$i]->getClientOriginalExtension();
-                    
-                    $documento_ext[$i]->move($path, $imageName);
-                    $ARR_data["documento"] = "archivos/{$imageName}";
-                    
-                    if(!is_null($data)) {
-                        if(!empty($obj["documento"])) {
-                            $filename = public_path() . "/" . $obj["documento"];
-                            if (file_exists($filename))
-                                unlink($filename);
+                $ARR_data["formato"] = $datosRequest["ext_formato"][$i];
+                if(isset($documento_ext[$i])) {
+                    if(!is_null($documento_ext[$i])) {
+                        if(!empty($data)) {
+                            //Descarga::destroy($obj["id"]);
+                            if(!empty($obj["documento"])) {
+                                $filename = public_path() . "/{$obj["documento"]}";
+                                if (file_exists($filename))
+                                    unlink($filename);
+                            }
                         }
+
+                        $ARR_data["formato"] = strtoupper($documento_ext[$i]->getClientOriginalExtension());
+                        $path = public_path('archivos/');
+                        if (!file_exists($path))
+                            mkdir($path, 0777, true);
+                        $imageName = $documento_ext[$i]->getClientOriginalName() . "." . $documento_ext[$i]->getClientOriginalExtension();
+                        
+                        $documento_ext[$i]->move($path, $imageName);
+                        $ARR_data["documento"] = "archivos/{$imageName}";
                     }
                 }
                 if(is_null($data))
                     Descarga::create($ARR_data);
                 else {
-                    $obj->fill($ARR_data);
-                    $obj->save();
-                }
-            }
-        }
-        if(!empty($data)) {
-            for( $i = 0; $i < count($data) ; $i++) {
-                if(isset($data[$i]["sigue"])) {
-                    Descarga::destroy($data[$i]["id"]);
-                    if(!empty($data[$i]["documento"])) {
-                        $filename = public_path() . "/{$data[$i]["documento"]}";
-                        if (file_exists($filename))
-                            unlink($filename);
+                    if(is_null($obj)) 
+                        Descarga::create($ARR_data);
+                    else {
+                        $obj->fill($ARR_data);
+                        $obj->save();
                     }
                 }
             }

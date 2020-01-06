@@ -202,7 +202,6 @@
                     
                     $(target).select2({
                         data: msg,
-                        tags: "true",
                         allowClear: true,
                         placeholder: "Seleccione: CATEGORÍA",
                         width: "resolve"

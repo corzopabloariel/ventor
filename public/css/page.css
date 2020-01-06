@@ -146,9 +146,6 @@ body {
     color: #BF1939;
     text-transform: uppercase;
 }
-.productos a p:nth-child(3)::before {
-    content: "para ";
-}
 /* ---------------------------------------------------
     NAV
 ----------------------------------------------------- */
@@ -367,7 +364,9 @@ nav .buscador .btn:focus {
 .wrapper-novedades .productos a p {
     color: #0099D8;
 }
-
+.wrapper-datos strong {
+    color: #0099D6;
+}
 /* ---------------------------------------------------
     PRESUPUESTO
 ----------------------------------------------------- */

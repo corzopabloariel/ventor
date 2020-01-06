@@ -27,11 +27,11 @@
                             </li>
                             @if(auth()->guard('client')->user()["is_vendedor"] == 0)
                             <li class="list-group-item px-0 pr-1 position-relative">
-                                <a style="font-size:inherit; font-weight: normal" class="d-block isDisabled" href="{{ URL::to('cliente/pedidos') }}"><i class="fas fa-cash-register mr-3"></i>Mis pedidos</a>
+                                <a style="font-size:inherit; font-weight: normal" class="d-block isDisabled" href="#{{-- URL::to('cliente/pedidos') --}}"><i class="fas fa-cash-register mr-3"></i>Mis pedidos</a>
                             </li>
                             @endif
                             <li class="list-group-item px-0 pr-1 position-relative">
-                                <a style="font-size:inherit; font-weight: normal" onclick="limpiar()" class="d-block d-flex justify-content-between align-items-center" href="{{ URL::to('salir') }}">Cerrar sesión<i class="text-danger fas fa-sign-out-alt"></i></a>
+                                <a style="font-size:inherit; font-weight: normal" onclick="event.preventDefault(); limpiar(this);" class="d-block d-flex justify-content-between align-items-center" href="{{ URL::to('salir') }}">Cerrar sesión<i class="text-danger fas fa-sign-out-alt"></i></a>
                             </li>
                         </ul>
                     </li>
@@ -39,6 +39,22 @@
                     <li class="list-group-item px-0 text-uppercase"><a href="{{ route('empresa') }}">Empresa</a></li>
                     <li class="list-group-item px-0 text-uppercase" data-pedido><a href="{{ route('pedido') }}">Pedido</a></li>
                     <li class="list-group-item px-0 text-uppercase" data-carrito><a href="{{ route('carrito') }}">Carrito</a></li>
+
+                    <li class="list-group-item px-0 text-uppercase position-relative pr-1">
+                        <div data-toggle="collapse" data-target="#cuenta" aria-controls="cuenta" aria-expanded="false" aria-label="Toggle navigation"><a href="#">@if(auth()->guard('client')->user()["is_vendedor"] == 0) Cuenta @else Cuentas @endif</a><i class="fas fa-caret-down position-absolute" style="right: 0; top: 15px"></i></div>
+                        <ul class="collapse list-group list-group-flush" id="cuenta">
+                            <li class="list-group-item px-0 pr-1 position-relative">
+                                <a class="isDisabled" href="#">Análisis de deuda</a>
+                            </li>
+                            <li class="list-group-item px-0 pr-1 position-relative">
+                                <a class="isDisabled" href="#">Faltantes</a>
+                            </li>
+                            <li class="list-group-item px-0 pr-1 position-relative">
+                                <a class="isDisabled" href="#">Comprobantes</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('descargas') }}">Descargas</a></li>
                     <li class="list-group-item px-0 text-uppercase position-relative pr-1">
                         <div data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation"><a href="#">Atención al Cliente</a><i class="fas fa-caret-down position-absolute" style="right: 0; top: 15px"></i></div>
                         <ul class="collapse list-group list-group-flush" id="navbarToggleExternalContent">
@@ -59,6 +75,7 @@
                     <li class="list-group-item px-0 text-uppercase"><a href="{{ route('index') }}">Home</a></li>
                     <li class="list-group-item px-0 text-uppercase"><a href="{{ route('empresa') }}">Empresa</a></li>
                     <li class="list-group-item px-0 text-uppercase"><a href="{{ route('productos.productos') }}">Productos</a></li>
+                    <li class="list-group-item px-0 text-uppercase"><a href="{{ route('descargas') }}">Descargas</a></li>
                     <li class="list-group-item px-0 text-uppercase position-relative pr-1">
                         <div data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation"><a href="#">Atención al Cliente</a><i class="fas fa-caret-down position-absolute" style="right: 0; top: 15px"></i></div>
                         <ul class="collapse list-group list-group-flush" id="navbarToggleExternalContent">
@@ -85,6 +102,7 @@
                     <i class="fas fa-map-marker-alt mr-2"></i>{!! $datos["empresa"]["domicilio"]["calle"] !!} {!! $datos["empresa"]["domicilio"]["altura"] !!}<br/>C.A.B.A | Argentina
                 </p>
             </div>
+            @if(!auth()->guard('client')->check())
             <div class="modal-footer bg-light info">
                 <form method="post" action="{{ url('/buscador/body') }}" class="position-relative w-100">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -92,6 +110,7 @@
                     <i class="fas fa-search position-absolute" style="right:10px; top:10px;"></i>
                 </form>
             </div>
+            @endif
         </div>
     </div>
 </div>
@@ -99,11 +118,12 @@
     <nav class="navbar navbar-expand-lg pb-0 navbar-light">
         <div class="container">
             @if(auth()->guard('client')->check())
-            <a class="navbar-brand position-absolute" href="{{ route('pedido') }}">
+            <a style="top:0" class="navbar-brand position-absolute" href="{{ route('index') }}">
                 <img onerror="this.src='{{ asset('images/general/no-img.png') }}'" src="{{ asset($datos['empresa']['images']['logo']) }}@php echo '?t=' . time() @endphp" style="width: 257px;height: 65px;">
             </a>
             <div class="row justify-content-end flex-column w-100">
                 <ul class="list-unstyled menu d-flex justify-content-end pt-2 mb-1 align-items-center info">
+                  @if(!auth()->guard('client')->check())
                     <li class="buscador hidden-tablet">
                         <form class="position-relative d-flex" action="{{ url('/buscador/body') }}" method="post">
                             <button type="submit" class="btn">
@@ -112,6 +132,7 @@
                             <input placeholder="Estoy buscando..." type="text" name="buscar" class="form-control form-control-sm">
                         </form>
                     </li>
+                    @endif
                     <li class="border-left-0 btnMenuModal">
                         <button class="navbar-toggler btn btn-light rounded-0" type="button" data-toggle="modal" data-target="#menuNav">
                             <i class="fas fa-bars"></i>
@@ -119,28 +140,28 @@
                     </li>
 					<li class="hidden-tablet">
 					</li>
-                    <li class="hidden-tablet" style="width:200px;">
-						<span style="color:#0099D6;" class="text-truncate d-block">
-							<i class="fas fa-user-circle mr-2"></i>Bienvenido, {{auth()->guard('client')->user()["name"]}}
+                    <li class="hidden-tablet border-left-0" style="width:400px;">
+						<span style="color:#0099D6;" class="text-truncate d-block text-left">
+                            <i class="fas fa-user-circle mr-2"></i>Bienvenido, {{auth()->guard('client')->user()["name"]}}
+                            <ul class="submenu list-unstyled shadow-sm" style="font-size: 17px;">
+                                @if(auth()->guard('client')->user()["username"] != "0")
+                                <li class="p-0">
+                                    <a style="font-size:inherit; font-weight: normal" class="d-block" href="{{ URL::to('cliente/datos') }}"><i class="fas fa-id-card mr-3"></i>Mis datos</a>
+                                </li>
+                                @endif
+                                <li class="p-0">
+                                    <a style="font-size:inherit; font-weight: normal" class="d-block" href="#" onclick="confirguracionMarkUP(this)"><i class="fas fa-cog mr-3"></i>Configuración</a>
+                                </li>
+                                @if(auth()->guard('client')->user()["is_vendedor"] == 0)
+                                <li class="p-0">
+                                    <a style="font-size:inherit; font-weight: normal" class="d-block isDisabled" href="#{{-- URL::to('cliente/pedidos') --}}"><i class="fas fa-cash-register mr-3"></i>Mis pedidos</a>
+                                </li>
+                                @endif
+                                <li class="p-0">
+                                    <a style="font-size:inherit; font-weight: normal" onclick="event.preventDefault(); limpiar(this);" class="d-block d-flex justify-content-between align-items-center" href="{{ URL::to('salir') }}">Cerrar sesión<i class="text-danger fas fa-sign-out-alt"></i></a>
+                                </li>
+                            </ul>
 						</span>
-                        <ul class="submenu w-100 list-unstyled shadow-sm" style="font-size: 17px;">
-                            @if(auth()->guard('client')->user()["username"] != "111")
-                            <li class="p-0">
-                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="{{ URL::to('cliente/datos') }}"><i class="fas fa-id-card mr-3"></i>Mis datos</a>
-                            </li>
-                            @endif
-                            <li class="p-0">
-                                <a style="font-size:inherit; font-weight: normal" class="d-block" href="#" onclick="confirguracionMarkUP(this)"><i class="fas fa-cog mr-3"></i>Configuración</a>
-                            </li>
-                            @if(auth()->guard('client')->user()["is_vendedor"] == 0)
-                            <li class="p-0">
-                                <a style="font-size:inherit; font-weight: normal" class="d-block isDisabled" href="{{ URL::to('cliente/pedidos') }}"><i class="fas fa-cash-register mr-3"></i>Mis pedidos</a>
-                            </li>
-                            @endif
-                            <li class="p-0">
-                                <a style="font-size:inherit; font-weight: normal" onclick="limpiar()" class="d-block d-flex justify-content-between align-items-center" href="{{ URL::to('salir') }}">Cerrar sesión<i class="text-danger fas fa-sign-out-alt"></i></a>
-                            </li>
-                        </ul>
                     </li>
 					<li class="redes">
                         @php
@@ -165,13 +186,13 @@
                         <a data-href="atencion" href="#">@if(auth()->guard('client')->user()["is_vendedor"] == 0) Cuenta @else Cuentas @endif</a>
                         <ul class="submenu list-unstyled shadow-sm">
                             <li>
-                                <a href="{{ URL::to('atencion/transmision') }}">Análisis de transmisión</a>
+                                <a class="isDisabled" href="#">Análisis de deuda</a>
                             </li>
                             <li>
-                                <a href="{{ URL::to('atencion/pagos') }}">Información sobre pagos</a>
+                                <a class="isDisabled" href="#">Faltantes</a>
                             </li>
                             <li>
-                                <a href="{{ URL::to('atencion/consulta') }}">Consulta general</a>
+                                <a class="isDisabled" href="#">Comprobantes</a>
                             </li>
                         </ul>
                     </li>
@@ -201,7 +222,7 @@
                 </ul>
             </div>
             @else
-            <a class="navbar-brand position-absolute" href="{{ route('index') }}">
+            <a style="top:0" class="navbar-brand position-absolute" href="{{ route('index') }}">
                 <img onerror="this.src='{{ asset('images/general/no-img.png') }}'" src="{{ asset($datos['empresa']['images']['logo']) }}@php echo '?t=' . time() @endphp" style="width: 257px;height: 65px;">
             </a>
             <div class="row justify-content-end flex-column w-100">
@@ -230,6 +251,9 @@
                                         <button class="btn mx-auto px-5 text-white d-block mx-auto mt-3 text-uppercase" type="submit">ingresar</button>
                                     </form>
                                 </div>
+                            </li>
+                            <li class="border-top bg-white">
+                                <p class="text-center mb-0"><a href="{{ route('olvide') }}" class="text-primary">Olvidé mi contraseña</a></p>
                             </li>
                         </ul>
                     </li>

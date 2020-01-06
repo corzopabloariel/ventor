@@ -22,11 +22,18 @@ class Cliente extends Model
         'nrodoc',
         'vendedor_id',
         'transporte_id',//TRANSPORTE
-        'descr_002'
+        'descr_002',
+        'whatsapp',
+        'instagram'
     ];
 
     public function localidad()
     {
         return $this->belongsTo('App\Localidad');
+    }
+    
+    public function transporte()
+    {
+        return $this->belongsTo('App\Transporte');
     }
 }
